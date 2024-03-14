@@ -34,11 +34,26 @@ export default function rhchInit(rowheight, colwidth) {
     }
 
     // 如果增加行和回到顶部按钮隐藏，则减少底部空白区域，但是预留足够空间给单元格下拉按钮
+    console.log(
+      "%c Line:39 🥔 MBLsheetConfigsetting",
+      "color:#b03734",
+      MBLsheetConfigsetting
+    );
     if (
       !MBLsheetConfigsetting.enableAddRow &&
       !MBLsheetConfigsetting.enableAddBackTop
     ) {
-      Store.rh_height += 29;
+      // let curHeight = 29
+      const curHeight = 12;
+      const sheetRowHeight = MBLsheetConfigsetting.showsheetbar
+        ? 29
+        : curHeight;
+      console.log(
+        "%c Line:49 🥛 sheetRowHeight",
+        "color:#42b983",
+        sheetRowHeight
+      );
+      Store.rh_height += sheetRowHeight;
     } else {
       Store.rh_height += 80; //最底部增加空白
     }
@@ -49,7 +64,7 @@ export default function rhchInit(rowheight, colwidth) {
     Store.visibledatacolumn = [];
     Store.ch_width = 0;
 
-    let maxColumnlen = 120;
+    let maxColumnlen = 0;
 
     for (let c = 0; c < colwidth; c++) {
       let firstcolumnlen = Store.defaultcollen;

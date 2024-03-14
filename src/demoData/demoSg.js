@@ -1,9 +1,9 @@
 window.sgCell = {
   name: "一代测序111111",
-  color: "red", // sheet 下划线颜色
   row: 100,
   column: 15,
   defaultColWidth: 150,
+  defaultRowHeight: 40,
   celldata: [
     {
       r: 0,
@@ -41,12 +41,6 @@ window.sgCell = {
       0: 100,
       1: 100,
     },
-    // rowhidden: {
-    //   4: 1,
-    // },
-    // colhidden: {
-    //   4: 1,
-    // },
     borderInfo: [
       {
         rangeType: "cell",
@@ -54,35 +48,23 @@ window.sgCell = {
           row_index: 3,
           col_index: 3,
           l: {
-            style: 10,
+            style: 7,
             color: "#FF0000",
           },
           r: {
-            style: 10,
+            style: 7,
             color: "#FF0000",
           },
           t: {
-            style: 10,
+            style: 7,
             color: "#FF0000",
           },
           b: {
-            style: 10,
+            style: 7,
             color: "#FF0000",
           },
         },
       },
-      //   {
-      //     rangeType: "range",
-      //     borderType: "border-all",
-      //     style: 3,
-      //     color: "#0000ff",
-      //     range: [
-      //       {
-      //         row: [7, 8],
-      //         column: [2, 3],
-      //       },
-      //     ],
-      //   },
       {
         rangeType: "range",
         borderType: "border-all",
@@ -91,7 +73,7 @@ window.sgCell = {
         range: [
           {
             row: [6, 7],
-            column: [4, 6],
+            column: [5, 6],
           },
         ],
       },
