@@ -163,7 +163,7 @@ MBLsheet.create = function (setting) {
   initPlugins(extendsetting.plugins, extendsetting.data);
 
   // Store formula information, including internationalization
-  functionlist(extendsetting.customFunctions);
+  // functionlist(extendsetting.customFunctions);
 
   let devicePixelRatio = extendsetting.devicePixelRatio;
   if (devicePixelRatio == null) {
