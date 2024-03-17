@@ -71,6 +71,7 @@ MBLsheet.create = function (setting) {
   Store.MBLsheetfile = extendsetting.data;
   Store.defaultcolumnNum = extendsetting.column;
   Store.defaultrowNum = extendsetting.row;
+  Store.columnHeaderArr = extendsetting.data[0]?.columnHeaderArr;
   Store.defaultFontSize = extendsetting.defaultFontSize;
   Store.fullscreenmode = extendsetting.fullscreenmode;
   Store.lang = extendsetting.lang; //language

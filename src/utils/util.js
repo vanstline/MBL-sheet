@@ -251,6 +251,25 @@ function chatatABC(n) {
   //     }
   // }
 
+  if (Store.columnHeaderArr?.length) {
+    // const arr = ['爱','我','中','华'];
+      
+    let s = ''
+    const len = Store.columnHeaderArr.length
+      
+       console.log(n, s, Store, '--------n');
+    while (n >= 0) {
+        s = Store.columnHeaderArr[n % len] + s;
+        n = Math.floor(n / len) - 1;
+      }
+
+   
+
+    return s
+  }
+
+ 
+
   var orda = "a".charCodeAt(0);
 
   var ordz = "z".charCodeAt(0);
@@ -259,10 +278,12 @@ function chatatABC(n) {
 
   var s = "";
 
+  console.log("%c Line:282 🥕 n", "color:#ea7e5c", n);
   while (n >= 0) {
     s = String.fromCharCode((n % len) + orda) + s;
 
     n = Math.floor(n / len) - 1;
+    console.log("%c Line:286 🌭 n", "color:#93c0a4", n, s);
   }
 
   return s.toUpperCase();

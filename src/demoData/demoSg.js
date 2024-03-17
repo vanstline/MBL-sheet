@@ -1,7 +1,8 @@
 window.sgCell = {
   name: "一代测序111111",
   row: 100,
-  column: 15,
+  column: 0,
+  columnHeaderArr: ['爱', '我', '中', '华', 5, 2, 0, 1, 2, 3, 4],
   defaultColWidth: 150,
   defaultRowHeight: 40,
   celldata: [
@@ -89,10 +90,11 @@ window.sgCell = {
     //   },
     // ],
   },
-  frozen: {
-    type: "rangeColumn",
-    range: { row_focus: 1, column_focus: 5 },
-  },
+  // 冻结单元格
+  // frozen: {
+  //   type: "rangeColumn",
+  //   range: { row_focus: 1, column_focus: 5 },
+  // },
 
   dataVerification: {
     /* 下拉框 */
