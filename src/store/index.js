@@ -163,6 +163,9 @@ const Store = {
     m: "",
     v: "",
   },
+
+  // 验证数据集合
+  verifyMap: {},
 };
 
 export default Store;

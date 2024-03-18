@@ -253,22 +253,17 @@ function chatatABC(n) {
 
   if (Store.columnHeaderArr?.length) {
     // const arr = ['爱','我','中','华'];
-      
-    let s = ''
-    const len = Store.columnHeaderArr.length
-      
-       console.log(n, s, Store, '--------n');
+
+    let s = "";
+    const len = Store.columnHeaderArr.length;
+
     while (n >= 0) {
-        s = Store.columnHeaderArr[n % len] + s;
-        n = Math.floor(n / len) - 1;
-      }
+      s = Store.columnHeaderArr[n % len] + s;
+      n = Math.floor(n / len) - 1;
+    }
 
-   
-
-    return s
+    return s;
   }
-
- 
 
   var orda = "a".charCodeAt(0);
 

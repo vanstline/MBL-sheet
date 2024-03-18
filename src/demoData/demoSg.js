@@ -1,8 +1,8 @@
 window.sgCell = {
   name: "一代测序111111",
   row: 100,
-  column: 0,
-  columnHeaderArr: ['爱', '我', '中', '华', 5, 2, 0, 1, 2, 3, 4],
+  column: 10,
+  columnHeaderArr: ["爱", "我", "中", "华", 5, 2, 0, 1, 2, 3, 4],
   defaultColWidth: 150,
   defaultRowHeight: 40,
   celldata: [
@@ -98,6 +98,17 @@ window.sgCell = {
 
   dataVerification: {
     /* 下拉框 */
+    "6_5": {
+      type: "dropdown",
+      type2: null,
+      value1: "Develop,Fix,Done",
+      value2: "",
+      checked: false,
+      remote: false,
+      prohibitInput: false,
+      hintShow: false,
+      hintText: "",
+    },
     "1_0": {
       type: "dropdown",
       type2: null,

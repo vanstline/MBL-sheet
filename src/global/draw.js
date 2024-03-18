@@ -23,6 +23,7 @@ import method from "./method";
 import Store from "../store";
 import locale from "../locale/locale";
 import sheetmanage from "../controllers/sheetmanage";
+import { setVerifyByKey, clearVerify, hasVerifyByKey } from "./verify";
 
 function MBLsheetDrawgridRowTitle(scrollHeight, drawHeight, offsetTop) {
   if (scrollHeight == null) {
@@ -1748,29 +1749,67 @@ let cellRender = function (
   );
 
   let dataVerification = dataVerificationCtrl.dataVerification;
+  console.log("%c Line:1752 🍣 dataVerification", "color:#fca650", value);
 
   if (
     dataVerification != null &&
     dataVerification[r + "_" + c] != null &&
     !dataVerificationCtrl.validateCellData(value, dataVerification[r + "_" + c])
   ) {
-    //单元格左上角红色小三角标示
-    let dv_w = 5 * Store.zoomRatio,
-      dv_h = 5 * Store.zoomRatio; //红色小三角宽高
+    // 若单元格数据验证不通过，绘制红色边框
+    // //单元格左上角红色小三角标示
+    // let dv_w = 5 * Store.zoomRatio,
+    //   dv_h = 5 * Store.zoomRatio; //红色小三角宽高
 
+    // MBLsheetTableContent.beginPath();
+    // MBLsheetTableContent.moveTo(start_c + offsetLeft, start_r + offsetTop);
+    // MBLsheetTableContent.lineTo(
+    //   start_c + offsetLeft + dv_w,
+    //   start_r + offsetTop
+    // );
+    // MBLsheetTableContent.lineTo(
+    //   start_c + offsetLeft,
+    //   start_r + offsetTop + dv_h
+    // );
+    // MBLsheetTableContent.fillStyle = "#FC6666";
+    // MBLsheetTableContent.fill();
+    // MBLsheetTableContent.closePath();
+
+    // 绘制异常红色边框
     MBLsheetTableContent.beginPath();
-    MBLsheetTableContent.moveTo(start_c + offsetLeft, start_r + offsetTop);
-    MBLsheetTableContent.lineTo(
-      start_c + offsetLeft + dv_w,
-      start_r + offsetTop
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
     );
+    // 右上 向右移动
     MBLsheetTableContent.lineTo(
-      start_c + offsetLeft,
-      start_r + offsetTop + dv_h
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
     );
-    MBLsheetTableContent.fillStyle = "#FC6666";
-    MBLsheetTableContent.fill();
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
+    MBLsheetTableContent.lineWidth = 1;
+    MBLsheetTableContent.stroke();
     MBLsheetTableContent.closePath();
+    setVerifyByKey(r + "_" + c, value);
+  } else {
+    clearVerify(r + "_" + c);
   }
 
   //若单元格有批注（单元格右上角红色小三角标示）
@@ -2172,7 +2211,11 @@ let cellRender = function (
   if (cellOverflow_bd_r_render) {
     // 右边框
     // 无论是否有背景色，都默认绘制右边框
-    if (!Store.MBLsheetcurrentisPivotTable && Store.showGridLines) {
+    if (
+      !Store.MBLsheetcurrentisPivotTable &&
+      Store.showGridLines &&
+      !hasVerifyByKey(r + "_" + c)
+    ) {
       MBLsheetTableContent.beginPath();
       MBLsheetTableContent.moveTo(
         end_c + offsetLeft - 2 + bodrder05,
@@ -2191,7 +2234,11 @@ let cellRender = function (
 
   // 下边框
   // 无论是否有背景色，都默认绘制下边框
-  if (!Store.MBLsheetcurrentisPivotTable && Store.showGridLines) {
+  if (
+    !Store.MBLsheetcurrentisPivotTable &&
+    Store.showGridLines &&
+    !hasVerifyByKey(r + "_" + c)
+  ) {
     MBLsheetTableContent.beginPath();
     MBLsheetTableContent.moveTo(
       start_c + offsetLeft - 1,
