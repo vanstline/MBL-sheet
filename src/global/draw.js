@@ -1749,7 +1749,6 @@ let cellRender = function (
   );
 
   let dataVerification = dataVerificationCtrl.dataVerification;
-  console.log("%c Line:1752 🍣 dataVerification", "color:#fca650", value);
 
   if (
     dataVerification != null &&

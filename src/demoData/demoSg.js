@@ -42,43 +42,43 @@ window.sgCell = {
       0: 100,
       1: 100,
     },
-    borderInfo: [
-      {
-        rangeType: "cell",
-        value: {
-          row_index: 3,
-          col_index: 3,
-          l: {
-            style: 7,
-            color: "#FF0000",
-          },
-          r: {
-            style: 7,
-            color: "#FF0000",
-          },
-          t: {
-            style: 7,
-            color: "#FF0000",
-          },
-          b: {
-            style: 7,
-            color: "#FF0000",
-          },
-        },
-      },
-      {
-        rangeType: "range",
-        borderType: "border-all",
-        style: 7,
-        color: "#ff0000",
-        range: [
-          {
-            row: [6, 7],
-            column: [5, 6],
-          },
-        ],
-      },
-    ],
+    // borderInfo: [
+    //   {
+    //     rangeType: "cell",
+    //     value: {
+    //       row_index: 3,
+    //       col_index: 3,
+    //       l: {
+    //         style: 7,
+    //         color: "#FF0000",
+    //       },
+    //       r: {
+    //         style: 7,
+    //         color: "#FF0000",
+    //       },
+    //       t: {
+    //         style: 7,
+    //         color: "#FF0000",
+    //       },
+    //       b: {
+    //         style: 7,
+    //         color: "#FF0000",
+    //       },
+    //     },
+    //   },
+    //   {
+    //     rangeType: "range",
+    //     borderType: "border-all",
+    //     style: 7,
+    //     color: "#ff0000",
+    //     range: [
+    //       {
+    //         row: [6, 7],
+    //         column: [5, 6],
+    //       },
+    //     ],
+    //   },
+    // ],
 
     scrollLeft: 0,
     scrollTop: 0,
