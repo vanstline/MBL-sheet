@@ -39,6 +39,7 @@ import { changeSheetContainerSize, menuToolBarWidth } from "./resize";
 import { zoomNumberDomBind } from "./zoom";
 import menuButton from "./menuButton";
 import method from "../global/method";
+import "./observer";
 
 const sheetmanage = {
   generateRandomSheetIndex: function (prefix) {

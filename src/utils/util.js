@@ -925,6 +925,28 @@ function camel2split(camel) {
   });
 }
 
+/**
+ * 节流函数
+ *
+ * @param {*} func
+ * @param {*} wait
+ * @return {*}
+ */
+function throttle(func, wait) {
+  var timeout;
+  return function () {
+    var context = this,
+      args = arguments,
+      later = function () {
+        timeout = null;
+        func.apply(context, args);
+      };
+    if (!timeout) {
+      timeout = setTimeout(later, wait);
+    }
+  };
+}
+
 export {
   isJsonString,
   common_extend,
@@ -955,4 +977,5 @@ export {
   createProxy,
   arrayRemoveItem,
   camel2split,
+  throttle,
 };
