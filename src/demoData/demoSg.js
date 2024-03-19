@@ -2,7 +2,7 @@ window.sgCell = {
   name: "一代测序111111",
   row: 100,
   column: 10,
-  columnHeaderArr: ["爱", "我", "中", "华", 5, 2, 0, 1, 2, 3, 4],
+  columnHeaderArr: ["引物名称", "AI", "我", "中", "华", 5, 2, 0, 1, 2, 3, 4],
   defaultColWidth: 150,
   defaultRowHeight: 40,
   celldata: [
@@ -26,14 +26,14 @@ window.sgCell = {
     },
   ],
   config: {
-    merge: {
-      "6_5": {
-        r: 6,
-        c: 5,
-        rs: 2,
-        cs: 2,
-      },
-    },
+    // merge: {
+    //   "6_5": {
+    //     r: 6,
+    //     c: 5,
+    //     rs: 2,
+    //     cs: 2,
+    //   },
+    // },
     rowlen: {
       0: 30,
       1: 30,
@@ -652,6 +652,9 @@ window.sgCell = {
       hintText: "",
     },
     /* 校验手机号 End */
+  },
+  disabled: {
+    "1_2": true,
   },
 };
 // export default sheetCell

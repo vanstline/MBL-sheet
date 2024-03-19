@@ -2,7 +2,7 @@
 
 - [x] 表头等区域隐藏
 - [ ] 右侧固定列
-- [ ] 单元格支持动态禁用
+- [x] 单元格支持动态禁用
 - [x] 单元格支持动态校验
 - [ ] 暴露校验 api
 - [x] 单元函数的禁用
@@ -12,3 +12,9 @@
 ## 方法
 
 - 获取当前 sheet: `sheetmanage.getSheetByIndex();`
+
+## 记录
+
+1. 初始绘制
+
+   refresh.js:1596 MBLsheetDrawgridColumnTitle(scrollWidth);

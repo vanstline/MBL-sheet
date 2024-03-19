@@ -30,6 +30,14 @@
           width: 80%;
           height: 500px;
         "></div>
+
+      <!-- <div style="margin: 30px auto; display: flex; justify-content: center">
+        <canvas
+          id="ctx"
+          width="300"
+          height="300"
+          style="border: 1px solid #000" />
+      </div> -->
     </div>
 
     <!-- full screen test -->
@@ -103,7 +111,7 @@
               view: false,
               zoom: false,
             },
-            // showsheetbar: false,
+            showsheetbar: false,
             enableAddRow: false,
             enableAddBackTop: false,
             forceCalculation: false,
@@ -296,5 +304,26 @@
         stroke-linecap: round;
       }
     </style>
+
+    <!-- <script>
+      const cvs = document.getElementById("ctx");
+      const ctx = cvs.getContext("2d");
+
+      ctx.beginPath();
+
+      // 左上起点
+      ctx.moveTo(50, 100);
+      // 右上 向右移动
+      ctx.lineTo(100, 100);
+      // 右下 向下移动
+      ctx.lineTo(100, 150);
+      // 左下 向左移动
+      ctx.lineTo(50, 150);
+      // 左上 回到起点
+      ctx.lineTo(50, 100);
+      ctx.fillStyle = "#FC6666";
+      ctx.fill();
+      ctx.closePath();
+    </script> -->
   </body>
 </html>

@@ -299,6 +299,30 @@ export default function MBLsheetHandler() {
         return;
       }
 
+      let mouse = mouseposition(event.pageX, event.pageY);
+
+      let x = mouse[0] + $("#MBLsheet-cell-main").scrollLeft();
+      let y = mouse[1] + $("#MBLsheet-cell-main").scrollTop();
+      let row_location = rowLocation(y),
+        row = row_location[1],
+        row_pre = row_location[0],
+        row_index = row_location[2];
+
+      let col_location = colLocation(x),
+        col = col_location[1],
+        col_pre = col_location[0],
+        col_index = col_location[2];
+
+      let row_index_ed = row_index,
+        col_index_ed = col_index;
+      let sheetFile = sheetmanage.getSheetByIndex();
+      // // 单元格禁用
+      // const curDisabledMap = sheetFile?.disabled ?? {};
+
+      // if (curDisabledMap[`${row_index}_${col_index}`]) {
+      //   return;
+      // }
+
       // 协同编辑其他用户不在操作的时候，用户名框隐藏
       hideUsername();
 
@@ -324,16 +348,13 @@ export default function MBLsheetHandler() {
       }
 
       //MBLsheetautoadjustmousedown = 1;
-      let mouse = mouseposition(event.pageX, event.pageY);
+
       if (
         mouse[0] >= Store.cellmainWidth - Store.cellMainSrollBarSize ||
         mouse[1] >= Store.cellmainHeight - Store.cellMainSrollBarSize
       ) {
         return;
       }
-
-      let x = mouse[0] + $("#MBLsheet-cell-main").scrollLeft();
-      let y = mouse[1] + $("#MBLsheet-cell-main").scrollTop();
 
       if (
         MBLsheetFreezen.freezenverticaldata != null &&
@@ -353,23 +374,10 @@ export default function MBLsheetHandler() {
         y = mouse[1] + MBLsheetFreezen.freezenhorizontaldata[2];
       }
 
-      let sheetFile = sheetmanage.getSheetByIndex();
       let MBLsheetTableContent = $("#MBLsheetTableContent")
         .get(0)
         .getContext("2d");
 
-      let row_location = rowLocation(y),
-        row = row_location[1],
-        row_pre = row_location[0],
-        row_index = row_location[2];
-
-      let col_location = colLocation(x),
-        col = col_location[1],
-        col_pre = col_location[0],
-        col_index = col_location[2];
-
-      let row_index_ed = row_index,
-        col_index_ed = col_index;
       let margeset = menuButton.mergeborer(
         Store.flowdata,
         row_index,
@@ -1755,6 +1763,21 @@ export default function MBLsheetHandler() {
         col_index = margeset.column[2];
       }
 
+      // 检查当前坐标和焦点坐标是否一致，如果不一致那么进行修正
+      let column_focus = Store.MBLsheet_select_save[0]["column_focus"];
+      let row_focus = Store.MBLsheet_select_save[0]["row_focus"];
+      if (column_focus !== col_index || row_focus !== row_index) {
+        row_index = row_focus;
+        col_index = column_focus;
+      }
+
+      // 单元格禁用
+      const curDisabledMap = sheetmanage.getSheetByIndex()?.disabled ?? {};
+
+      if (curDisabledMap[`${row_index}_${col_index}`]) {
+        return;
+      }
+
       if (pivotTable.isPivotRange(row_index, col_index)) {
         //数据透视表没有 任何数据
         if (
@@ -1850,13 +1873,6 @@ export default function MBLsheetHandler() {
           menuButton.cancelPaintModel();
         }
 
-        // 检查当前坐标和焦点坐标是否一致，如果不一致那么进行修正
-        let column_focus = Store.MBLsheet_select_save[0]["column_focus"];
-        let row_focus = Store.MBLsheet_select_save[0]["row_focus"];
-        if (column_focus !== col_index || row_focus !== row_index) {
-          row_index = row_focus;
-          col_index = column_focus;
-        }
         MBLsheetupdateCell(row_index, col_index, Store.flowdata);
 
         /* 设置选区高亮 */

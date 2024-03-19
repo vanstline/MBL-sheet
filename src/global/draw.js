@@ -1378,6 +1378,69 @@ function MBLsheetDrawMain(
     );
   }
 
+  const curSheet = sheetmanage.getSheetByIndex();
+
+  for (let r = dataset_row_st; r <= dataset_row_ed; r++) {
+    let start_r;
+    if (r == 0) {
+      start_r = -scrollHeight - 1;
+    } else {
+      start_r = Store.visibledatarow[r - 1] - scrollHeight - 1;
+    }
+
+    let end_r = Store.visibledatarow[r] - scrollHeight;
+
+    if (
+      Store.config["rowhidden"] != null &&
+      Store.config["rowhidden"][r] != null
+    ) {
+      continue;
+    }
+
+    for (let c = dataset_col_st; c <= dataset_col_ed; c++) {
+      let start_c;
+      if (c == 0) {
+        start_c = -scrollWidth;
+      } else {
+        start_c = Store.visibledatacolumn[c - 1] - scrollWidth;
+      }
+
+      let end_c = Store.visibledatacolumn[c] - scrollWidth;
+      if (curSheet?.disabled[`${r}_${c}`]) {
+        MBLsheetTableContent.beginPath();
+
+        // 左上起点
+        MBLsheetTableContent.moveTo(
+          start_c + offsetLeft - 1 - bodrder05,
+          start_r + offsetTop - bodrder05
+        );
+        // 右上 向右移动
+        MBLsheetTableContent.lineTo(
+          end_c + offsetLeft - 1 - bodrder05,
+          start_r + offsetTop - bodrder05
+        );
+        // 右下 向下移动
+        MBLsheetTableContent.lineTo(
+          end_c + offsetLeft - 1 - bodrder05,
+          end_r + offsetTop - 1 - bodrder05
+        );
+        // 左下 向左移动
+        MBLsheetTableContent.lineTo(
+          start_c + offsetLeft - 1 - bodrder05,
+          end_r + offsetTop - 1 - bodrder05
+        );
+        // 左上 回到起点
+        MBLsheetTableContent.lineTo(
+          start_c + offsetLeft - 1 - bodrder05,
+          start_r + offsetTop - bodrder05
+        );
+        MBLsheetTableContent.fillStyle = "#ccc";
+        MBLsheetTableContent.fill();
+        MBLsheetTableContent.closePath();
+      }
+    }
+  }
+
   MBLsheetTableContent.restore();
 
   Store.measureTextCacheTimeOut = setTimeout(() => {
@@ -2250,6 +2313,41 @@ let cellRender = function (
     MBLsheetTableContent.lineWidth = 1;
     MBLsheetTableContent.strokeStyle = MBLsheetdefaultstyle.strokeStyle;
     MBLsheetTableContent.stroke();
+    MBLsheetTableContent.closePath();
+  }
+
+  const res = sheetmanage.getSheetByIndex();
+  if (sheetmanage.getSheetByIndex()?.disabled[`${r}_${c}`]) {
+    MBLsheetTableContent.beginPath();
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+
+    MBLsheetTableContent.fillStyle = "#FC6666";
+    MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
   }
 
