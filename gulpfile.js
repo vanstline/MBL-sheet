@@ -1,4 +1,10 @@
+const fs = require("fs");
+const util = require("util");
 const gulp = require("gulp");
+const babelCore = require("@babel/core");
+const through2 = require("through2");
+const writeFileAsync = util.promisify(fs.writeFile);
+
 // gulp core function
 const { src, dest, series, parallel, watch } = require("gulp");
 // gulp compress js
@@ -28,7 +34,7 @@ const commonjs = require("@rollup/plugin-commonjs");
 const terser = require("rollup-plugin-terser").terser;
 // rollup babel plugin, support the latest ES grammar
 const babel = require("@rollup/plugin-babel").default;
-// const gulpBabel = require('gulp-babel');
+const gulpBabel = require("gulp-babel");
 // Distinguish development and production environments
 const production = process.env.NODE_ENV === "production" ? true : false;
 
@@ -256,16 +262,51 @@ async function core_rollup() {
 }
 
 async function core() {
-  await require("esbuild").buildSync({
-    format: "iife",
-    globalName: "MBLsheet",
-    entryPoints: ["src/index.js"],
-    bundle: true,
-    minify: production,
-    banner: { js: banner },
-    target: ["es2015"],
-    sourcemap: true,
-    outfile: "dist/MBLsheet.umd.js",
+  // 先使用Babel转换ES6到ES5
+  const babelPromises = [];
+
+  return new Promise((resolve, reject) => {
+    gulp
+      .src("src/index.js")
+      .pipe(
+        through2.obj(async (file, _, cb) => {
+          try {
+            const result = babelCore.transformFileSync(file.path, {
+              presets: ["@babel/preset-env"],
+              targets: { esmodules: true, browsers: ["ie 11"] }, // 示例：针对IE11
+            });
+
+            babelPromises.push(
+              writeFileAsync(file.path.replace("src/", "dist/"), result.code)
+            );
+
+            cb();
+          } catch (error) {
+            reject(error);
+          }
+        })
+      )
+      .on("end", async () => {
+        try {
+          await Promise.all(babelPromises);
+
+          // 确保Babel转换完成后再执行esbuild构建
+          await esbuild.buildSync({
+            format: "iife",
+            globalName: "MBLsheet",
+            entryPoints: ["dist/index.js"],
+            bundle: true,
+            minify: production,
+            banner: { js: banner },
+            sourcemap: true,
+            outfile: "dist/MBLsheet.umd.js",
+          });
+
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      });
   });
 }
 
@@ -318,10 +359,12 @@ function copyStaticExpendPlugins() {
 }
 function copyStaticDemoData() {
   return src(paths.staticDemoData).pipe(dest(paths.destStaticDemoData));
-  // .pipe(gulpBabel({
-  //     presets: ['@babel/env']
-  // }))
-  // .pipe(gulp.dest('dist'));
+  // .pipe(
+  //   gulpBabel({
+  //     presets: ["@babel/env"],
+  //   })
+  // )
+  // .pipe(gulp.dest("dist"));
 }
 function copyStaticCssImages() {
   return src(paths.staticCssImages).pipe(dest(paths.destStaticCssImages));

@@ -25,14 +25,16 @@ $(document).ready(function () {
       // 在这里处理内容变更后的逻辑
     }
 
-    // 添加input事件监听器
-    editableElement.addEventListener("input", processChange);
+    if (editableElement) {
+      // 添加input事件监听器
+      editableElement?.addEventListener("input", processChange);
 
-    // 如果需要兼容旧版IE浏览器（IE9及更低版本不支持input事件）
-    if ("oninput" in document.createElement("div")) {
-      // 使用input事件
-    } else {
-      editableElement.addEventListener("keyup", processChange);
+      // 如果需要兼容旧版IE浏览器（IE9及更低版本不支持input事件）
+      if ("oninput" in document.createElement("div")) {
+        // 使用input事件
+      } else {
+        editableElement?.addEventListener("keyup", processChange);
+      }
     }
   });
 });

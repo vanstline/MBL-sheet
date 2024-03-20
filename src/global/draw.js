@@ -1406,7 +1406,7 @@ function MBLsheetDrawMain(
       }
 
       let end_c = Store.visibledatacolumn[c] - scrollWidth;
-      if (curSheet?.disabled[`${r}_${c}`]) {
+      if (curSheet?.disabled?.[`${r}_${c}`]) {
         MBLsheetTableContent.beginPath();
 
         // 左上起点
@@ -2317,7 +2317,7 @@ let cellRender = function (
   }
 
   const res = sheetmanage.getSheetByIndex();
-  if (sheetmanage.getSheetByIndex()?.disabled[`${r}_${c}`]) {
+  if (sheetmanage.getSheetByIndex()?.disabled?.[`${r}_${c}`]) {
     MBLsheetTableContent.beginPath();
 
     // 左上起点

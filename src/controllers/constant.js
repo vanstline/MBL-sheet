@@ -1517,26 +1517,26 @@ const iconfontObjects = {
 function customCellRightClickConfig() {
   const config = {
     copy: true, // copy
-    copyAs: true, // copy as
+    // copyAs: true, // copy as
     paste: true, // paste
-    insertRow: true, // insert row
-    insertColumn: true, // insert column
-    deleteRow: true, // delete the selected row
-    deleteColumn: true, // delete the selected column
-    deleteCell: true, // delete cell
-    hideRow: true, // hide the selected row and display the selected row
-    hideColumn: true, // hide the selected column and display the selected column
-    rowHeight: true, // row height
-    columnWidth: true, // column width
+    // insertRow: true, // insert row
+    // insertColumn: true, // insert column
+    // deleteRow: true, // delete the selected row
+    // deleteColumn: true, // delete the selected column
+    // deleteCell: true, // delete cell
+    // hideRow: true, // hide the selected row and display the selected row
+    // hideColumn: true, // hide the selected column and display the selected column
+    // rowHeight: true, // row height
+    // columnWidth: true, // column width
     clear: true, // clear content
-    matrix: true, // matrix operation selection
-    sort: true, // sort selection
-    filter: true, // filter selection
-    chart: true, // chart generation
-    image: true, // insert picture
-    link: true, // insert link
-    data: true, // data verification
-    cellFormat: true, // Set cell format
+    // matrix: true, // matrix operation selection
+    // sort: true, // sort selection
+    // filter: true, // filter selection
+    // chart: true, // chart generation
+    // image: true, // insert picture
+    // link: true, // insert link
+    // data: true, // data verification
+    // cellFormat: true, // Set cell format
   };
 
   // cellRightClickConfig determines the final result

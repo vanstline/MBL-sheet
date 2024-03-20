@@ -263,4 +263,47 @@ MBLsheet.MBLsheetextendData = MBLsheetextendData;
 
 MBLsheet.locales = locales;
 
+MBLsheet.init = function (setting, config) {
+  const sheet = {
+    ...config,
+    // column: ,
+  };
+  if (!config.columnHeaderArr) {
+    throw new Error("columnHeaderArr 是必填字段");
+    // columnHeaderArr;
+  }
+  sheet.column = config.columnHeaderArr.length;
+  sheet.defaultColWidth = config.defaultColWidth || 150;
+
+  MBLsheet.create({
+    ...setting,
+    sheetFormulaBar: false,
+    showstatisticBarConfig: {
+      count: false,
+      view: false,
+      zoom: false,
+    },
+    showsheetbar: false,
+    enableAddRow: false,
+    enableAddBackTop: false,
+    forceCalculation: false,
+    plugins: ["chart"],
+    fontList: [
+      {
+        fontName: "HanaleiFill",
+        url: "./assets/iconfont/HanaleiFill-Regular.ttf",
+      },
+      {
+        fontName: "Anton",
+        url: "./assets/iconfont/Anton-Regular.ttf",
+      },
+      {
+        fontName: "Pacifico",
+        url: "./assets/iconfont/Pacifico-Regular.ttf",
+      },
+    ],
+    data: [sheet],
+  });
+};
+
 export { MBLsheet };
