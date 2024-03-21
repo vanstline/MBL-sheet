@@ -1,5 +1,5 @@
 import Store from "../store";
-import { MBLsheetextendtable } from "./extend";
+import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
 
 function sgInit(setting, config, MBLsheet) {
   MBLsheet._create = MBLsheet.create;
@@ -57,6 +57,8 @@ function setLength(len, MBLsheet) {
   if (finlayLen === 0) return;
   if (finlayLen > 0) {
     MBLsheetextendtable("row", curLen, finlayLen);
+  } else {
+    MBLsheetdeletetable("row", curLen + finlayLen + 1, curLen);
   }
 }
 

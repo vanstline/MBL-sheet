@@ -1753,13 +1753,13 @@ function MBLsheetdeletetable(type, st, ed, sheetIndex) {
     d.splice(st, slen);
 
     //删除多少行，增加多少行空白行
-    for (let r = 0; r < slen; r++) {
-      let row = [];
-      for (let c = 0; c < d[0].length; c++) {
-        row.push(null);
-      }
-      d.push(row);
-    }
+    // for (let r = 0; r < slen; r++) {
+    //   let row = [];
+    //   for (let c = 0; c < d[0].length; c++) {
+    //     row.push(null);
+    //   }
+    //   d.push(row);
+    // }
   } else {
     type1 = "c";
 
