@@ -38,6 +38,7 @@ import Mandarin from "flatpickr/dist/l10n/zh.js";
 import { initListener } from "./controllers/listener";
 import { hideloading, showloading } from "./global/loading.js";
 import { MBLsheetextendData } from "./global/extend.js";
+import { sgInit } from "./global/sg.js";
 
 let MBLsheet = {};
 
@@ -263,47 +264,6 @@ MBLsheet.MBLsheetextendData = MBLsheetextendData;
 
 MBLsheet.locales = locales;
 
-MBLsheet.init = function (setting, config) {
-  const sheet = {
-    ...config,
-    // column: ,
-  };
-  if (!config.columnHeaderArr) {
-    throw new Error("columnHeaderArr 是必填字段");
-    // columnHeaderArr;
-  }
-  sheet.column = config.columnHeaderArr.length;
-  sheet.defaultColWidth = config.defaultColWidth || 150;
-
-  MBLsheet.create({
-    ...setting,
-    sheetFormulaBar: false,
-    showstatisticBarConfig: {
-      count: false,
-      view: false,
-      zoom: false,
-    },
-    showsheetbar: false,
-    enableAddRow: false,
-    enableAddBackTop: false,
-    forceCalculation: false,
-    plugins: ["chart"],
-    fontList: [
-      {
-        fontName: "HanaleiFill",
-        url: "./assets/iconfont/HanaleiFill-Regular.ttf",
-      },
-      {
-        fontName: "Anton",
-        url: "./assets/iconfont/Anton-Regular.ttf",
-      },
-      {
-        fontName: "Pacifico",
-        url: "./assets/iconfont/Pacifico-Regular.ttf",
-      },
-    ],
-    data: [sheet],
-  });
-};
+MBLsheet.init = (setting, config) => sgInit(setting, config, MBLsheet);
 
 export { MBLsheet };
