@@ -5209,6 +5209,11 @@ fieldset[disabled] .btn-danger.focus {
              font: 13.3333px Arial;
          }*/
 
+/* 先禁用 */
+#MBLsheet-search-replace {
+  display: none !important;
+}
+
 /*查找替换弹出框样式*/
 #MBLsheet-search-replace .tabBox {
   margin-top: 20px;
@@ -6351,6 +6356,10 @@ fieldset[disabled] .btn-danger.focus {
 }
 
 /*下拉图标*/
+#MBLsheet-dropCell-icon {
+  display: none !important;
+}
+
 #MBLsheet-dropCell-icon #icon_dropCell {
   width: 25px;
   height: 15px;
