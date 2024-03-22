@@ -82,16 +82,44 @@
         var lang = MBLsheetDemoUtil.language() === "zh" ? "zh" : "en";
 
         MBLsheet.init(
-          { container: "mblsheet", lang: lang },
+          { container: "mblsheet" },
           {
             name: "一代测序111111",
-            columnHeaderArr: [
-              "样本编号",
-              "样本名称",
-              "样本类型",
-              "样本数量",
-              "样本浓度",
-              "样本体积",
+            columns: [
+              {
+                dataIndex: "sampleId",
+                title: "样本编号",
+              },
+              {
+                dataIndex: "sampleName",
+                title: "样本名称",
+              },
+              {
+                dataIndex: "sampleType",
+                title: "样本类型",
+              },
+              {
+                dataIndex: "sampleCount",
+                title: "样本数量",
+              },
+              {
+                dataIndex: "sampleConcentration",
+                title: "样本浓度",
+              },
+              {
+                dataIndex: "sampleVolume",
+                title: "样本体积",
+              },
+            ],
+            dataSource: [
+              {
+                sampleId: "1111",
+                sampleName: "2222",
+                sampleType: "3333",
+                sampleCount: "4444",
+                sampleConcentration: "5555",
+                sampleVolume: "6666",
+              },
             ],
           }
         );

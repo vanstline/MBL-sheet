@@ -273,12 +273,9 @@ function chatatABC(n) {
 
   var s = "";
 
-  console.log("%c Line:282 🥕 n", "color:#ea7e5c", n);
   while (n >= 0) {
     s = String.fromCharCode((n % len) + orda) + s;
-
     n = Math.floor(n / len) - 1;
-    console.log("%c Line:286 🌭 n", "color:#93c0a4", n, s);
   }
 
   return s.toUpperCase();

@@ -1,21 +1,25 @@
 import Store from "../store";
 import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
+import { initDataSource } from "./sg/data";
 
 function sgInit(setting, config, MBLsheet) {
   MBLsheet._create = MBLsheet.create;
 
   delete MBLsheet.create;
 
-  const sheet = {
-    ...config,
-    // column: ,
-  };
-  if (!config.columnHeaderArr) {
-    throw new Error("columnHeaderArr 是必填字段");
-    // columnHeaderArr;
+  const sheet = { ...config };
+  if (!config.columns) {
+    throw new Error("columns 是必填字段");
+    // columns;
   }
-  sheet.column = config.columnHeaderArr.length;
+  sheet.column = config.columns.length;
+  sheet.columnHeaderArr = config.columns.map((item) => item.title);
   sheet.defaultColWidth = config.defaultColWidth || 150;
+  sheet.lang = config.lang || "zh";
+
+  initDataSource(config.dataSource, sheet);
+
+  // sheet.celldata = dataSource || [];
 
   MBLsheet._create({
     ...setting,
@@ -26,7 +30,7 @@ function sgInit(setting, config, MBLsheet) {
       zoom: false,
     },
     showsheetbar: false,
-    // enableAddRow: false,
+    enableAddRow: false,
     enableAddBackTop: false,
     forceCalculation: false,
     plugins: ["chart"],
