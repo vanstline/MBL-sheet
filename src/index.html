@@ -109,6 +109,10 @@
               {
                 dataIndex: "sampleType",
                 title: "样本类型",
+                fieldsProps: {
+                  type: "select",
+                  options: ["1", "2", "3", "4", "5"],
+                },
               },
               {
                 dataIndex: "sampleCount",
@@ -140,8 +144,13 @@
           }
         );
 
-        const ranges = MBLsheet.getRange();
-        console.log("%c Line:132 🥝 ranges", "color:#e41a6a", ranges);
+        // const ranges = MBLsheet.getRange();
+        // console.log("%c Line:132 🥝 ranges", "color:#e41a6a", ranges);
+        // MBLsheet.create({
+        //   container: "mblsheet",
+        //   lang: "zh",
+        //   data: [sgCell],
+        // });
       });
     </script>
     <style>

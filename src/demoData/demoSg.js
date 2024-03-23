@@ -653,8 +653,8 @@ window.sgCell = {
     },
     /* 校验手机号 End */
   },
-  disabled: {
-    "1_2": true,
-  },
+  // disabled: {
+  //   "1_2": true,
+  // },
 };
 // export default sheetCell
