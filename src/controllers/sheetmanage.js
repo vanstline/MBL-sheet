@@ -741,11 +741,9 @@ const sheetmanage = {
         if (d[r][c] == null) {
           continue;
         }
-
         ret.push({ r: r, c: c, v: d[r][c] });
       }
     }
-
     return ret;
   },
   buildGridData: function (file) {

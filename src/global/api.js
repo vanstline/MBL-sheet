@@ -133,7 +133,7 @@ export function getCellValue(row, column, options = {}) {
  * @param {Function} options.success 操作结束的回调函数
  */
 export function setCellValue(row, column, value, options = {}) {
-  let curv = Store.flowdata[row][column];
+  let curv = Store.flowdata?.[row]?.[column];
 
   // Store old value for hook function
   const oldValue = JSON.stringify(curv);
@@ -260,7 +260,7 @@ export function setCellValue(row, column, value, options = {}) {
       "cellUpdated",
       row,
       column,
-      JSON.parse(oldValue),
+      oldValue === "undefined" ? JSON.parse(oldValue) : undefined,
       Store.flowdata[row][column],
       isRefresh
     );
@@ -6824,6 +6824,11 @@ export function getImageOption(options = {}) {
  * @param {Function} options.success 操作结束的回调函数
  */
 export function transToCellData(data, options = {}) {
+  console.log(
+    "%c Line:6827 🥒 data",
+    "color:#33a5ff",
+    JSON.parse(JSON.stringify(data))
+  );
   let { success } = { ...options };
 
   setTimeout(() => {
@@ -6831,6 +6836,33 @@ export function transToCellData(data, options = {}) {
       success();
     }
   }, 0);
+
+  return sheetmanage.getGridData(data);
+}
+
+/**
+ * data => celldata ，data二维数组数据转化成 {r, c, v}格式一维数组
+ *
+ * @param {Array} data 二维数组数据
+ * @param {Object} options 可选参数
+ * @param {Function} options.success 操作结束的回调函数
+ */
+export function transToCellDataV2(data, options = {}) {
+  let { success } = { ...options };
+
+  setTimeout(() => {
+    if (success && typeof success === "function") {
+      success();
+    }
+  }, 0);
+
+  data?.forEach((item) => {
+    item.forEach((it) => {
+      if (!it?.ct) {
+        it.ct = { fa: "@", t: "s" };
+      }
+    });
+  });
 
   return sheetmanage.getGridData(data);
 }

@@ -78,17 +78,29 @@
 
     <script>
       $(function () {
-        // According to the browser language
-        var lang = MBLsheetDemoUtil.language() === "zh" ? "zh" : "en";
-
         MBLsheet.init(
           { container: "mblsheet" },
           {
-            name: "一代测序111111",
             columns: [
               {
                 dataIndex: "sampleId",
                 title: "样本编号",
+                render: (text, record, index) => {
+                  return text + 10000;
+                },
+                onchange: (value, cell) => {
+                  const { r, c } = cell;
+                  console.log(
+                    "%c Line:92 🍎",
+                    " 当前是第",
+                    r,
+                    "行，第",
+                    c,
+                    "列，值为'",
+                    value,
+                    "'"
+                  );
+                },
               },
               {
                 dataIndex: "sampleName",
@@ -113,16 +125,23 @@
             ],
             dataSource: [
               {
-                sampleId: "1111",
+                sampleId: "888",
                 sampleName: "2222",
                 sampleType: "3333",
                 sampleCount: "4444",
                 sampleConcentration: "5555",
                 sampleVolume: "6666",
               },
+              {
+                sampleId: "1111",
+              },
             ],
+            row: 2,
           }
         );
+
+        const ranges = MBLsheet.getRange();
+        console.log("%c Line:132 🥝 ranges", "color:#e41a6a", ranges);
       });
     </script>
     <style>

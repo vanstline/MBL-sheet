@@ -12,12 +12,13 @@ function sgInit(setting, config, MBLsheet) {
     throw new Error("columns 是必填字段");
     // columns;
   }
+  sheet.row = config.row;
   sheet.column = config.columns.length;
   sheet.columnHeaderArr = config.columns.map((item) => item.title);
   sheet.defaultColWidth = config.defaultColWidth || 150;
-  sheet.lang = config.lang || "zh";
+  setting.lang = setting.lang || "zh";
 
-  initDataSource(config.dataSource, sheet);
+  initDataSource(config.dataSource, sheet, MBLsheet);
 
   // sheet.celldata = dataSource || [];
 
