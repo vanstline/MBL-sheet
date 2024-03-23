@@ -105,6 +105,13 @@
               {
                 dataIndex: "sampleName",
                 title: "样本名称",
+                fieldsProps: {
+                  type: "text",
+                  compareInfo: {
+                    sign: "in", // 比较符
+                    range: [1, 10],
+                  },
+                },
               },
               {
                 dataIndex: "sampleType",
@@ -117,6 +124,13 @@
               {
                 dataIndex: "sampleCount",
                 title: "样本数量",
+                fieldsProps: {
+                  type: "textarea",
+                  compareInfo: {
+                    sign: "include", // 比较符
+                    value: "1",
+                  },
+                },
               },
               {
                 dataIndex: "sampleConcentration",
@@ -131,7 +145,7 @@
               {
                 sampleId: "888",
                 sampleName: "2222",
-                sampleType: "3333",
+                sampleType: "1",
                 sampleCount: "4444",
                 sampleConcentration: "5555",
                 sampleVolume: "6666",

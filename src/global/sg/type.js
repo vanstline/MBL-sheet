@@ -30,6 +30,8 @@ var lengthMap = {
   "<=": "lte",
 };
 
+var lengthVerArr = ["number", "int", "decimal", "text"];
+
 // textarea  时 校验条件
 var contentMap = {
   /* (包括) */
@@ -48,3 +50,5 @@ var validityMap = {
   /* (等于) */
   equal: "equal",
 };
+
+export { fieldsMap, lengthMap, contentMap, validityMap, lengthVerArr };
