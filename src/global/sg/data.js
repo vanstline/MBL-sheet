@@ -68,7 +68,7 @@ function initVerification(data, sheet, MBLsheet) {
     }
   }
   sheet.dataVerification = curVerifyMap;
-  // console.log("%c Line:41 🍔 sheet", "color:#e41a6a", sheet);
+  console.log("%c Line:41 🍔 sheet", "color:#e41a6a", sheet);
 }
 
 export { initDataSource, initVerification };

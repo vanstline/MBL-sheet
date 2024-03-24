@@ -1,4 +1,5 @@
 import Store from "../store";
+import { scroll, transToData } from "./api";
 import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
 import { initDataSource } from "./sg/data";
 
@@ -53,6 +54,23 @@ function sgInit(setting, config, MBLsheet) {
   });
 
   MBLsheet.setRow = (len) => setLength(len, MBLsheet);
+
+  MBLsheet.verify = verify;
+
+  MBLsheet.getData = (verifyData) => {
+    if (verifyData && verify()) {
+      return;
+    }
+    const data = MBLsheet.getSheetData()?.map((item) => {
+      const obj = {};
+      sheet.columns.forEach((col, index) => {
+        obj[col.dataIndex] = item?.[index]?.v;
+      });
+      return obj;
+    });
+
+    return data;
+  };
 }
 
 function setLength(len, MBLsheet) {
@@ -65,6 +83,17 @@ function setLength(len, MBLsheet) {
   } else {
     MBLsheetdeletetable("row", curLen + finlayLen + 1, curLen);
   }
+}
+
+function verify() {
+  const m = Object.keys(Store.verifyMap);
+
+  if (m.length) {
+    const [targetRow, targetColumn] = m[0]?.split("_") ?? [];
+    scroll({ targetRow, targetColumn });
+    return true;
+  }
+  return false;
 }
 
 export { sgInit };
