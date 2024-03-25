@@ -18,3 +18,6 @@
 1. 初始绘制
 
    refresh.js:1596 MBLsheetDrawgridColumnTitle(scrollWidth);
+
+2. 渲染数据
+   //若单元格有条件格式数据条

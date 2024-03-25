@@ -830,7 +830,11 @@ function MBLsheetDrawMain(
         mcArr.push(cellupdate[cud]);
         // continue;
       } else {
-        value = getRealCellValue(r, c);
+        if (typeof cell == "object" && cell.v.nodeType) {
+          value = cell.v;
+        } else {
+          value = getRealCellValue(r, c);
+        }
       }
 
       if (value == null || value.toString().length == 0) {
@@ -1739,6 +1743,7 @@ let cellRender = function (
   bodrder05,
   isMerge
 ) {
+  console.log("%c Line:1744 🥒 arguments", "color:#ed9ec7", arguments);
   let cell = Store.flowdata[r][c];
   let cellWidth = end_c - start_c - 2;
   let cellHeight = end_r - start_r - 2;
@@ -2269,6 +2274,7 @@ let cellRender = function (
 
     MBLsheetTableContent.restore();
   }
+  return;
 
   if (cellOverflow_bd_r_render) {
     // 右边框
@@ -2346,7 +2352,41 @@ let cellRender = function (
       start_r + offsetTop - bodrder05
     );
 
-    MBLsheetTableContent.fillStyle = "#FC6666";
+    MBLsheetTableContent.fillStyle = "rgba(0, 0, 0, .1)";
+    MBLsheetTableContent.fill();
+    MBLsheetTableContent.closePath();
+  }
+
+  if (value.nodeType) {
+    MBLsheetTableContent.beginPath();
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+
+    MBLsheetTableContent.fillStyle = "rgba(0, 0, 0, .1)";
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
   }

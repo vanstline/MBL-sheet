@@ -21,30 +21,35 @@
 
   <body>
     <!-- Non-full screen test -->
-    <div>
-      行数：<input type="text" id="row" value="100" /><button
-        id="setRow"
-        onclick="MBLsheet.setRow($('#row').val())">
-        设置
-      </button>
-    </div>
-    <div style="position: relative; width: 100%; height: 100%">
-      <div
-        id="mblsheet"
-        style="
-          margin: 80px auto;
-          padding: 0px;
-          width: 970px;
-          height: 500px;
-        "></div>
+    <div style="margin: 80px auto; padding: 0px; width: 970px">
+      <div>
+        行数：<input type="text" id="row" value="100" /><button
+          id="setRow"
+          onclick="MBLsheet.setRow($('#row').val())">
+          设置
+        </button>
+      </div>
+      <div style="position: relative; width: 100%; height: 100%">
+        <div id="mblsheet" style="height: 500px"></div>
+        <div>
+          <input
+            type="button"
+            value="获取数据"
+            onclick="console.log(MBLsheet.getData())" />
+          <input
+            type="button"
+            value="获取数据，并校验"
+            onclick="console.log(MBLsheet.getData(true))" />
+        </div>
 
-      <!-- <div style="margin: 30px auto; display: flex; justify-content: center">
+        <!-- <div style="margin: 30px auto; display: flex; justify-content: center">
         <canvas
           id="ctx"
           width="300"
           height="300"
           style="border: 1px solid #000" />
       </div> -->
+      </div>
     </div>
 
     <!-- full screen test -->
@@ -82,63 +87,80 @@
           { container: "mblsheet" },
           {
             columns: [
+              // {
+              //   dataIndex: "sampleId",
+              //   title: "样本编号",
+              //   render: (text, record, index) => {
+              //     return text + 10000;
+              //   },
+              //   onchange: (value, cell) => {
+              //     const { r, c } = cell;
+              //     console.log(
+              //       "%c Line:92 🍎",
+              //       " 当前是第",
+              //       r,
+              //       "行，第",
+              //       c,
+              //       "列，值为'",
+              //       value,
+              //       "'"
+              //     );
+              //   },
+              // },
+              // {
+              //   dataIndex: "sampleName",
+              //   title: "样本名称",
+              //   fieldsProps: {
+              //     type: "text",
+              //     compareInfo: {
+              //       sign: "in", // 比较符
+              //       range: [1, 10],
+              //     },
+              //   },
+              // },
+              // {
+              //   dataIndex: "sampleType",
+              //   title: "样本类型",
+              //   fieldsProps: {
+              //     type: "select",
+              //     options: ["1", "2", "3", "4", "5"],
+              //   },
+              // },
+              // {
+              //   dataIndex: "sampleCount",
+              //   title: "样本数量",
+              //   fieldsProps: {
+              //     type: "textarea",
+              //     compareInfo: {
+              //       sign: "include", // 比较符
+              //       value: "1",
+              //     },
+              //   },
+              // },
+              // {
+              //   dataIndex: "sampleConcentration",
+              //   title: "样本浓度",
+              // },
+              // {
+              //   dataIndex: "sampleVolume",
+              //   title: "样本体积",
+              // },
               {
-                dataIndex: "sampleId",
-                title: "样本编号",
+                title: "操作",
                 render: (text, record, index) => {
-                  return text + 10000;
+                  const aHref = document.createElement("a");
+                  aHref.href = "javascript:;";
+                  aHref.innerText = "删除";
+                  return aHref;
                 },
                 onchange: (value, cell) => {
-                  const { r, c } = cell;
                   console.log(
-                    "%c Line:92 🍎",
-                    " 当前是第",
-                    r,
-                    "行，第",
-                    c,
-                    "列，值为'",
+                    "%c Line:157 🎂 value, cell",
+                    "color:#93c0a4",
                     value,
-                    "'"
+                    cell
                   );
                 },
-              },
-              {
-                dataIndex: "sampleName",
-                title: "样本名称",
-                fieldsProps: {
-                  type: "text",
-                  compareInfo: {
-                    sign: "in", // 比较符
-                    range: [1, 10],
-                  },
-                },
-              },
-              {
-                dataIndex: "sampleType",
-                title: "样本类型",
-                fieldsProps: {
-                  type: "select",
-                  options: ["1", "2", "3", "4", "5"],
-                },
-              },
-              {
-                dataIndex: "sampleCount",
-                title: "样本数量",
-                fieldsProps: {
-                  type: "textarea",
-                  compareInfo: {
-                    sign: "include", // 比较符
-                    value: "1",
-                  },
-                },
-              },
-              {
-                dataIndex: "sampleConcentration",
-                title: "样本浓度",
-              },
-              {
-                dataIndex: "sampleVolume",
-                title: "样本体积",
               },
             ],
             dataSource: [
@@ -150,9 +172,9 @@
                 sampleConcentration: "5555",
                 sampleVolume: "6666",
               },
-              {
-                sampleId: "1111",
-              },
+              // {
+              //   sampleId: "1111",
+              // },
             ],
             row: 2,
           }

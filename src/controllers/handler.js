@@ -1772,7 +1772,24 @@ export default function MBLsheetHandler() {
       }
 
       // 单元格禁用
-      const curDisabledMap = sheetmanage.getSheetByIndex()?.disabled ?? {};
+      const curSheet = sheetmanage.getSheetByIndex();
+      console.log(
+        "%c Line:1777 🥝 curSheet.columns",
+        "color:#ea7e5c",
+        curSheet.columns
+      );
+      if (curSheet.columns?.[0]?.[col_index]?.dataIndex == null) {
+        const changeFn = curSheet.columns?.[0].onchange;
+        console.log("%c Line:1779 🥝 changeFn", "color:#b03734", changeFn);
+        console.log("%c Line:1778 🍫", "color:#2eafb0", "没有 dataIndex 禁用");
+        changeFn(null, { r: row_index, c: col_index });
+        return;
+      }
+
+      const curDisabledMap = curSheet?.disabled ?? {};
+
+      const columns = sheetmanage.getSheetByIndex();
+      console.log("%c Line:1778 🥚 columns", "color:#fca650", columns);
 
       if (curDisabledMap[`${row_index}_${col_index}`]) {
         return;
