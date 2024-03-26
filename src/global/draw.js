@@ -1743,7 +1743,6 @@ let cellRender = function (
   bodrder05,
   isMerge
 ) {
-  console.log("%c Line:1744 🥒 arguments", "color:#ed9ec7", arguments);
   let cell = Store.flowdata[r][c];
   let cellWidth = end_c - start_c - 2;
   let cellHeight = end_r - start_r - 2;
@@ -2274,7 +2273,6 @@ let cellRender = function (
 
     MBLsheetTableContent.restore();
   }
-  return;
 
   if (cellOverflow_bd_r_render) {
     // 右边框
@@ -2357,7 +2355,7 @@ let cellRender = function (
     MBLsheetTableContent.closePath();
   }
 
-  if (value.nodeType) {
+  if (value?.nodeType) {
     MBLsheetTableContent.beginPath();
 
     // 左上起点
