@@ -4,7 +4,9 @@ import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
 import { initDataSource } from "./sg/data";
 
 function sgInit(setting, config, MBLsheet) {
-  MBLsheet._create = MBLsheet.create;
+  if (MBLsheet.create) {
+    MBLsheet._create = MBLsheet.create;
+  }
 
   delete MBLsheet.create;
 
