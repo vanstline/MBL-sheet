@@ -82,101 +82,503 @@
     <script src="./demoData/demoSg.js"></script>
 
     <script>
+      const excelDataSource = [
+        {
+          createDate: "2024-03-25 19:44:36.0",
+
+          cxPrimerCartId: 1731287,
+
+          cxPrimerCartInfo: [
+            {
+              baseNumber: 0,
+
+              concentration: "",
+
+              createDate: "2024-03-25 19:44:36.0",
+
+              cxPrimerCode: "U1011200",
+
+              cxPrimerId: 2250,
+
+              endDate: null,
+
+              id: 1731287,
+
+              ids: null,
+
+              isOldPrimer: 1,
+
+              mark: null,
+
+              name: "ITS3",
+
+              page: 1,
+
+              primerTypeIds: null,
+
+              reverseSequence: "",
+
+              rows: 20,
+
+              sequence: "GCATCGATGAAGAACGCAGC",
+
+              startDate: null,
+
+              status: 0,
+
+              targetLength: 0,
+
+              type: 1,
+
+              typeName: "通用",
+
+              updateMark: null,
+
+              userId: 375760,
+
+              userInfo: null,
+            },
+          ],
+
+          cxPrimerCartList: [],
+
+          cxSampleCartId: 8684104,
+
+          cxSampleCartInfo: [
+            {
+              carrierId: 0,
+
+              carrierName: "1212",
+
+              createDate: "2024-03-25 19:44:36.0",
+
+              cxSampleCode: "31224032500002",
+
+              cxSampleId: 32208228,
+
+              endDate: null,
+
+              id: 8684104,
+
+              ids: null,
+
+              isOldSample: 1,
+
+              mark: null,
+
+              maxFragmentLength: "23",
+
+              minFragmentLength: "12",
+
+              name: "qwer",
+
+              note: "",
+
+              page: 1,
+
+              resistance: "12",
+
+              rows: 20,
+
+              sampleSequence: "",
+
+              sampleTypeId: 1,
+
+              sampleTypeIds: null,
+
+              sampleTypeName: "PCR产物(已纯化)",
+
+              startDate: null,
+
+              status: 0,
+
+              updateMark: null,
+
+              userId: 375760,
+
+              userInfo: null,
+            },
+          ],
+
+          endDate: null,
+
+          id: 22955773,
+
+          ids: null,
+
+          mark: null,
+
+          page: 1,
+
+          rows: 20,
+
+          seqMark: "噬菌体质粒",
+
+          seqText: "单向",
+
+          sequenceMethod: 0,
+
+          sequenceQuest: 1,
+
+          sort: 1,
+
+          startDate: null,
+
+          status: 0,
+
+          updateMark: null,
+
+          userId: 375760,
+
+          userInfo: null,
+        },
+
+        {
+          createDate: "2024-03-25 19:44:36.0",
+
+          cxPrimerCartId: 1731287,
+
+          cxPrimerCartInfo: [
+            {
+              baseNumber: 0,
+
+              concentration: "",
+
+              createDate: "2024-03-25 19:44:36.0",
+
+              cxPrimerCode: "U1011200",
+
+              cxPrimerId: 2250,
+
+              endDate: null,
+
+              id: 1731287,
+
+              ids: null,
+
+              isOldPrimer: 1,
+
+              mark: null,
+
+              name: "ITS3",
+
+              page: 1,
+
+              primerTypeIds: null,
+
+              reverseSequence: "",
+
+              rows: 20,
+
+              sequence: "GCATCGATGAAGAACGCAGC",
+
+              startDate: null,
+
+              status: 0,
+
+              targetLength: 0,
+
+              type: 1,
+
+              typeName: "通用",
+
+              updateMark: null,
+
+              userId: 375760,
+
+              userInfo: null,
+            },
+          ],
+
+          cxPrimerCartList: [],
+
+          cxSampleCartId: 8684105,
+
+          cxSampleCartInfo: [
+            {
+              carrierId: 0,
+
+              carrierName: "123",
+
+              createDate: "2024-03-25 19:44:36.0",
+
+              cxSampleCode: "31224032500001",
+
+              cxSampleId: 32208227,
+
+              endDate: null,
+
+              id: 8684105,
+
+              ids: null,
+
+              isOldSample: 1,
+
+              mark: null,
+
+              maxFragmentLength: "34",
+
+              minFragmentLength: "12",
+
+              name: "12312312",
+
+              note: "",
+
+              page: 1,
+
+              resistance: "123",
+
+              rows: 20,
+
+              sampleSequence: "",
+
+              sampleTypeId: 1,
+
+              sampleTypeIds: null,
+
+              sampleTypeName: "PCR产物(已纯化)",
+
+              startDate: null,
+
+              status: 0,
+
+              updateMark: null,
+
+              userId: 375760,
+
+              userInfo: null,
+            },
+          ],
+
+          endDate: null,
+
+          id: 22955774,
+
+          ids: null,
+
+          mark: null,
+
+          page: 1,
+
+          rows: 20,
+
+          seqMark: "",
+
+          seqText: "单向",
+
+          sequenceMethod: 0,
+
+          sequenceQuest: 1,
+
+          sort: 2,
+
+          startDate: null,
+
+          status: 0,
+
+          updateMark: null,
+
+          userId: 375760,
+
+          userInfo: null,
+        },
+      ];
+
       $(function () {
         MBLsheet.init(
           { container: "mblsheet" },
           {
             columns: [
-              // {
-              //   dataIndex: "sampleId",
-              //   title: "样本编号",
-              //   render: (text, record, index) => {
-              //     return text + 10000;
-              //   },
-              //   onchange: (value, cell) => {
-              //     const { r, c } = cell;
-              //     console.log(
-              //       "%c Line:92 🍎",
-              //       " 当前是第",
-              //       r,
-              //       "行，第",
-              //       c,
-              //       "列，值为'",
-              //       value,
-              //       "'"
-              //     );
-              //   },
-              // },
-              // {
-              //   dataIndex: "sampleName",
-              //   title: "样本名称",
-              //   fieldsProps: {
-              //     type: "text",
-              //     compareInfo: {
-              //       sign: "in", // 比较符
-              //       range: [1, 10],
-              //     },
-              //   },
-              // },
-              // {
-              //   dataIndex: "sampleType",
-              //   title: "样本类型",
-              //   fieldsProps: {
-              //     type: "select",
-              //     options: ["1", "2", "3", "4", "5"],
-              //   },
-              // },
-              // {
-              //   dataIndex: "sampleCount",
-              //   title: "样本数量",
-              //   fieldsProps: {
-              //     type: "textarea",
-              //     compareInfo: {
-              //       sign: "include", // 比较符
-              //       value: "1",
-              //     },
-              //   },
-              // },
-              // {
-              //   dataIndex: "sampleConcentration",
-              //   title: "样本浓度",
-              // },
-              // {
-              //   dataIndex: "sampleVolume",
-              //   title: "样本体积",
-              // },
               {
-                title: "操作",
+                dataIndex: "sampleName",
+
+                title: "样本名称",
+
+                // fieldsProps: {
+
+                //     type: "text",
+
+                //     compareInfo: {
+
+                //         sign: "in", // 比较符
+
+                //         range: [1, 10],
+
+                //     },
+
+                // },
+
                 render: (text, record, index) => {
-                  const aHref = document.createElement("a");
-                  aHref.href = "javascript:;";
-                  aHref.innerText = "删除";
-                  return aHref;
-                },
-                onchange: (value, cell) => {
                   console.log(
-                    "%c Line:157 🎂 value, cell",
-                    "color:#93c0a4",
-                    value,
-                    cell
+                    "%c Line:413 🥑 excelDataSource",
+                    "color:#4fff4B",
+                    text,
+                    record,
+                    index
                   );
+                  return record.cxSampleCartInfo?.[0]?.name;
                 },
               },
-            ],
-            dataSource: [
+
               {
-                sampleId: "888",
-                sampleName: "2222",
-                sampleType: "1",
-                sampleCount: "4444",
-                sampleConcentration: "5555",
-                sampleVolume: "6666",
+                dataIndex: "sampleTypeName",
+
+                title: "样本类型",
+
+                fieldsProps: {
+                  type: "select",
+
+                  options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
+                },
+
+                render: (text, record, index) => {
+                  return record.cxSampleCartInfo?.[0]?.sampleTypeName;
+                },
               },
-              // {
-              //   sampleId: "1111",
-              // },
+
+              {
+                dataIndex: "resistance",
+
+                title: "抗性",
+
+                fieldsProps: {
+                  type: "select",
+
+                  options: ["Kan", "Amp"],
+                },
+
+                render: (text, record, index) => {
+                  return record.cxSampleCartInfo?.[0]?.resistance;
+                },
+              },
+
+              {
+                dataIndex: "carrierName",
+
+                title: "载体",
+
+                // fieldsProps: {
+                //   type: "select",
+
+                //   options: cxcart_carrier.map(function (item) {
+                //     return item.name;
+                //   }),
+                // },
+
+                render: (text, record, index) => {
+                  return record.cxSampleCartInfo?.[0]?.carrierName;
+                },
+              },
+
+              {
+                dataIndex: "minFragmentLength",
+
+                title: "最小长度",
+
+                fieldsProps: {
+                  type: "text",
+
+                  compareInfo: {
+                    sign: "in", // 比较符
+
+                    range: [0, 999999],
+                  },
+                },
+
+                render: (text, record, index) => {
+                  return record.cxSampleCartInfo?.[0]?.minFragmentLength;
+                },
+              },
+
+              {
+                dataIndex: "maxFragmentLength",
+
+                title: "最大长度",
+
+                fieldsProps: {
+                  type: "text",
+
+                  compareInfo: {
+                    sign: "in", // 比较符
+
+                    range: [0, 999999],
+                  },
+                },
+
+                render: (text, record, index) => {
+                  return record.cxSampleCartInfo?.[0]?.maxFragmentLength;
+                },
+              },
+
+              {
+                dataIndex: "sampleConcentration",
+
+                title: "样品备注",
+
+                fieldsProps: {
+                  type: "select",
+
+                  options: [
+                    "GC Rich",
+                    "复杂结构",
+                    "重复序列",
+                    "低拷贝",
+                    "病毒DNA",
+                    "噬菌体质粒",
+                  ],
+                },
+              },
+
+              {
+                dataIndex: "sampleConcentration",
+
+                title: "要求",
+
+                fieldsProps: {
+                  type: "select",
+
+                  options: ["单向", "测通", "双向", "多向"],
+                },
+
+                render: (text, record, index) => {
+                  return record.seqText;
+                },
+              },
+
+              {
+                dataIndex: "primerTypeName",
+
+                title: "引物类型",
+
+                fieldsProps: {
+                  type: "select",
+
+                  options: ["通用", "自带", "合成", "暂存引物"],
+                },
+
+                render: (text, record, index) => {
+                  return record.cxPrimerCartInfo?.[0]?.typeName;
+                },
+              },
+
+              {
+                dataIndex: "primerName",
+
+                title: "引物名称",
+
+                render: (text, record, index) => {
+                  return record.cxPrimerCartInfo?.[0]?.name;
+                },
+              },
+
+              {
+                dataIndex: "options",
+
+                title: "操作",
+              },
             ],
-            row: 2,
+            dataSource: excelDataSource,
+            row: 20,
           }
         );
 

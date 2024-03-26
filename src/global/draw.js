@@ -830,7 +830,7 @@ function MBLsheetDrawMain(
         mcArr.push(cellupdate[cud]);
         // continue;
       } else {
-        if (typeof cell == "object" && cell.v.nodeType) {
+        if (typeof cell == "object" && cell?.v?.nodeType) {
           value = cell.v;
         } else {
           value = getRealCellValue(r, c);

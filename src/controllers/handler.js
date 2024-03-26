@@ -1780,10 +1780,16 @@ export default function MBLsheetHandler() {
       );
       if (curSheet.columns?.[0]?.[col_index]?.dataIndex == null) {
         const changeFn = curSheet.columns?.[0].onchange;
-        console.log("%c Line:1779 🥝 changeFn", "color:#b03734", changeFn);
-        console.log("%c Line:1778 🍫", "color:#2eafb0", "没有 dataIndex 禁用");
-        changeFn(null, { r: row_index, c: col_index });
-        return;
+        if (changeFn && typeof changeFn === "function") {
+          console.log("%c Line:1779 🥝 changeFn", "color:#b03734", changeFn);
+          console.log(
+            "%c Line:1778 🍫",
+            "color:#2eafb0",
+            "没有 dataIndex 禁用"
+          );
+          changeFn(null, { r: row_index, c: col_index });
+          return;
+        }
       }
 
       const curDisabledMap = curSheet?.disabled ?? {};

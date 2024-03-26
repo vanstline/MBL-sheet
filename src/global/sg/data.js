@@ -17,14 +17,12 @@ function initDataSource(dataSource, sheet, MBLsheet) {
   const curData = fillArr.map((item, r) => {
     return columns.map((sub) => {
       var v = item[sub.dataIndex];
-      console.log("%c Line:21 🥝 sub.render", "color:#33a5ff", sub.render);
-      const dom = sub.render && sub.render(item[sub.dataIndex], sub, r);
+
+      const dom = sub.render && sub.render(item[sub.dataIndex], item, r);
       console.log(dom);
       if (sub.render && typeof sub.render === "function") {
-        v = sub.render(item[sub.dataIndex], sub, r);
+        v = sub.render(item[sub.dataIndex], item, r);
       }
-      console.log("%c Line:25 🍐 v", "color:#2eafb0", v);
-
       if (lengthVerArr.includes(sub?.fieldsMap?.type)) {
         sub.ct = {
           fa: "0",

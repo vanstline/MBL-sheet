@@ -515,20 +515,29 @@ function getCellTextInfo(cell, ctx, option) {
     underLine = checkstatusByCell(cell, "un"); //underLine
     fontSize = checkstatusByCell(cell, "fs");
 
+    // if (cell instanceof Object) {
+    //   if (cell.render && typeof cell.render === "function") {
+    //     const dom = cell.render(
+    //       null,
+    //       { cell, r: option.r, c: option.c },
+    //       option.r
+    //     );
+    //     value = dom.innerText;
+    //     console.log("%c Line:522 🍣", "color:#ea7e5c", dom);
+    //   } else {
+    //     value = cell.m;
+    //     if (value == null) {
+    //       value = cell.v;
+    //     }
+    //   }
+    // } else {
+    //   value = cell;
+    // }
+
     if (cell instanceof Object) {
-      if (cell.render && typeof cell.render === "function") {
-        const dom = cell.render(
-          null,
-          { cell, r: option.r, c: option.c },
-          option.r
-        );
-        value = dom.innerText;
-        console.log("%c Line:522 🍣", "color:#ea7e5c", dom);
-      } else {
-        value = cell.m;
-        if (value == null) {
-          value = cell.v;
-        }
+      value = cell.m;
+      if (value == null) {
+        value = cell.v;
       }
     } else {
       value = cell;
