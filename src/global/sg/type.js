@@ -1,5 +1,8 @@
+export const AUTOCOMPLETE = "autocomplete";
+
 var fieldsMap = {
   select: "dropdown",
+  autocomplete: "autocomplete",
   number: "number",
   int: "number_integer",
   decimal: "number_decimal",

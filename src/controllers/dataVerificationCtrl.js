@@ -1765,6 +1765,9 @@ const dataVerificationCtrl = {
 
       // 多选的情况 检查每个都在下拉列表中
       if (type2 && cellValue) {
+        if (type2 === "autocomplete") {
+          return true;
+        }
         return cellValue.split(",").every(function (i) {
           return list.indexOf(i) !== -1;
         });
@@ -1969,7 +1972,7 @@ const dataVerificationCtrl = {
     let list = _this.getDropdownList(item.value1);
 
     let optionHtml = "";
-    if (item.type === "dropdown" && item.type2) {
+    if (item.type === "dropdown" && item.type2 && item.type2 === "multi") {
       // 下拉多选的情况下 将已经选择的标出来
       let cellValue = getcellvalue(rowIndex, colIndex, null);
       let valueArr = isRealNull(cellValue) ? [] : cellValue.split(",");

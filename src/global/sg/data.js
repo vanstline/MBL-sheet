@@ -1,5 +1,11 @@
 import { transToCellData, transToCellDataV2 } from "../api";
-import { fieldsMap, lengthMap, lengthVerArr, contentMap } from "./type";
+import {
+  fieldsMap,
+  lengthMap,
+  lengthVerArr,
+  contentMap,
+  AUTOCOMPLETE,
+} from "./type";
 
 function initDataSource(dataSource, sheet, MBLsheet) {
   const { columns } = sheet;
@@ -44,17 +50,18 @@ function initVerification(data, sheet, MBLsheet) {
   for (let i = 0; i < data.length; i++) {
     for (let j = 0; j < columns.length; j++) {
       if (typeof columns?.[j]?.fieldsProps === "object") {
-        const { type, options, status, verifyText, compareInfo } =
+        const { type, type2, options, status, verifyText, compareInfo } =
           columns[j].fieldsProps;
         const { sign, range, value } = compareInfo ?? {};
         var curVerifyInfo = {
-          type: fieldsMap[type],
+          type: fieldsMap[type] === AUTOCOMPLETE ? "dropdown" : fieldsMap[type],
           hintShow: !!status,
           hintText: verifyText,
         };
 
-        if (type === "select") {
+        if (type === "select" || type === AUTOCOMPLETE) {
           curVerifyInfo.value1 = options?.join(",");
+          curVerifyInfo.type2 = type === AUTOCOMPLETE ? AUTOCOMPLETE : type2;
         } else if (lengthVerArr.includes(type) && range != null) {
           const [v1, v2] = range || [];
           curVerifyInfo.type2 = lengthMap[sign];

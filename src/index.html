@@ -385,32 +385,32 @@
       ];
 
       const columns = [
-        {
-          dataIndex: "sampleName",
+        // {
+        //   dataIndex: "sampleName",
 
-          title: "样本名称",
+        //   title: "样本名称",
 
-          fieldsProps: {
-            type: "text",
+        //   fieldsProps: {
+        //     type: "text",
 
-            compareInfo: {
-              sign: "in", // 比较符
+        //     compareInfo: {
+        //       sign: "in", // 比较符
 
-              range: [1, 10],
-            },
-          },
+        //       range: [1, 10],
+        //     },
+        //   },
 
-          render: (text, record, index) => {
-            console.log(
-              "%c Line:413 🥑 excelDataSource",
-              "color:#4fff4B",
-              text,
-              record,
-              index
-            );
-            return record.cxSampleCartInfo?.[0]?.name;
-          },
-        },
+        //   render: (text, record, index) => {
+        //     console.log(
+        //       "%c Line:413 🥑 excelDataSource",
+        //       "color:#4fff4B",
+        //       text,
+        //       record,
+        //       index
+        //     );
+        //     return record.cxSampleCartInfo?.[0]?.name;
+        //   },
+        // },
 
         {
           dataIndex: "sampleTypeName",
@@ -419,6 +419,7 @@
 
           fieldsProps: {
             type: "select",
+            type2: "multi",
 
             options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
           },
@@ -434,7 +435,10 @@
           title: "抗性",
 
           fieldsProps: {
-            type: "select",
+            type: "autocomplete",
+            type2: "multi",
+            // type: "select",
+            // type2: "select",
 
             options: ["Kan", "Amp"],
           },
@@ -444,116 +448,116 @@
           },
         },
 
-        {
-          dataIndex: "carrierName",
+        // {
+        //   dataIndex: "carrierName",
 
-          title: "载体",
+        //   title: "载体",
 
-          render: (text, record, index) => {
-            return record.cxSampleCartInfo?.[0]?.carrierName;
-          },
-        },
+        //   render: (text, record, index) => {
+        //     return record.cxSampleCartInfo?.[0]?.carrierName;
+        //   },
+        // },
 
-        {
-          dataIndex: "minFragmentLength",
+        // {
+        //   dataIndex: "minFragmentLength",
 
-          title: "最小长度",
+        //   title: "最小长度",
 
-          fieldsProps: {
-            type: "text",
+        //   fieldsProps: {
+        //     type: "text",
 
-            compareInfo: {
-              sign: "in", // 比较符
+        //     compareInfo: {
+        //       sign: "in", // 比较符
 
-              range: [0, 999999],
-            },
-          },
+        //       range: [0, 999999],
+        //     },
+        //   },
 
-          render: (text, record, index) => {
-            return record.cxSampleCartInfo?.[0]?.minFragmentLength;
-          },
-        },
+        //   render: (text, record, index) => {
+        //     return record.cxSampleCartInfo?.[0]?.minFragmentLength;
+        //   },
+        // },
 
-        {
-          dataIndex: "maxFragmentLength",
+        // {
+        //   dataIndex: "maxFragmentLength",
 
-          title: "最大长度",
+        //   title: "最大长度",
 
-          fieldsProps: {
-            type: "text",
+        //   fieldsProps: {
+        //     type: "text",
 
-            compareInfo: {
-              sign: "in", // 比较符
+        //     compareInfo: {
+        //       sign: "in", // 比较符
 
-              range: [0, 999999],
-            },
-          },
+        //       range: [0, 999999],
+        //     },
+        //   },
 
-          render: (text, record, index) => {
-            return record.cxSampleCartInfo?.[0]?.maxFragmentLength;
-          },
-        },
+        //   render: (text, record, index) => {
+        //     return record.cxSampleCartInfo?.[0]?.maxFragmentLength;
+        //   },
+        // },
 
-        {
-          dataIndex: "sampleConcentration",
+        // {
+        //   dataIndex: "sampleConcentration",
 
-          title: "样品备注",
+        //   title: "样品备注",
 
-          fieldsProps: {
-            type: "select",
+        //   fieldsProps: {
+        //     type: "select",
 
-            options: [
-              "GC Rich",
-              "复杂结构",
-              "重复序列",
-              "低拷贝",
-              "病毒DNA",
-              "噬菌体质粒",
-            ],
-          },
-        },
+        //     options: [
+        //       "GC Rich",
+        //       "复杂结构",
+        //       "重复序列",
+        //       "低拷贝",
+        //       "病毒DNA",
+        //       "噬菌体质粒",
+        //     ],
+        //   },
+        // },
 
-        {
-          dataIndex: "sampleConcentration",
+        // {
+        //   dataIndex: "sampleConcentration",
 
-          title: "要求",
+        //   title: "要求",
 
-          fieldsProps: {
-            type: "select",
+        //   fieldsProps: {
+        //     type: "select",
 
-            options: ["单向", "测通", "双向", "多向"],
-          },
+        //     options: ["单向", "测通", "双向", "多向"],
+        //   },
 
-          render: (text, record, index) => {
-            return record.seqText;
-          },
-        },
+        //   render: (text, record, index) => {
+        //     return record.seqText;
+        //   },
+        // },
 
-        {
-          dataIndex: "primerTypeName",
+        // {
+        //   dataIndex: "primerTypeName",
 
-          title: "引物类型",
+        //   title: "引物类型",
 
-          fieldsProps: {
-            type: "select",
+        //   fieldsProps: {
+        //     type: "select",
 
-            options: ["通用", "自带", "合成", "暂存引物"],
-          },
+        //     options: ["通用", "自带", "合成", "暂存引物"],
+        //   },
 
-          render: (text, record, index) => {
-            return record.cxPrimerCartInfo?.[0]?.typeName;
-          },
-        },
+        //   render: (text, record, index) => {
+        //     return record.cxPrimerCartInfo?.[0]?.typeName;
+        //   },
+        // },
 
-        {
-          dataIndex: "primerName",
+        // {
+        //   dataIndex: "primerName",
 
-          title: "引物名称",
+        //   title: "引物名称",
 
-          // render: (text, record, index) => {
-          //   return record.cxPrimerCartInfo?.[0]?.name;
-          // },
-        },
+        //   // render: (text, record, index) => {
+        //   //   return record.cxPrimerCartInfo?.[0]?.name;
+        //   // },
+        // },
 
         {
           dataIndex: "options",
