@@ -7345,9 +7345,13 @@ fieldset[disabled] .btn-danger.focus {
   top: 50%;
   margin-left: -5px;
   margin-top: -5px;
+  background-size: 60%;
+  cursor: pointer;
 }
 #MBLsheet-dataVerification-dropdown-List {
+  max-height: 150px;
   display: none;
+  overflow: auto;
   background-color: #fff;
   border: 1px solid #ccc;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);

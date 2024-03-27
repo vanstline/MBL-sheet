@@ -421,7 +421,36 @@
             type: "select",
             type2: "multi",
 
-            options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
+            options: [
+              "PCR已纯化",
+              "PCR未纯化",
+              "菌株",
+              "质粒",
+              "PCR已纯化1",
+              "PCR未纯化1",
+              "菌株1",
+              "质粒1",
+              "PCR已纯化2",
+              "PCR未纯化2",
+              "菌株2",
+              "质粒2",
+              "PCR已纯化3",
+              "PCR未纯化3",
+              "菌株3",
+              "质粒3",
+              "PCR已纯化4",
+              "PCR未纯化4",
+              "菌株4",
+              "质粒4",
+              "PCR已纯化5",
+              "PCR未纯化5",
+              "菌株5",
+              "质粒5",
+              "PCR已纯化6",
+              "PCR未纯化6",
+              "菌株6",
+              "质粒6",
+            ],
           },
 
           render: (text, record, index) => {
@@ -561,30 +590,16 @@
 
         {
           dataIndex: "options",
-
           title: "操作",
-          fieldsProps: {
-            verifyFn: (t, record) => {
-              console.log(
-                "%c Line:568 🌶 t, record",
-                "color:#b03734",
-                t,
-                record
-              );
-              return {
-                status: true,
-                message: t,
-              };
-            },
-          },
           onchange: (text, record, { setRowData }) => {
-            console.log(
-              "%c Line:413 🥑 excelDataSource",
-              "color:#4fff4B",
-              text,
-              record
-            );
             setRowData({ resistance: text * 2, sampleTypeName: text });
+          },
+          extra: {
+            style: {
+              width: 100,
+              height: 50,
+              background: "red",
+            },
           },
         },
       ];

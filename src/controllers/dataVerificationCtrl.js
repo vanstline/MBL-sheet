@@ -1992,14 +1992,17 @@ const dataVerificationCtrl = {
       });
     }
 
+    const paneswrapper = document.querySelectorAll(".MBLsheet-paneswrapper");
+    const { width = 0, height = 0 } = paneswrapper?.[0].getBoundingClientRect();
+
     $("#MBLsheet-dataVerification-dropdown-List")
       .html(optionHtml)
       .prop("data-index", rowIndex + "_" + colIndex)
       .show()
       .css({
         width: col - col_pre - 1,
-        left: col_pre,
-        top: row,
+        left: col_pre + width,
+        top: row + height,
       });
 
     let myh = $("#MBLsheet-dataVerification-dropdown-List").outerHeight();
@@ -2007,7 +2010,7 @@ const dataVerificationCtrl = {
 
     if (row + myh > currentWinH - 42 - 6) {
       $("#MBLsheet-dataVerification-dropdown-List").css({
-        top: row_pre - myh,
+        top: row_pre - myh + height,
       });
     }
   },

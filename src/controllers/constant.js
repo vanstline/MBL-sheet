@@ -224,7 +224,7 @@ const gridHTML = function () {
                                                         </div>
                                                     </div>
                                                     <div id="MBLsheet-dataVerification-dropdown-btn"></div>
-                                                    <div id="MBLsheet-dataVerification-dropdown-List" class="MBLsheet-mousedown-cancel"></div>
+                                                    
                                                     <div id="MBLsheet-dataVerification-showHintBox" class="MBLsheet-mousedown-cancel"></div>
                                                     <div class="MBLsheet-cell-copy"></div>  
                                                     <div class="MBLsheet-grdblkflowpush"></div>  \${flow} 
@@ -291,6 +291,7 @@ const gridHTML = function () {
                     <div id="MBLsheet-copy-content" contenteditable="true"></div>
                     <input id="MBLsheet-copy-btn" type="button" data-clipboard-target="MBLsheet-copy-content">
                     <div id="testdpidiv" style="height: 1in; left: -100%; position: absolute; top: -100%; width: 1in;"></div>
+                    <div id="MBLsheet-dataVerification-dropdown-List" class="MBLsheet-mousedown-cancel"></div>
                   </div>`;
 };
 
