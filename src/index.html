@@ -418,9 +418,9 @@
           title: "样本类型",
 
           fieldsProps: {
-            defaultValue: "菌株",
             type: "select",
             type2: "multi",
+            defaultValue: "菌株",
 
             options: [
               "PCR已纯化",
@@ -593,6 +593,8 @@
           dataIndex: "options",
           title: "操作",
           fieldsProps: {
+            defaultValue: "菌株",
+
             verifyFn(text) {
               return {
                 status: true,
@@ -619,7 +621,7 @@
           {
             columns: columns,
             dataSource: excelDataSource,
-            row: 20,
+            row: 2,
           }
         );
 

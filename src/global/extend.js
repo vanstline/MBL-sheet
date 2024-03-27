@@ -645,7 +645,12 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
     // *添加空行模板这里请保持为push null;
     let row = [];
     for (let c = 0; c < d[0].length; c++) {
-      row.push(null);
+      const defaultV = d?.[0]?.[c]?.fieldsProps?.defaultValue;
+      if (defaultV !== undefined) {
+        row.push({ ...d[0][c], v: defaultV, m: defaultV });
+      } else {
+        row.push(null);
+      }
     }
 
     var cellBorderConfig = [];
