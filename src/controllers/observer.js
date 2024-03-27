@@ -17,17 +17,19 @@ $(document).ready(function () {
       var currentContent = event.target.textContent || event.target.innerText; // 获取当前内容
       const curRowData = Store.flowdata[r];
       const rowData = {};
-      const curKey = curRowData[c].dataIndex;
+      const curKey = curRowData?.[c]?.dataIndex;
       const keyNumMap = {};
 
       sheet.columns.forEach((item, i) => {
-        const v = curRowData?.find(
-          (sub) => sub.dataIndex === item.dataIndex
-        )?.v;
+        if (item.dataIndex) {
+          const v = curRowData?.find(
+            (sub) => sub?.dataIndex === item.dataIndex
+          )?.v;
 
-        keyNumMap[item.dataIndex] = i;
+          keyNumMap[item.dataIndex] = i;
 
-        rowData[item.dataIndex] = v;
+          rowData[item.dataIndex] = v;
+        }
       });
 
       rowData[curKey] = currentContent;

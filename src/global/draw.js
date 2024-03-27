@@ -1822,6 +1822,11 @@ let cellRender = function (
     dataVerification[r + "_" + c] != null &&
     !dataVerificationCtrl.validateCellData(value, dataVerification[r + "_" + c])
   ) {
+    const maxRowLen = Store.flowdata.length;
+    const maxColLen = Store.flowdata[0].length;
+    const curSheetTable = document.querySelector("#MBLsheet-cell-main");
+    const curSheetTableRect = curSheetTable?.getBoundingClientRect();
+
     // 若单元格数据验证不通过，绘制红色边框
     // //单元格左上角红色小三角标示
     // let dv_w = 5 * Store.zoomRatio,
@@ -1841,18 +1846,42 @@ let cellRender = function (
     // MBLsheetTableContent.fill();
     // MBLsheetTableContent.closePath();
 
-    // 绘制异常红色边框
-    MBLsheetTableContent.beginPath();
+    const curMax =
+      // 绘制异常红色边框
+      MBLsheetTableContent.beginPath();
+    const dissLeft = c === 0 ? 1 : 0;
+    const dissTop = r === 0 ? 1 : 0;
+
+    const endRight = end_c + offsetLeft - 1 - bodrder05;
+    const endBottom = end_r + offsetTop - 1 - bodrder05;
+    let dissRight = 0;
+    let dissBottom = 0;
+
+    if (c === maxColLen - 1 && end_c >= curSheetTableRect.width) {
+      // console.log(
+      //   "%c Line:1862 🍅 c === maxColLen",
+      //   "color:#f5ce50",
+      //   maxColLen,
+      //   end_c,
+      //   (c + 1) * end_c,
+      //   curSheetTableRect.width
+      // );
+      dissRight = 10;
+    }
+
+    if (r === maxRowLen - 1 && c * maxRowLen > curSheetTableRect.height) {
+      dissBottom = 1;
+    }
 
     // 左上起点
     MBLsheetTableContent.moveTo(
-      start_c + offsetLeft - 1 - bodrder05,
-      start_r + offsetTop - bodrder05
+      start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+      start_r + offsetTop - bodrder05 + dissTop
     );
     // 右上 向右移动
     MBLsheetTableContent.lineTo(
       end_c + offsetLeft - 1 - bodrder05,
-      start_r + offsetTop - bodrder05
+      start_r + offsetTop - bodrder05 + dissTop
     );
     // 右下 向下移动
     MBLsheetTableContent.lineTo(
@@ -1861,13 +1890,13 @@ let cellRender = function (
     );
     // 左下 向左移动
     MBLsheetTableContent.lineTo(
-      start_c + offsetLeft - 1 - bodrder05,
+      start_c + offsetLeft - 1 - bodrder05 + dissLeft,
       end_r + offsetTop - 1 - bodrder05
     );
     // 左上 回到起点
     MBLsheetTableContent.lineTo(
-      start_c + offsetLeft - 1 - bodrder05,
-      start_r + offsetTop - bodrder05
+      start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+      start_r + offsetTop - bodrder05 + dissTop
     );
     MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
     MBLsheetTableContent.lineWidth = 1;

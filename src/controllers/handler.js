@@ -1771,17 +1771,18 @@ export default function MBLsheetHandler() {
         col_index = column_focus;
       }
 
-      // 单元格禁用
       const curSheet = sheetmanage.getSheetByIndex();
       const curRowData = Store.flowdata[row_index];
       const rowData = {};
 
       curSheet.columns.forEach((item) => {
-        const v = curRowData?.find(
-          (sub) => sub.dataIndex === item.dataIndex
-        )?.v;
+        if (item.dataIndex) {
+          const v = curRowData?.find(
+            (sub) => sub?.dataIndex === item.dataIndex
+          )?.v;
 
-        rowData[item.dataIndex] = v;
+          rowData[item.dataIndex] = v;
+        }
       });
 
       if (curSheet.columns?.[0]?.[col_index]?.dataIndex == null) {
@@ -1799,6 +1800,7 @@ export default function MBLsheetHandler() {
         }
       }
 
+      // 单元格禁用
       const curDisabledMap = curSheet?.disabled ?? {};
 
       const columns = sheetmanage.getSheetByIndex();
