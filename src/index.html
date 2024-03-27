@@ -563,14 +563,14 @@
           dataIndex: "options",
 
           title: "操作",
-          onchange: (text, record, index) => {
+          onchange: (text, record, { setRowData }) => {
             console.log(
               "%c Line:413 🥑 excelDataSource",
               "color:#4fff4B",
               text,
-              record,
-              index
+              record
             );
+            setRowData({ resistance: text * 2, sampleTypeName: text });
           },
         },
       ];

@@ -1,7 +1,7 @@
 import Store from "../store";
 import { scroll, transToData } from "./api";
 import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
-import { initDataSource } from "./sg/data";
+import { initDataSource, setData } from "./sg/data";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -73,6 +73,8 @@ function sgInit(setting, config, MBLsheet) {
 
     return data;
   };
+
+  MBLsheet.setData = (data) => setData(data, sheet, MBLsheet);
 }
 
 function setLength(len, MBLsheet) {

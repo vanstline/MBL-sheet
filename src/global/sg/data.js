@@ -8,40 +8,7 @@ import {
 } from "./type";
 
 function initDataSource(dataSource, sheet, MBLsheet) {
-  const { columns } = sheet;
-  const cMap = {};
-  columns.forEach(({ dataIndex }, i) => {
-    cMap[dataIndex] = i;
-  });
-
-  const fillArr = Array.from({ length: sheet.row })?.map((_, i) => {
-    return dataSource[i] || {};
-  });
-
-  initVerification(fillArr, sheet, MBLsheet);
-
-  const curData = fillArr.map((item, r) => {
-    return columns.map((sub) => {
-      var v = item[sub.dataIndex];
-
-      const dom = sub.render && sub.render(item[sub.dataIndex], item, r);
-      // TODO: 未来可能会有更多的渲染方式
-      // console.log(dom);
-      if (sub.render && typeof sub.render === "function") {
-        v = sub.render(item[sub.dataIndex], item, r);
-      }
-      if (lengthVerArr.includes(sub?.fieldsMap?.type)) {
-        sub.ct = {
-          fa: "0",
-          t: "n",
-        };
-      }
-      return { ...sub, v, ct: sub.ct };
-    });
-  });
-
-  const finallyData = transToCellDataV2(curData);
-  sheet.celldata = finallyData;
+  sheet.celldata = processData(dataSource, sheet, MBLsheet);
 }
 
 function initVerification(data, sheet, MBLsheet) {
@@ -81,4 +48,48 @@ function initVerification(data, sheet, MBLsheet) {
   console.log("%c Line:41 🍔 sheet", "color:#e41a6a", sheet);
 }
 
-export { initDataSource, initVerification };
+function setData(data, sheet, MBLsheet) {
+  const curData = processData(data, sheet, MBLsheet);
+  curData.forEach((item) => {
+    MBLsheet.setCellValue(item.r, item.c, item.v);
+  });
+}
+
+function processData(dataSource, sheet, MBLsheet) {
+  const { columns } = sheet;
+  const cMap = {};
+  columns.forEach(({ dataIndex }, i) => {
+    cMap[dataIndex] = i;
+  });
+
+  const fillArr = Array.from({ length: sheet.row })?.map((_, i) => {
+    return dataSource[i] || {};
+  });
+
+  initVerification(fillArr, sheet, MBLsheet);
+
+  const curData = fillArr.map((item, r) => {
+    return columns.map((sub) => {
+      var v = item[sub.dataIndex];
+
+      const dom = sub.render && sub.render(item[sub.dataIndex], item, r);
+      // TODO: 未来可能会有更多的渲染方式
+      // console.log(dom);
+      if (sub.render && typeof sub.render === "function") {
+        v = sub.render(item[sub.dataIndex], item, r);
+      }
+      if (lengthVerArr.includes(sub?.fieldsMap?.type)) {
+        sub.ct = {
+          fa: "0",
+          t: "n",
+        };
+      }
+      return { ...sub, v, ct: sub.ct };
+    });
+  });
+
+  const finallyData = transToCellDataV2(curData);
+  return finallyData;
+}
+
+export { initDataSource, initVerification, setData };

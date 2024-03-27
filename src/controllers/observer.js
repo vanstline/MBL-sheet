@@ -18,21 +18,33 @@ $(document).ready(function () {
       const curRowData = Store.flowdata[r];
       const rowData = {};
       const curKey = curRowData[c].dataIndex;
+      const keyNumMap = {};
 
-      sheet.columns.forEach((item) => {
+      sheet.columns.forEach((item, i) => {
         const v = curRowData?.find(
           (sub) => sub.dataIndex === item.dataIndex
         )?.v;
+
+        keyNumMap[item.dataIndex] = i;
 
         rowData[item.dataIndex] = v;
       });
 
       rowData[curKey] = currentContent;
 
+      const setRowData = (obj) => {
+        // setTimeout(() => {
+        for (let key in obj) {
+          const col = keyNumMap[key];
+          MBLsheet.setCellValue(r, col, obj[key]);
+        }
+        // });
+      };
+
       // 在这里处理内容变更后的逻辑
       const onchange = getcellvalue(r, c, null, "onchange");
       if (onchange && typeof onchange === "function") {
-        onchange(currentContent, rowData, c);
+        onchange(currentContent, rowData, { setRowData });
       }
     }
 
