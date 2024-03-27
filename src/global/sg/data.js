@@ -90,6 +90,11 @@ function processData(dataSource, sheet, MBLsheet) {
       if (sub.render && typeof sub.render === "function") {
         v = sub.render(item[sub.dataIndex], item, r);
       }
+
+      if (v === undefined && sub?.fieldsProps?.defaultValue) {
+        v = sub?.fieldsProps?.defaultValue;
+      }
+
       if (lengthVerArr.includes(sub?.fieldsMap?.type)) {
         sub.ct = {
           fa: "0",
@@ -100,6 +105,7 @@ function processData(dataSource, sheet, MBLsheet) {
     });
   });
 
+  console.log("%c Line:106 🍒 curData", "color:#2eafb0", curData);
   const finallyData = transToCellDataV2(curData);
   return finallyData;
 }
