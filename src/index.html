@@ -563,6 +563,15 @@
           dataIndex: "options",
 
           title: "操作",
+          onchange: (text, record, index) => {
+            console.log(
+              "%c Line:413 🥑 excelDataSource",
+              "color:#4fff4B",
+              text,
+              record,
+              index
+            );
+          },
         },
       ];
 

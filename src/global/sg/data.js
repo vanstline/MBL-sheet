@@ -25,7 +25,8 @@ function initDataSource(dataSource, sheet, MBLsheet) {
       var v = item[sub.dataIndex];
 
       const dom = sub.render && sub.render(item[sub.dataIndex], item, r);
-      console.log(dom);
+      // TODO: 未来可能会有更多的渲染方式
+      // console.log(dom);
       if (sub.render && typeof sub.render === "function") {
         v = sub.render(item[sub.dataIndex], item, r);
       }

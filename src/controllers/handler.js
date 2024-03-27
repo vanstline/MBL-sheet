@@ -1773,11 +1773,17 @@ export default function MBLsheetHandler() {
 
       // 单元格禁用
       const curSheet = sheetmanage.getSheetByIndex();
-      console.log(
-        "%c Line:1777 🥝 curSheet.columns",
-        "color:#ea7e5c",
-        curSheet.columns
-      );
+      const curRowData = Store.flowdata[row_index];
+      const rowData = {};
+
+      curSheet.columns.forEach((item) => {
+        const v = curRowData?.find(
+          (sub) => sub.dataIndex === item.dataIndex
+        )?.v;
+
+        rowData[item.dataIndex] = v;
+      });
+
       if (curSheet.columns?.[0]?.[col_index]?.dataIndex == null) {
         const changeFn = curSheet.columns?.[0].onchange;
         if (changeFn && typeof changeFn === "function") {
@@ -1787,7 +1793,8 @@ export default function MBLsheetHandler() {
             "color:#2eafb0",
             "没有 dataIndex 禁用"
           );
-          changeFn(null, { r: row_index, c: col_index });
+
+          changeFn(null, rowData, col_index);
           return;
         }
       }
