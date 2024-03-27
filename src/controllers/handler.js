@@ -1794,7 +1794,7 @@ export default function MBLsheetHandler() {
             "没有 dataIndex 禁用"
           );
 
-          changeFn(null, rowData, col_index);
+          changeFn(null, rowData, {});
           return;
         }
       }
@@ -1802,7 +1802,6 @@ export default function MBLsheetHandler() {
       const curDisabledMap = curSheet?.disabled ?? {};
 
       const columns = sheetmanage.getSheetByIndex();
-      console.log("%c Line:1778 🥚 columns", "color:#fca650", columns);
 
       if (curDisabledMap[`${row_index}_${col_index}`]) {
         return;

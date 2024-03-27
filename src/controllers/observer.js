@@ -32,6 +32,21 @@ $(document).ready(function () {
 
       rowData[curKey] = currentContent;
 
+      if (typeof sheet.dataVerification[`${r}_${c}`]?.verifyFn === "function") {
+        const curVerifyInfo = sheet.dataVerification[`${r}_${c}`]?.verifyFn(
+          currentContent,
+          rowData
+        );
+
+        if (curVerifyInfo.status === true) {
+          sheet.dataVerification[`${r}_${c}`] = {
+            ...sheet.dataVerification[`${r}_${c}`],
+            hintShow: curVerifyInfo.status,
+            hintText: curVerifyInfo.message,
+          };
+        }
+      }
+
       const setRowData = (obj) => {
         // setTimeout(() => {
         for (let key in obj) {

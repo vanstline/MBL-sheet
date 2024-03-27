@@ -1760,6 +1760,10 @@ const dataVerificationCtrl = {
       value1 = item.value1,
       value2 = item.value2;
 
+    if (typeof item.verifyFn === "function") {
+      return !item.hintShow;
+    }
+
     if (type == "dropdown") {
       let list = _this.getDropdownList(value1);
 

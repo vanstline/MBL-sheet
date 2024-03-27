@@ -18,13 +18,25 @@ function initVerification(data, sheet, MBLsheet) {
   for (let i = 0; i < data.length; i++) {
     for (let j = 0; j < columns.length; j++) {
       if (typeof columns?.[j]?.fieldsProps === "object") {
-        const { type, type2, options, status, verifyText, compareInfo } =
-          columns[j].fieldsProps;
+        const {
+          type,
+          type2,
+          options,
+          status,
+          verifyText,
+          compareInfo,
+          verifyFn,
+        } = columns[j].fieldsProps;
         const { sign, range, value } = compareInfo ?? {};
+
+        // 自定义校验
+        const curVerifyFn = typeof verifyFn === "function" ? verifyFn : null;
+
         var curVerifyInfo = {
           type: fieldsMap[type] === AUTOCOMPLETE ? "dropdown" : fieldsMap[type],
           hintShow: !!status,
           hintText: verifyText,
+          verifyFn: curVerifyFn,
         };
 
         if (type === "select" || type === AUTOCOMPLETE) {

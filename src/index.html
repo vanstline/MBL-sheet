@@ -563,6 +563,20 @@
           dataIndex: "options",
 
           title: "操作",
+          fieldsProps: {
+            verifyFn: (t, record) => {
+              console.log(
+                "%c Line:568 🌶 t, record",
+                "color:#b03734",
+                t,
+                record
+              );
+              return {
+                status: true,
+                message: t,
+              };
+            },
+          },
           onchange: (text, record, { setRowData }) => {
             console.log(
               "%c Line:413 🥑 excelDataSource",
