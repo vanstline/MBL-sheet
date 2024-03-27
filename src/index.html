@@ -399,15 +399,31 @@
               range: [1, 10],
             },
           },
+          extra: {
+            style: {
+              width: 30,
+              height: 10,
+              // background: "red",
+            },
+            onclick: (text, data, index) => {
+              console.log(
+                "%c Line:409 🧀 text, index",
+                "color:#7f2b82",
+                text,
+                data,
+                index
+              );
+            },
+          },
 
           render: (text, record, index) => {
-            console.log(
-              "%c Line:413 🥑 excelDataSource",
-              "color:#4fff4B",
-              text,
-              record,
-              index
-            );
+            // console.log(
+            //   "%c Line:413 🥑 excelDataSource",
+            //   "color:#4fff4B",
+            //   text,
+            //   record,
+            //   index
+            // );
             return record.cxSampleCartInfo?.[0]?.name;
           },
         },
@@ -488,45 +504,45 @@
           },
         },
 
-        {
-          dataIndex: "minFragmentLength",
+        // {
+        //   dataIndex: "minFragmentLength",
 
-          title: "最小长度",
+        //   title: "最小长度",
 
-          fieldsProps: {
-            type: "text",
+        //   fieldsProps: {
+        //     type: "text",
 
-            compareInfo: {
-              sign: "in", // 比较符
+        //     compareInfo: {
+        //       sign: "in", // 比较符
 
-              range: [0, 999999],
-            },
-          },
+        //       range: [0, 999999],
+        //     },
+        //   },
 
-          render: (text, record, index) => {
-            return record.cxSampleCartInfo?.[0]?.minFragmentLength;
-          },
-        },
+        //   render: (text, record, index) => {
+        //     return record.cxSampleCartInfo?.[0]?.minFragmentLength;
+        //   },
+        // },
 
-        {
-          dataIndex: "maxFragmentLength",
+        // {
+        //   dataIndex: "maxFragmentLength",
 
-          title: "最大长度",
+        //   title: "最大长度",
 
-          fieldsProps: {
-            type: "text",
+        //   fieldsProps: {
+        //     type: "text",
 
-            compareInfo: {
-              sign: "in", // 比较符
+        //     compareInfo: {
+        //       sign: "in", // 比较符
 
-              range: [0, 999999],
-            },
-          },
+        //       range: [0, 999999],
+        //     },
+        //   },
 
-          render: (text, record, index) => {
-            return record.cxSampleCartInfo?.[0]?.maxFragmentLength;
-          },
-        },
+        //   render: (text, record, index) => {
+        //     return record.cxSampleCartInfo?.[0]?.maxFragmentLength;
+        //   },
+        // },
 
         // {
         //   dataIndex: "sampleConcentration",
@@ -605,13 +621,13 @@
           onchange: (text, record, { setRowData }) => {
             setRowData({ resistance: text * 2, sampleTypeName: text });
           },
-          extra: {
-            style: {
-              width: 100,
-              height: 50,
-              background: "red",
-            },
-          },
+          // extra: {
+          //   style: {
+          //     width: 100,
+          //     height: 50,
+          //     background: "red",
+          //   },
+          // },
         },
       ];
 

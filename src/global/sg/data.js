@@ -105,7 +105,6 @@ function processData(dataSource, sheet, MBLsheet) {
     });
   });
 
-  console.log("%c Line:106 🍒 curData", "color:#2eafb0", curData);
   const finallyData = transToCellDataV2(curData);
   return finallyData;
 }

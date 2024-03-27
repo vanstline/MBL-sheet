@@ -316,6 +316,29 @@ export default function MBLsheetHandler() {
       let row_index_ed = row_index,
         col_index_ed = col_index;
       let sheetFile = sheetmanage.getSheetByIndex();
+
+      var curColumn = sheetFile?.columns?.[col_index_ed] ?? {};
+      if (typeof curColumn?.extra === "object") {
+        const extra = curColumn.extra;
+        const { width = 0 } = extra?.style ?? {};
+        if (col - x <= width && typeof extra.onclick === "function") {
+          const curRowData = Store.flowdata[row_index_ed];
+          const rowData = {};
+          const curKey = curRowData?.[col_index]?.dataIndex;
+
+          sheetFile.columns.forEach((item, i) => {
+            if (item.dataIndex) {
+              const v = curRowData?.find(
+                (sub) => sub?.dataIndex === item.dataIndex
+              )?.v;
+
+              rowData[item.dataIndex] = v;
+            }
+          });
+          extra.onclick(rowData[curColumn.dataIndex], rowData, row_index_ed);
+          return;
+        }
+      }
       // // 单元格禁用
       // const curDisabledMap = sheetFile?.disabled ?? {};
 
@@ -1772,6 +1795,18 @@ export default function MBLsheetHandler() {
       }
 
       const curSheet = sheetmanage.getSheetByIndex();
+
+      var columns = curSheet?.columns ?? [];
+      if (typeof columns[column_focus]?.extra === "object") {
+        const extra = columns[column_focus].extra;
+        const { width = 0 } = extra?.style ?? {};
+        if (col_location[1] - x <= width) {
+          // TODO: 双击事件
+          console.log("%c Line:1792 🌰", "color:#6ec1c2 禁用了");
+          return;
+        }
+      }
+
       const curRowData = Store.flowdata[row_index];
       const rowData = {};
 
@@ -1788,7 +1823,6 @@ export default function MBLsheetHandler() {
       if (curSheet.columns?.[0]?.[col_index]?.dataIndex == null) {
         const changeFn = curSheet.columns?.[0].onchange;
         if (changeFn && typeof changeFn === "function") {
-          console.log("%c Line:1779 🥝 changeFn", "color:#b03734", changeFn);
           console.log(
             "%c Line:1778 🍫",
             "color:#2eafb0",
@@ -1803,7 +1837,7 @@ export default function MBLsheetHandler() {
       // 单元格禁用
       const curDisabledMap = curSheet?.disabled ?? {};
 
-      const columns = sheetmanage.getSheetByIndex();
+      var columns = sheetmanage.getSheetByIndex();
 
       if (curDisabledMap[`${row_index}_${col_index}`]) {
         return;

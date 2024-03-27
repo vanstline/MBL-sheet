@@ -1815,6 +1815,44 @@ let cellRender = function (
     cellsize[3]
   );
 
+  const columns = sheetmanage.getSheetByIndex().columns;
+  if (typeof columns[c]?.extra === "object") {
+    const { style = {} } = columns[c]?.extra;
+    // TODO: 优化
+    console.log("%c Line:1820 🌮 columns", "color:#4fff4B", columns[c]?.extra);
+    MBLsheetTableContent.beginPath();
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+
+    MBLsheetTableContent.fillStyle = style.background || "rgba(0, 0, 0, .1)";
+    MBLsheetTableContent.fill();
+    MBLsheetTableContent.closePath();
+  }
+
   let dataVerification = dataVerificationCtrl.dataVerification;
 
   if (
