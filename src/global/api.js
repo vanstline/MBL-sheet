@@ -6040,7 +6040,7 @@ export function redo(options = {}) {
  */
 export function getAllSheets() {
   let data = $.extend(true, [], Store.MBLsheetfile);
-
+  // FIXME: 这里的取值有问题 导致初始话 select 没有展示 对应的label
   data.forEach((item, index, arr) => {
     if (item.data != null && item.data.length > 0) {
       item.celldata = sheetmanage.getGridData(item.data);

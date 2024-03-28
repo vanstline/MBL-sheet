@@ -1912,8 +1912,6 @@ export default function MBLsheetHandler() {
         return;
       }
 
-      debugger;
-
       if (
         $("#MBLsheet-search-formula-parm").is(":visible") ||
         $("#MBLsheet-search-formula-parm-select").is(":visible")

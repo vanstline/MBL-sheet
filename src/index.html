@@ -85,317 +85,173 @@
       const excelDataSource = [
         {
           createDate: "2024-03-25 19:44:36.0",
-
           cxPrimerCartId: 1731287,
-
           cxPrimerCartInfo: [
             {
               baseNumber: 0,
-
               concentration: "",
-
               createDate: "2024-03-25 19:44:36.0",
-
               cxPrimerCode: "U1011200",
-
               cxPrimerId: 2250,
-
               endDate: null,
-
               id: 1731287,
-
               ids: null,
-
               isOldPrimer: 1,
-
               mark: null,
-
               name: "ITS3",
-
               page: 1,
-
               primerTypeIds: null,
-
               reverseSequence: "",
-
               rows: 20,
-
               sequence: "GCATCGATGAAGAACGCAGC",
-
               startDate: null,
-
               status: 0,
-
               targetLength: 0,
-
               type: 1,
-
               typeName: "通用",
-
               updateMark: null,
-
               userId: 375760,
-
               userInfo: null,
             },
           ],
-
           cxPrimerCartList: [],
-
           cxSampleCartId: 8684104,
-
           cxSampleCartInfo: [
             {
               carrierId: 0,
-
               carrierName: "1212",
-
               createDate: "2024-03-25 19:44:36.0",
-
               cxSampleCode: "31224032500002",
-
               cxSampleId: 32208228,
-
               endDate: null,
-
               id: 8684104,
-
               ids: null,
-
               isOldSample: 1,
-
               mark: null,
-
               maxFragmentLength: "23",
-
               minFragmentLength: "12",
-
               name: "qwer",
-
               note: "",
-
               page: 1,
-
               resistance: "12",
-
               rows: 20,
-
               sampleSequence: "",
-
               sampleTypeId: 1,
-
               sampleTypeIds: null,
-
               sampleTypeName: "PCR产物(已纯化)",
-
               startDate: null,
-
               status: 0,
-
               updateMark: null,
-
               userId: 375760,
-
               userInfo: null,
             },
           ],
-
           endDate: null,
-
           id: 22955773,
-
           ids: null,
-
           mark: null,
-
           page: 1,
-
           rows: 20,
-
           seqMark: "噬菌体质粒",
-
           seqText: "单向",
-
           sequenceMethod: 0,
-
           sequenceQuest: 1,
-
           sort: 1,
-
           startDate: null,
-
           status: 0,
-
           updateMark: null,
-
           userId: 375760,
-
           userInfo: null,
         },
-
         {
           createDate: "2024-03-25 19:44:36.0",
-
           cxPrimerCartId: 1731287,
-
           cxPrimerCartInfo: [
             {
               baseNumber: 0,
-
               concentration: "",
-
               createDate: "2024-03-25 19:44:36.0",
-
               cxPrimerCode: "U1011200",
-
               cxPrimerId: 2250,
-
               endDate: null,
-
               id: 1731287,
-
               ids: null,
-
               isOldPrimer: 1,
-
               mark: null,
-
               name: "ITS3",
-
               page: 1,
-
               primerTypeIds: null,
-
               reverseSequence: "",
-
               rows: 20,
-
               sequence: "GCATCGATGAAGAACGCAGC",
-
               startDate: null,
-
               status: 0,
-
               targetLength: 0,
-
               type: 1,
-
               typeName: "通用",
-
               updateMark: null,
-
               userId: 375760,
-
               userInfo: null,
             },
           ],
-
           cxPrimerCartList: [],
-
           cxSampleCartId: 8684105,
-
           cxSampleCartInfo: [
             {
               carrierId: 0,
-
               carrierName: "123",
-
               createDate: "2024-03-25 19:44:36.0",
-
               cxSampleCode: "31224032500001",
-
               cxSampleId: 32208227,
-
               endDate: null,
-
               id: 8684105,
-
               ids: null,
-
               isOldSample: 1,
-
               mark: null,
-
               maxFragmentLength: "34",
-
               minFragmentLength: "12",
-
               name: "12312312",
-
               note: "",
-
               page: 1,
-
               resistance: "123",
-
               rows: 20,
-
               sampleSequence: "",
-
               sampleTypeId: 1,
-
               sampleTypeIds: null,
-
-              sampleTypeName: "PCR产物(已纯化)",
-
+              sampleTypeName: "PCR已纯化-Value",
               startDate: null,
-
               status: 0,
-
               updateMark: null,
-
               userId: 375760,
-
               userInfo: null,
             },
           ],
-
           endDate: null,
-
           id: 22955774,
-
           ids: null,
-
           mark: null,
-
           page: 1,
-
           rows: 20,
-
           seqMark: "",
-
           seqText: "单向",
-
           sequenceMethod: 0,
-
           sequenceQuest: 1,
-
           sort: 2,
-
           startDate: null,
-
           status: 0,
-
           updateMark: null,
-
           userId: 375760,
-
           userInfo: null,
         },
       ];
-
       const columns = [
         {
           dataIndex: "sampleName",
-
           title: "样本名称",
-
           fieldsProps: {
             type: "text",
-
             compareInfo: {
               sign: "in", // 比较符
-
               range: [1, 10],
             },
           },
@@ -414,7 +270,6 @@
               );
             },
           },
-
           render: (text, record, index) => {
             // console.log(
             //   "%c Line:413 🥑 excelDataSource",
@@ -426,83 +281,46 @@
             return record.cxSampleCartInfo?.[0]?.name;
           },
         },
-
         {
           dataIndex: "sampleTypeName",
-
           title: "样本类型",
-
           fieldsProps: {
             type: "select",
             type2: "multi",
-            defaultValue: "菌株",
-
+            defaultValue: "PCR已纯化-Value",
             options: [
-              "PCR已纯化",
-              "PCR未纯化",
-              "菌株",
-              "质粒",
-              "PCR已纯化1",
-              "PCR未纯化1",
-              "菌株1",
-              "质粒1",
-              "PCR已纯化2",
-              "PCR未纯化2",
-              "菌株2",
-              "质粒2",
-              "PCR已纯化3",
-              "PCR未纯化3",
-              "菌株3",
-              "质粒3",
-              "PCR已纯化4",
-              "PCR未纯化4",
-              "菌株4",
-              "质粒4",
-              "PCR已纯化5",
-              "PCR未纯化5",
-              "菌株5",
-              "质粒5",
-              "PCR已纯化6",
-              "PCR未纯化6",
-              "菌株6",
-              "质粒6",
+              // "PCR已纯化", "PCR未纯化", "菌株", "质粒"
+              { label: "PCR已纯化111", value: "PCR已纯化-Value" },
+              { label: "PCR未纯化", value: "PCR未纯化-Value" },
+              { label: "菌株", value: "菌株-Value" },
+              { label: "质粒", value: "质粒-Value" },
             ],
           },
-
           render: (text, record, index) => {
             return record.cxSampleCartInfo?.[0]?.sampleTypeName;
           },
         },
-
         {
           dataIndex: "resistance",
-
           title: "抗性",
-
           fieldsProps: {
             type: "autocomplete",
             type2: "multi",
             // type: "select",
             // type2: "select",
-
             options: ["Kan", "Amp"],
           },
-
           render: (text, record, index) => {
             return record.cxSampleCartInfo?.[0]?.resistance;
           },
         },
-
         {
           dataIndex: "carrierName",
-
           title: "载体",
-
           render: (text, record, index) => {
             return record.cxSampleCartInfo?.[0]?.carrierName;
           },
         },
-
         // {
         //   dataIndex: "minFragmentLength",
 

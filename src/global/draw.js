@@ -1819,7 +1819,6 @@ let cellRender = function (
   if (typeof columns[c]?.extra === "object") {
     const { style = {} } = columns[c]?.extra;
     // TODO: 优化
-    console.log("%c Line:1820 🌮 columns", "color:#4fff4B", columns[c]?.extra);
     MBLsheetTableContent.beginPath();
 
     // 左上起点

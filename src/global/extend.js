@@ -645,9 +645,24 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
     // *添加空行模板这里请保持为push null;
     let row = [];
     for (let c = 0; c < d[0].length; c++) {
-      const defaultV = d?.[0]?.[c]?.fieldsProps?.defaultValue;
+      const fieldsProps = d?.[0]?.[c]?.fieldsProps ?? {};
+      const defaultV = fieldsProps?.defaultValue;
+      const { type = "", options = [] } = fieldsProps;
       if (defaultV !== undefined) {
-        row.push({ ...d[0][c], v: defaultV, m: defaultV });
+        if (type === "select") {
+          let curM = defaultV
+            .split(",")
+            .map((min) => {
+              return (
+                options?.find((min) => min.value === defaultV)?.label ||
+                defaultV
+              );
+            })
+            .join(",");
+          row.push({ ...d[0][c], v: defaultV, m: curM });
+        } else {
+          row.push({ ...d[0][c], v: defaultV, m: defaultV });
+        }
       } else {
         row.push(null);
       }

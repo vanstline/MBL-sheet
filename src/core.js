@@ -60,7 +60,6 @@ MBLsheet.create = function (setting) {
   }
 
   let extendsetting = common_extend(defaultSetting, setting);
-  console.log("%c Line:62 🌶 extendsetting", "color:#e41a6a", extendsetting);
 
   let loadurl = extendsetting.loadUrl,
     menu = extendsetting.menu,

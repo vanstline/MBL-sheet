@@ -1,3 +1,4 @@
+import Store from "../../store";
 import { transToCellData, transToCellDataV2 } from "../api";
 import {
   fieldsMap,
@@ -8,7 +9,8 @@ import {
 } from "./type";
 
 function initDataSource(dataSource, sheet, MBLsheet) {
-  sheet.celldata = processData(dataSource, sheet, MBLsheet);
+  const newCellData = processData(dataSource, sheet, MBLsheet);
+  sheet.celldata = newCellData;
 }
 
 function initVerification(data, sheet, MBLsheet) {
@@ -40,7 +42,10 @@ function initVerification(data, sheet, MBLsheet) {
         };
 
         if (type === "select" || type === AUTOCOMPLETE) {
-          curVerifyInfo.value1 = options?.join(",");
+          // if ()
+          curVerifyInfo.value1 = options
+            .map((item) => item.label || item)
+            .join(",");
           curVerifyInfo.type2 = type === AUTOCOMPLETE ? AUTOCOMPLETE : type2;
         } else if (lengthVerArr.includes(type) && range != null) {
           const [v1, v2] = range || [];
@@ -74,7 +79,9 @@ function processData(dataSource, sheet, MBLsheet) {
     cMap[dataIndex] = i;
   });
 
-  const fillArr = Array.from({ length: sheet.row })?.map((_, i) => {
+  const fillArr = Array.from({
+    length: Math.max(dataSource.length, sheet.row),
+  })?.map((_, i) => {
     return dataSource[i] || {};
   });
 
@@ -84,6 +91,8 @@ function processData(dataSource, sheet, MBLsheet) {
     return columns.map((sub) => {
       var v = item[sub.dataIndex];
 
+      const fieldsProps = sub.fieldsProps || {};
+
       const dom = sub.render && sub.render(item[sub.dataIndex], item, r);
       // TODO: 未来可能会有更多的渲染方式
       // console.log(dom);
@@ -91,8 +100,21 @@ function processData(dataSource, sheet, MBLsheet) {
         v = sub.render(item[sub.dataIndex], item, r);
       }
 
-      if (v === undefined && sub?.fieldsProps?.defaultValue) {
-        v = sub?.fieldsProps?.defaultValue;
+      if (v === undefined && fieldsProps?.defaultValue) {
+        v = fieldsProps?.defaultValue;
+      }
+
+      var m = v;
+
+      if (fieldsProps?.type === "select") {
+        m = v
+          .split(",")
+          .map((min) => {
+            return (
+              fieldsProps?.options?.find((min) => min.value === m)?.label || v
+            );
+          })
+          .join(",");
       }
 
       if (lengthVerArr.includes(sub?.fieldsMap?.type)) {
@@ -101,7 +123,7 @@ function processData(dataSource, sheet, MBLsheet) {
           t: "n",
         };
       }
-      return { ...sub, v, ct: sub.ct };
+      return { ...sub, v, m, ct: sub.ct };
     });
   });
 
