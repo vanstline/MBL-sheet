@@ -66,7 +66,16 @@ function sgInit(setting, config, MBLsheet) {
     const data = MBLsheet.getSheetData()?.map((item) => {
       const obj = {};
       sheet.columns.forEach((col, index) => {
-        obj[col.dataIndex] = item?.[index]?.v;
+        const fieldsProps = item?.[index]?.fieldsProps;
+
+        if (fieldsProps?.type === "select" && fieldsProps.options) {
+          obj[col.dataIndex] =
+            fieldsProps.options.find((sub) => {
+              return sub.label === item?.[index]?.m;
+            })?.value || item?.[index]?.v;
+        } else {
+          obj[col.dataIndex] = item?.[index]?.v;
+        }
       });
       return obj;
     });

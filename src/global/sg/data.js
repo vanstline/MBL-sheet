@@ -107,14 +107,18 @@ function processData(dataSource, sheet, MBLsheet) {
       var m = v;
 
       if (fieldsProps?.type === "select") {
-        m = v
-          .split(",")
-          .map((min) => {
-            return (
-              fieldsProps?.options?.find((min) => min.value === m)?.label || v
-            );
-          })
-          .join(",");
+        if (typeof v === "number") {
+          m = fieldsProps?.options?.find((min) => min.value === v)?.label || v;
+        } else {
+          m = v
+            ?.split(",")
+            .map((min) => {
+              return (
+                fieldsProps?.options?.find((min) => min.value === m)?.label || v
+              );
+            })
+            .join(",");
+        }
       }
 
       if (lengthVerArr.includes(sub?.fieldsMap?.type)) {
@@ -123,6 +127,7 @@ function processData(dataSource, sheet, MBLsheet) {
           t: "n",
         };
       }
+
       return { ...sub, v, m, ct: sub.ct };
     });
   });

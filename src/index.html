@@ -196,36 +196,34 @@
           ],
           cxPrimerCartList: [],
           cxSampleCartId: 8684105,
-          cxSampleCartInfo: [
-            {
-              carrierId: 0,
-              carrierName: "123",
-              createDate: "2024-03-25 19:44:36.0",
-              cxSampleCode: "31224032500001",
-              cxSampleId: 32208227,
-              endDate: null,
-              id: 8684105,
-              ids: null,
-              isOldSample: 1,
-              mark: null,
-              maxFragmentLength: "34",
-              minFragmentLength: "12",
-              name: "12312312",
-              note: "",
-              page: 1,
-              resistance: "123",
-              rows: 20,
-              sampleSequence: "",
-              sampleTypeId: 1,
-              sampleTypeIds: null,
-              sampleTypeName: "PCR已纯化-Value",
-              startDate: null,
-              status: 0,
-              updateMark: null,
-              userId: 375760,
-              userInfo: null,
-            },
-          ],
+          cxSampleCartInfo: {
+            carrierId: 0,
+            carrierName: "123",
+            createDate: "2024-03-25 19:44:36.0",
+            cxSampleCode: "31224032500001",
+            cxSampleId: 32208227,
+            endDate: null,
+            id: 8684105,
+            ids: null,
+            isOldSample: 1,
+            mark: null,
+            maxFragmentLength: "34",
+            minFragmentLength: "12",
+            name: "12312312",
+            note: "",
+            page: 1,
+            resistance: "123",
+            rows: 20,
+            sampleSequence: "",
+            sampleTypeId: 1,
+            sampleTypeIds: null,
+            sampleTypeName: "菌株",
+            startDate: null,
+            status: 0,
+            updateMark: null,
+            userId: 375760,
+            userInfo: null,
+          },
           endDate: null,
           id: 22955774,
           ids: null,
@@ -278,26 +276,40 @@
             //   record,
             //   index
             // );
-            return record.cxSampleCartInfo?.[0]?.name;
+            return record.cxSampleCartInfo?.name;
           },
         },
         {
-          dataIndex: "sampleTypeName",
+          // dataIndex: "sampleTypeName",
+          // title: "样本类型",
+          // fieldsProps: {
+          //   type: "select",
+          //   type2: "multi",
+          //   defaultValue: "PCR已纯化-Value",
+          //   options: [
+          //     // "PCR已纯化", "PCR未纯化", "菌株", "质粒"
+          //     { label: "PCR已纯化111", value: "PCR已纯化-Value" },
+          //     { label: "PCR未纯化", value: "PCR未纯化-Value" },
+          //     { label: "菌株", value: "菌株-Value" },
+          //     { label: "质粒", value: "质粒-Value" },
+          //   ],
+          // },
+          // render: (text, record, index) => {
+          //   return record.cxSampleCartInfo?.sampleTypeName;
+          // },
+          dataIndex: "sampleTypeId",
           title: "样本类型",
           fieldsProps: {
+            // defaultValue: '菌株',
             type: "select",
-            type2: "multi",
-            defaultValue: "PCR已纯化-Value",
+            // options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
             options: [
-              // "PCR已纯化", "PCR未纯化", "菌株", "质粒"
-              { label: "PCR已纯化111", value: "PCR已纯化-Value" },
-              { label: "PCR未纯化", value: "PCR未纯化-Value" },
-              { label: "菌株", value: "菌株-Value" },
-              { label: "质粒", value: "质粒-Value" },
+              { label: "菌株", value: "4" },
+              { label: "PCR产物(已纯化)", value: 1 },
             ],
           },
           render: (text, record, index) => {
-            return record.cxSampleCartInfo?.[0]?.sampleTypeName;
+            return record?.cxSampleCartInfo?.sampleTypeId;
           },
         },
         {
@@ -311,14 +323,14 @@
             options: ["Kan", "Amp"],
           },
           render: (text, record, index) => {
-            return record.cxSampleCartInfo?.[0]?.resistance;
+            return record.cxSampleCartInfo?.resistance;
           },
         },
         {
           dataIndex: "carrierName",
           title: "载体",
           render: (text, record, index) => {
-            return record.cxSampleCartInfo?.[0]?.carrierName;
+            return record.cxSampleCartInfo?.carrierName;
           },
         },
         // {
@@ -337,7 +349,7 @@
         //   },
 
         //   render: (text, record, index) => {
-        //     return record.cxSampleCartInfo?.[0]?.minFragmentLength;
+        //     return record.cxSampleCartInfo?.minFragmentLength;
         //   },
         // },
 
@@ -357,7 +369,7 @@
         //   },
 
         //   render: (text, record, index) => {
-        //     return record.cxSampleCartInfo?.[0]?.maxFragmentLength;
+        //     return record.cxSampleCartInfo?.maxFragmentLength;
         //   },
         // },
 
@@ -449,14 +461,28 @@
       ];
 
       $(function () {
-        MBLsheet.init(
-          { container: "mblsheet" },
-          {
-            columns: columns,
-            dataSource: excelDataSource,
-            row: 2,
-          }
-        );
+        // MBLsheet.init(
+        //   { container: "mblsheet" },
+        //   {
+        //     columns: [],
+        //     dataSource: [],
+        //     row: 2,
+        //   }
+        // );
+        setTimeout(() => {
+          MBLsheet.init(
+            { container: "mblsheet" },
+            {
+              columns: columns,
+              dataSource: [],
+              row: 2,
+            }
+          );
+        }, 2000);
+
+        setTimeout(() => {
+          MBLsheet.setData(excelDataSource);
+        }, 3000);
 
         // setTimeout(() => {
         //   MBLsheet.destroy();
