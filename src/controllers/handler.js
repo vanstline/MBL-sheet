@@ -1786,19 +1786,20 @@ export default function MBLsheetHandler() {
         col_index = margeset.column[2];
       }
 
+      // TODO: 暂时弃用 与自定义区域点击事件冲突
       // 检查当前坐标和焦点坐标是否一致，如果不一致那么进行修正
-      let column_focus = Store.MBLsheet_select_save[0]["column_focus"];
-      let row_focus = Store.MBLsheet_select_save[0]["row_focus"];
-      if (column_focus !== col_index || row_focus !== row_index) {
-        row_index = row_focus;
-        col_index = column_focus;
-      }
+      // let column_focus = Store.MBLsheet_select_save[0]["column_focus"];
+      // let row_focus = Store.MBLsheet_select_save[0]["row_focus"];
+      // if (column_focus !== col_index || row_focus !== row_index) {
+      //   row_index = row_focus;
+      //   col_index = column_focus;
+      // }
 
       const curSheet = sheetmanage.getSheetByIndex();
 
       var columns = curSheet?.columns ?? [];
-      if (typeof columns[column_focus]?.extra === "object") {
-        const extra = columns[column_focus].extra;
+      if (typeof columns[col_index]?.extra === "object") {
+        const extra = columns[col_index].extra;
         const { width = 0 } = extra?.style ?? {};
         if (col_location[1] - x <= width) {
           // TODO: 双击事件
@@ -1910,6 +1911,8 @@ export default function MBLsheetHandler() {
         pivotTable.drillDown(row_index, col_index);
         return;
       }
+
+      debugger;
 
       if (
         $("#MBLsheet-search-formula-parm").is(":visible") ||

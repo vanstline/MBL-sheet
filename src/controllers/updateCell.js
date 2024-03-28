@@ -62,10 +62,12 @@ export function MBLsheetupdateCell(
     }
   }
 
+  // 自定义扩展点击区域的
+  const extraWidth = d[0][col_index1]?.extra?.style?.width || 0;
   let size = getColumnAndRowSize(row_index1, col_index1, d);
   let row = size.row,
     row_pre = size.row_pre,
-    col = size.col,
+    col = size.col - extraWidth,
     col_pre = size.col_pre,
     row_index = size.row_index,
     col_index = size.col_index;
