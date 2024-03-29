@@ -1522,7 +1522,7 @@ function customCellRightClickConfig() {
     paste: true, // paste
     // insertRow: true, // insert row
     // insertColumn: true, // insert column
-    // deleteRow: true, // delete the selected row
+    deleteRow: true, // delete the selected row
     // deleteColumn: true, // delete the selected column
     // deleteCell: true, // delete cell
     // hideRow: true, // hide the selected row and display the selected row

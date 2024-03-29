@@ -11,6 +11,7 @@ $(document).ready(function () {
     const sheet = sheetmanage.getSheetByIndex();
 
     function processChange(event) {
+      console.log("%c Line:14 🥔 event", "color:#ed9ec7", event);
       let c = Store.MBLsheet_select_save[0]["column_focus"];
       let r = Store.MBLsheet_select_save[0]["row_focus"];
 
@@ -33,6 +34,11 @@ $(document).ready(function () {
       });
 
       rowData[curKey] = currentContent;
+      console.log(
+        "%c Line:36 🍷 currentContent",
+        "color:#93c0a4",
+        currentContent
+      );
 
       if (typeof sheet.dataVerification[`${r}_${c}`]?.verifyFn === "function") {
         const curVerifyInfo = sheet.dataVerification[`${r}_${c}`]?.verifyFn(
@@ -60,6 +66,7 @@ $(document).ready(function () {
 
       // 在这里处理内容变更后的逻辑
       const onchange = getcellvalue(r, c, null, "onchange");
+      console.log("%c Line:63 🌽 onchange", "color:#93c0a4", onchange);
       if (onchange && typeof onchange === "function") {
         onchange(currentContent, rowData, { setRowData });
       }

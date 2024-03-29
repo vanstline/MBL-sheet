@@ -55,7 +55,10 @@ function sgInit(setting, config, MBLsheet) {
     data: [sheet],
   });
 
-  MBLsheet.setRow = (len) => setLength(len, MBLsheet);
+  MBLsheet.setLength = (len) => setLength(len, MBLsheet);
+
+  MBLsheet.delRow = (cur, length) => MBLsheetdeletetable("row", cur, length);
+  MBLsheet.addRow = (cur, length) => MBLsheetextendtable("row", cur, length);
 
   MBLsheet.verify = verify;
 
