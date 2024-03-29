@@ -1992,8 +1992,8 @@ const dataVerificationCtrl = {
       });
     }
 
-    const paneswrapper = document.querySelectorAll(".MBLsheet-paneswrapper");
-    const { width = 0, height = 0 } = paneswrapper?.[0].getBoundingClientRect();
+    // const paneswrapper = document.querySelectorAll(".MBLsheet-paneswrapper");
+    // const { width = 0, height = 0 } = paneswrapper?.[0].getBoundingClientRect();
 
     $("#MBLsheet-dataVerification-dropdown-List")
       .html(optionHtml)
@@ -2001,8 +2001,10 @@ const dataVerificationCtrl = {
       .show()
       .css({
         width: col - col_pre - 1,
-        left: col_pre + width,
-        top: row + height,
+        // left: col_pre + width,
+        left: col_pre,
+        // top: row + height,
+        top: row,
       });
 
     let myh = $("#MBLsheet-dataVerification-dropdown-List").outerHeight();
@@ -2010,7 +2012,8 @@ const dataVerificationCtrl = {
 
     if (row + myh > currentWinH - 42 - 6) {
       $("#MBLsheet-dataVerification-dropdown-List").css({
-        top: row_pre - myh + height,
+        // top: row_pre - myh + height,
+        top: row_pre - myh,
       });
     }
   },
