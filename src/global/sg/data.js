@@ -72,6 +72,27 @@ function setData(data, sheet, MBLsheet) {
   });
 }
 
+function getData(sheet) {
+  const data = MBLsheet.getSheetData()?.map((item) => {
+    const obj = {};
+    sheet.columns.forEach((col, index) => {
+      const fieldsProps = item?.[index]?.fieldsProps;
+
+      if (fieldsProps?.type === "select" && fieldsProps.options) {
+        obj[col.dataIndex] =
+          fieldsProps.options.find((sub) => {
+            return sub.label === item?.[index]?.m;
+          })?.value || item?.[index]?.v;
+      } else {
+        obj[col.dataIndex] = item?.[index]?.v;
+      }
+    });
+    return obj;
+  });
+
+  return data;
+}
+
 function processData(dataSource, sheet, MBLsheet) {
   const { columns } = sheet;
   const cMap = {};
@@ -136,4 +157,4 @@ function processData(dataSource, sheet, MBLsheet) {
   return finallyData;
 }
 
-export { initDataSource, initVerification, setData };
+export { initDataSource, initVerification, setData, getData };

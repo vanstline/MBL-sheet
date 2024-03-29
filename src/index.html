@@ -271,12 +271,14 @@
           render: (text, record, index) => {
             return record.cxSampleCartInfo?.name;
           },
-          onchange: (text, record, { setRowData }) => {
+          onchange: (text, record, i, config) => {
             console.log(
               "%c Line:282 🍐 text, record",
               "color:#465975",
               text,
-              record
+              record,
+              i,
+              config
             );
           },
         },
@@ -461,38 +463,18 @@
         },
       ];
 
+      // setTimeout(() => {
       MBLsheet.init(
         { container: "mblsheet" },
         {
           columns: columns,
           dataSource: [],
-          // disabled: {
-          //   A1: "readOnly",
-          // },
-          row: 20,
+          row: 2,
         }
       );
+      // }, 2000);
 
       $(function () {
-        // MBLsheet.init(
-        //   { container: "mblsheet" },
-        //   {
-        //     columns: [],
-        //     dataSource: [],
-        //     row: 2,
-        //   }
-        // );
-        // setTimeout(() => {
-        //   MBLsheet.init(
-        //     { container: "mblsheet" },
-        //     {
-        //       columns: columns,
-        //       dataSource: [],
-        //       row: 2,
-        //     }
-        //   );
-        // }, 2000);
-
         setTimeout(() => {
           MBLsheet.setData(excelDataSource);
         }, 3000);

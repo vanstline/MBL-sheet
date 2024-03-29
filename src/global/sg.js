@@ -1,7 +1,7 @@
 import Store from "../store";
 import { scroll, transToData } from "./api";
 import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
-import { initDataSource, setData } from "./sg/data";
+import { getData, initDataSource, setData } from "./sg/data";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -66,24 +66,7 @@ function sgInit(setting, config, MBLsheet) {
     if (verifyData && verify()) {
       return;
     }
-    const data = MBLsheet.getSheetData()?.map((item) => {
-      const obj = {};
-      sheet.columns.forEach((col, index) => {
-        const fieldsProps = item?.[index]?.fieldsProps;
-
-        if (fieldsProps?.type === "select" && fieldsProps.options) {
-          obj[col.dataIndex] =
-            fieldsProps.options.find((sub) => {
-              return sub.label === item?.[index]?.m;
-            })?.value || item?.[index]?.v;
-        } else {
-          obj[col.dataIndex] = item?.[index]?.v;
-        }
-      });
-      return obj;
-    });
-
-    return data;
+    return getData(sheet);
   };
 
   MBLsheet.setData = (data) => setData(data, sheet, MBLsheet);

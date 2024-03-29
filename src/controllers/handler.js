@@ -1831,7 +1831,7 @@ export default function MBLsheetHandler() {
           //   "没有 dataIndex 禁用"
           // );
 
-          changeFn(null, rowData, {});
+          changeFn(null, rowData, row_index, {});
         }
       }
 

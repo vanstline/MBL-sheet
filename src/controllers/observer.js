@@ -62,7 +62,7 @@ $(document).ready(function () {
       const onchange = sheet?.columns?.[c]?.onchange;
 
       if (onchange && typeof onchange === "function") {
-        onchange(currentContent, rowData, { setRowData });
+        onchange(currentContent, rowData, r, { setRowData });
       }
     }
 
