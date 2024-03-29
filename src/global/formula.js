@@ -1299,7 +1299,7 @@ const MBLsheetformula = {
         }
       );
 
-      for (let i = 0; i < functionlist.length; i++) {
+      for (let i = 0; i < functionlist?.length || 0; i++) {
         _this.functionlistPosition[functionlist[i].n] = i;
       }
     }

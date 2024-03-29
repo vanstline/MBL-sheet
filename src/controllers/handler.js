@@ -336,6 +336,7 @@ export default function MBLsheetHandler() {
             }
           });
           extra.onclick(rowData[curColumn.dataIndex], rowData, row_index_ed);
+          formula.cancelNormalSelected();
           return;
         }
       }
@@ -1831,7 +1832,6 @@ export default function MBLsheetHandler() {
           // );
 
           changeFn(null, rowData, {});
-          return;
         }
       }
 

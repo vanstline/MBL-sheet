@@ -25,7 +25,7 @@
       <div>
         行数：<input type="text" id="row" value="100" /><button
           id="setRow"
-          onclick="MBLsheet.setRow($('#row').val())">
+          onclick="MBLsheet.setLength($('#row').val())">
           设置
         </button>
       </div>
@@ -269,14 +269,15 @@
             },
           },
           render: (text, record, index) => {
-            // console.log(
-            //   "%c Line:413 🥑 excelDataSource",
-            //   "color:#4fff4B",
-            //   text,
-            //   record,
-            //   index
-            // );
             return record.cxSampleCartInfo?.name;
+          },
+          onchange: (text, record, { setRowData }) => {
+            console.log(
+              "%c Line:282 🍐 text, record",
+              "color:#465975",
+              text,
+              record
+            );
           },
         },
         {
@@ -333,64 +334,64 @@
             return record.cxSampleCartInfo?.carrierName;
           },
         },
-        // {
-        //   dataIndex: "minFragmentLength",
+        {
+          dataIndex: "minFragmentLength",
 
-        //   title: "最小长度",
+          title: "最小长度",
 
-        //   fieldsProps: {
-        //     type: "text",
+          fieldsProps: {
+            type: "text",
 
-        //     compareInfo: {
-        //       sign: "in", // 比较符
+            compareInfo: {
+              sign: "in", // 比较符
 
-        //       range: [0, 999999],
-        //     },
-        //   },
+              range: [0, 999999],
+            },
+          },
 
-        //   render: (text, record, index) => {
-        //     return record.cxSampleCartInfo?.minFragmentLength;
-        //   },
-        // },
+          render: (text, record, index) => {
+            return record.cxSampleCartInfo?.minFragmentLength;
+          },
+        },
 
-        // {
-        //   dataIndex: "maxFragmentLength",
+        {
+          dataIndex: "maxFragmentLength",
 
-        //   title: "最大长度",
+          title: "最大长度",
 
-        //   fieldsProps: {
-        //     type: "text",
+          fieldsProps: {
+            type: "text",
 
-        //     compareInfo: {
-        //       sign: "in", // 比较符
+            compareInfo: {
+              sign: "in", // 比较符
 
-        //       range: [0, 999999],
-        //     },
-        //   },
+              range: [0, 999999],
+            },
+          },
 
-        //   render: (text, record, index) => {
-        //     return record.cxSampleCartInfo?.maxFragmentLength;
-        //   },
-        // },
+          render: (text, record, index) => {
+            return record.cxSampleCartInfo?.maxFragmentLength;
+          },
+        },
 
-        // {
-        //   dataIndex: "sampleConcentration",
+        {
+          dataIndex: "sampleConcentration",
 
-        //   title: "样品备注",
+          title: "样品备注",
 
-        //   fieldsProps: {
-        //     type: "select",
+          fieldsProps: {
+            type: "select",
 
-        //     options: [
-        //       "GC Rich",
-        //       "复杂结构",
-        //       "重复序列",
-        //       "低拷贝",
-        //       "病毒DNA",
-        //       "噬菌体质粒",
-        //     ],
-        //   },
-        // },
+            options: [
+              "GC Rich",
+              "复杂结构",
+              "重复序列",
+              "低拷贝",
+              "病毒DNA",
+              "噬菌体质粒",
+            ],
+          },
+        },
 
         // {
         //   dataIndex: "sampleConcentration",
@@ -460,6 +461,18 @@
         },
       ];
 
+      MBLsheet.init(
+        { container: "mblsheet" },
+        {
+          columns: columns,
+          dataSource: [],
+          // disabled: {
+          //   A1: "readOnly",
+          // },
+          row: 20,
+        }
+      );
+
       $(function () {
         // MBLsheet.init(
         //   { container: "mblsheet" },
@@ -469,16 +482,16 @@
         //     row: 2,
         //   }
         // );
-        setTimeout(() => {
-          MBLsheet.init(
-            { container: "mblsheet" },
-            {
-              columns: columns,
-              dataSource: [],
-              row: 2,
-            }
-          );
-        }, 2000);
+        // setTimeout(() => {
+        //   MBLsheet.init(
+        //     { container: "mblsheet" },
+        //     {
+        //       columns: columns,
+        //       dataSource: [],
+        //       row: 2,
+        //     }
+        //   );
+        // }, 2000);
 
         setTimeout(() => {
           MBLsheet.setData(excelDataSource);
