@@ -37,14 +37,30 @@ export function changeValue(r, c, value) {
   const rowData = {};
   const curKey = curRowData?.[c]?.dataIndex;
   const keyNumMap = {};
+  let newVal = value;
 
   sheet.columns.forEach((item, i) => {
     if (item.dataIndex) {
+      keyNumMap[item.dataIndex] = i;
       const v = curRowData?.find((sub) => sub?.dataIndex === item.dataIndex)?.v;
 
-      keyNumMap[item.dataIndex] = i;
-
-      rowData[item.dataIndex] = v;
+      if (item.dataIndex === curKey) {
+        if (typeof item?.fieldsProps?.options === "object") {
+          const valueStr = newVal
+            ?.split(",")
+            .map((sub) => {
+              const curOption = item.fieldsProps.options.find(
+                (min) => min.label === sub
+              );
+              return curOption?.value || sub;
+            })
+            .join(",");
+          rowData[item.dataIndex] = valueStr;
+          newVal = valueStr;
+        }
+      } else {
+        rowData[item.dataIndex] = v;
+      }
     }
   });
 
@@ -78,6 +94,6 @@ export function changeValue(r, c, value) {
   const onchange = sheet?.columns?.[c]?.onchange;
 
   if (onchange && typeof onchange === "function") {
-    onchange(value, rowData, r, { setRowData });
+    onchange(newVal, rowData, r, { setRowData });
   }
 }
