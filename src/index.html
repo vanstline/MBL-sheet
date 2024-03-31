@@ -326,85 +326,85 @@
             );
           },
         },
-        {
-          dataIndex: "resistance",
-          title: "抗性",
-          fieldsProps: {
-            type: "autocomplete",
-            type2: "multi",
-            // type: "select",
-            // type2: "select",
-            options: ["Kan", "Amp"],
-          },
-          render: (text, record, index) => {
-            return record.cxSampleCartInfo?.resistance;
-          },
-        },
-        {
-          dataIndex: "carrierName",
-          title: "载体",
-          render: (text, record, index) => {
-            return record.cxSampleCartInfo?.carrierName;
-          },
-        },
-        {
-          dataIndex: "minFragmentLength",
+        // {
+        //   dataIndex: "resistance",
+        //   title: "抗性",
+        //   fieldsProps: {
+        //     type: "autocomplete",
+        //     type2: "multi",
+        //     // type: "select",
+        //     // type2: "select",
+        //     options: ["Kan", "Amp"],
+        //   },
+        //   render: (text, record, index) => {
+        //     return record.cxSampleCartInfo?.resistance;
+        //   },
+        // },
+        // {
+        //   dataIndex: "carrierName",
+        //   title: "载体",
+        //   render: (text, record, index) => {
+        //     return record.cxSampleCartInfo?.carrierName;
+        //   },
+        // },
+        // {
+        //   dataIndex: "minFragmentLength",
 
-          title: "最小长度",
+        //   title: "最小长度",
 
-          fieldsProps: {
-            type: "text",
+        //   fieldsProps: {
+        //     type: "text",
 
-            compareInfo: {
-              sign: "in", // 比较符
+        //     compareInfo: {
+        //       sign: "in", // 比较符
 
-              range: [0, 999999],
-            },
-          },
+        //       range: [0, 999999],
+        //     },
+        //   },
 
-          render: (text, record, index) => {
-            return record.cxSampleCartInfo?.minFragmentLength;
-          },
-        },
+        //   render: (text, record, index) => {
+        //     return record.cxSampleCartInfo?.minFragmentLength;
+        //   },
+        // },
 
-        {
-          dataIndex: "maxFragmentLength",
+        // {
+        //   dataIndex: "maxFragmentLength",
 
-          title: "最大长度",
+        //   title: "最大长度",
 
-          fieldsProps: {
-            type: "text",
+        //   fieldsProps: {
+        //     type: "text",
 
-            compareInfo: {
-              sign: "in", // 比较符
+        //     compareInfo: {
+        //       sign: "in", // 比较符
 
-              range: [0, 999999],
-            },
-          },
+        //       range: [0, 999999],
+        //     },
+        //   },
 
-          render: (text, record, index) => {
-            return record.cxSampleCartInfo?.maxFragmentLength;
-          },
-        },
+        //   render: (text, record, index) => {
+        //     return record.cxSampleCartInfo?.maxFragmentLength;
+        //   },
+        // },
 
-        {
-          dataIndex: "sampleConcentration",
+        // {
+        //   dataIndex: "sampleConcentration",
 
-          title: "样品备注",
+        //   title: "样品备注",
 
-          fieldsProps: {
-            type: "select",
+        //   fieldsProps: {
+        //     type: "select",
 
-            options: [
-              "GC Rich",
-              "复杂结构",
-              "重复序列",
-              "低拷贝",
-              "病毒DNA",
-              "噬菌体质粒",
-            ],
-          },
-        },
+        //     options: [
+        //       "GC Rich",
+        //       "复杂结构",
+        //       "重复序列",
+        //       "低拷贝",
+        //       "病毒DNA",
+        //       "噬菌体质粒",
+        //     ],
+        //   },
+        // },
 
         // {
         //   dataIndex: "sampleConcentration",
@@ -452,17 +452,22 @@
           dataIndex: "options",
           title: "操作",
           fieldsProps: {
-            defaultValue: "菌株",
+            // defaultValue: "菌株",
 
             verifyFn(text) {
+              console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
               return {
                 status: true,
                 message: text,
               };
             },
           },
-          onchange: (text, record, { setRowData }) => {
-            setRowData({ resistance: text * 2, sampleTypeName: text });
+          onchange: (text, record, i, { setRowData }) => {
+            setRowData({
+              sampleName: text * 2,
+              sampleTypeId: text,
+              options: text,
+            });
           },
           // extra: {
           //   style: {

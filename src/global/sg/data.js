@@ -79,10 +79,24 @@ function getData(sheet) {
       const fieldsProps = item?.[index]?.fieldsProps;
 
       if (fieldsProps?.type === "select" && fieldsProps.options) {
-        obj[col.dataIndex] =
-          fieldsProps.options.find((sub) => {
-            return sub.label === item?.[index]?.m;
-          })?.value || item?.[index]?.v;
+        let curVal = item?.[index]?.v;
+        const valueArr = item?.[index]?.v?.split(",");
+        if (valueArr?.length > 1) {
+          curVal = valueArr
+            ?.map((sub) => {
+              return (
+                fieldsProps.options.find((min) => {
+                  return min.label === sub;
+                })?.value || sub
+              );
+            })
+            .join(",");
+        } else {
+          curVal =
+            fieldsProps.options.find((min) => min.label === curVal)?.value ||
+            curVal;
+        }
+        obj[col.dataIndex] = curVal;
       } else {
         obj[col.dataIndex] = item?.[index]?.v;
       }

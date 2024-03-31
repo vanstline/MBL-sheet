@@ -223,17 +223,17 @@ function setcellvalue(r, c, d, v) {
     }
   }
 
-  if (cell.fieldsProps?.type === "select" && cell.v != null) {
-    cell.v = cell.m
-      ?.split(",")
-      ?.map((item) => {
-        return (
-          cell.fieldsProps.options.find((ele) => ele.label === item)?.value ??
-          item
-        );
-      })
-      .join(",");
-  }
+  // if (cell.fieldsProps?.type === "select" && cell.v != null) {
+  //   cell.v = cell.m
+  //     ?.split(",")
+  //     ?.map((item) => {
+  //       return (
+  //         cell.fieldsProps.options.find((ele) => ele.label === item)?.value ??
+  //         item
+  //       );
+  //     })
+  //     .join(",");
+  // }
   d[r][c] = cell;
 }
 
