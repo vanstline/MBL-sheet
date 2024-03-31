@@ -64,6 +64,7 @@ import Store from "../store";
 import locale from "../locale/locale";
 import json from "./json";
 import method from "./method";
+import { changeValue } from "../controllers/observer";
 
 const MBLsheetformula = {
   error: {
@@ -1764,6 +1765,8 @@ const MBLsheetformula = {
 
     // value maybe an object
     setcellvalue(r, c, d, value);
+    // 如果value是对象，那么value.v是值
+    changeValue(r, c, typeof value !== "object" ? value : value.v);
     _this.cancelNormalSelected();
 
     let RowlChange = false;

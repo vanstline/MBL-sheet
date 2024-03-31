@@ -140,6 +140,14 @@ function processData(dataSource, sheet, MBLsheet) {
             })
             .join(",");
         }
+        // m = v
+        //   ?.split(",")
+        //   .map((min) => {
+        //     return (
+        //       fieldsProps?.options?.find((min) => min.value === m)?.label || v
+        //     );
+        //   })
+        //   .join(",");
       }
 
       if (lengthVerArr.includes(sub?.fieldsMap?.type)) {
@@ -149,7 +157,7 @@ function processData(dataSource, sheet, MBLsheet) {
         };
       }
 
-      return { ...sub, v, m, ct: sub.ct };
+      return { ...sub, v: m, m, ct: sub.ct };
     });
   });
 

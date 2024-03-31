@@ -305,6 +305,7 @@
           fieldsProps: {
             // defaultValue: '菌株',
             type: "select",
+            type2: "multi",
             // options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
             options: [
               { label: "菌株", value: "4" },
@@ -313,6 +314,16 @@
           },
           render: (text, record, index) => {
             return record?.cxSampleCartInfo?.sampleTypeId;
+          },
+          onchange: (text, record, i, config) => {
+            console.log(
+              "%c Line:318 🌮 text, record, i, config",
+              "color:#e41a6a",
+              text,
+              record,
+              i,
+              config
+            );
           },
         },
         {
