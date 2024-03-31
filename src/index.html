@@ -457,8 +457,8 @@
             verifyFn(text) {
               console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
               return {
-                status: true,
-                message: text,
+                status: text === "123123",
+                message: `当前值为${text}，不符合规则`,
               };
             },
           },

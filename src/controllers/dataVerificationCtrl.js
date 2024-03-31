@@ -1525,9 +1525,9 @@ const dataVerificationCtrl = {
       return;
     }
 
-    let validate = _this.validateCellData(cellValue, item);
+    let { status, message } = _this.validateCellDataCustom(cellValue, item);
 
-    if (!validate) {
+    if (!status) {
       let failureText;
 
       if (Store.lang == "en") {
@@ -1536,7 +1536,11 @@ const dataVerificationCtrl = {
         failureText = '<span style="color:#f72626;">失效：</span>';
       }
 
-      failureText += _this.getFailureText(item);
+      if (message) {
+        failureText += message;
+      } else {
+        failureText += _this.getFailureText(item);
+      }
 
       $("#MBLsheet-dataVerification-showHintBox").html(failureText).show().css({
         left: col_pre,
@@ -1752,6 +1756,15 @@ const dataVerificationCtrl = {
 
     return failureText;
   },
+  validateCellDataCustom: function (cellValue, item) {
+    if (typeof item.verifyFn === "function") {
+      return item.verifyFn(cellValue);
+    }
+    return {
+      status: this.validateCellData(cellValue, item),
+      message: undefined,
+    };
+  },
   validateCellData: function (cellValue, item) {
     let _this = this;
 
@@ -1759,10 +1772,6 @@ const dataVerificationCtrl = {
       type2 = item.type2,
       value1 = item.value1,
       value2 = item.value2;
-
-    if (typeof item.verifyFn === "function") {
-      return !item.hintShow;
-    }
 
     if (type == "dropdown") {
       let list = _this.getDropdownList(value1);
