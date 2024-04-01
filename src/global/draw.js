@@ -1704,6 +1704,68 @@ let nullCellRender = function (
     MBLsheetTableContent.closePath();
   }
 
+  let dataVerification = dataVerificationCtrl.dataVerification;
+
+  if (dataVerification != null && dataVerification[r + "_" + c] != null) {
+    if (dataVerification[r + "_" + c]?.required) {
+      const maxRowLen = Store.flowdata.length;
+      const maxColLen = Store.flowdata[0].length;
+      const curSheetTable = document.querySelector("#MBLsheet-cell-main");
+      const curSheetTableRect = curSheetTable?.getBoundingClientRect();
+      const curMax =
+        // 绘制异常红色边框
+        MBLsheetTableContent.beginPath();
+      const dissLeft = c === 0 ? 1 : 0;
+      const dissTop = r === 0 ? 1 : 0;
+
+      const endRight = end_c + offsetLeft - 1 - bodrder05;
+      const endBottom = end_r + offsetTop - 1 - bodrder05;
+      let dissRight = 0;
+      let dissBottom = 0;
+
+      if (c === maxColLen - 1 && end_c >= curSheetTableRect.width) {
+        dissRight = 10;
+      }
+
+      if (r === maxRowLen - 1 && c * maxRowLen > curSheetTableRect.height) {
+        dissBottom = 1;
+      }
+
+      // 左上起点
+      MBLsheetTableContent.moveTo(
+        start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+        start_r + offsetTop - bodrder05 + dissTop
+      );
+      // 右上 向右移动
+      MBLsheetTableContent.lineTo(
+        end_c + offsetLeft - 1 - bodrder05,
+        start_r + offsetTop - bodrder05 + dissTop
+      );
+      // 右下 向下移动
+      MBLsheetTableContent.lineTo(
+        end_c + offsetLeft - 1 - bodrder05,
+        end_r + offsetTop - 1 - bodrder05
+      );
+      // 左下 向左移动
+      MBLsheetTableContent.lineTo(
+        start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+        end_r + offsetTop - 1 - bodrder05
+      );
+      // 左上 回到起点
+      MBLsheetTableContent.lineTo(
+        start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+        start_r + offsetTop - bodrder05 + dissTop
+      );
+      MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
+      MBLsheetTableContent.lineWidth = 1;
+      MBLsheetTableContent.stroke();
+      MBLsheetTableContent.closePath();
+      setVerifyByKey(r + "_" + c, null);
+    }
+  } else {
+    clearVerify(r + "_" + c);
+  }
+
   // 单元格渲染后
   method.createHookFunction(
     "cellRenderAfter",
@@ -1866,25 +1928,6 @@ let cellRender = function (
     const maxColLen = Store.flowdata[0].length;
     const curSheetTable = document.querySelector("#MBLsheet-cell-main");
     const curSheetTableRect = curSheetTable?.getBoundingClientRect();
-
-    // 若单元格数据验证不通过，绘制红色边框
-    // //单元格左上角红色小三角标示
-    // let dv_w = 5 * Store.zoomRatio,
-    //   dv_h = 5 * Store.zoomRatio; //红色小三角宽高
-
-    // MBLsheetTableContent.beginPath();
-    // MBLsheetTableContent.moveTo(start_c + offsetLeft, start_r + offsetTop);
-    // MBLsheetTableContent.lineTo(
-    //   start_c + offsetLeft + dv_w,
-    //   start_r + offsetTop
-    // );
-    // MBLsheetTableContent.lineTo(
-    //   start_c + offsetLeft,
-    //   start_r + offsetTop + dv_h
-    // );
-    // MBLsheetTableContent.fillStyle = "#FC6666";
-    // MBLsheetTableContent.fill();
-    // MBLsheetTableContent.closePath();
 
     const curMax =
       // 绘制异常红色边框

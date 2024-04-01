@@ -258,7 +258,7 @@
                 message = "请输入样品名称";
               } else {
                 if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
-                  status = true;
+                  status = false;
                   message =
                     "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
                 } else {
@@ -267,6 +267,13 @@
                 }
               }
 
+              console.log(
+                "%c Line:270 🍢",
+                "color:#ed9ec7",
+                text,
+                status,
+                message
+              );
               return {
                 status,
                 message,

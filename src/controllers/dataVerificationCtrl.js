@@ -1501,31 +1501,31 @@ const dataVerificationCtrl = {
     //数据验证未通过
     let cellValue = getcellvalue(r, c, null);
     let { status, message } = _this.validateCellDataCustom(cellValue, item);
-    if (typeof item.verifyFn === "function" && status) {
+    if (status) {
       return;
     }
 
-    //提示语
-    if (item.hintShow) {
-      let hintText;
+    // //提示语
+    // if (item.hintShow) {
+    //   let hintText;
 
-      if (Store.lang == "en") {
-        hintText = '<span style="color:#f5a623;">Hint: </span>';
-      } else {
-        hintText = '<span style="color:#f5a623;">提示：</span>';
-      }
+    //   if (Store.lang == "en") {
+    //     hintText = '<span style="color:#f5a623;">Hint: </span>';
+    //   } else {
+    //     hintText = '<span style="color:#f5a623;">提示：</span>';
+    //   }
 
-      hintText += _this.getHintText(item);
+    //   hintText += _this.getHintText(item);
 
-      $("#MBLsheet-dataVerification-showHintBox").html(hintText).show().css({
-        left: col_pre,
-        top: row,
-      });
+    //   $("#MBLsheet-dataVerification-showHintBox").html(hintText).show().css({
+    //     left: col_pre,
+    //     top: row,
+    //   });
 
-      return;
-    }
+    //   return;
+    // }
 
-    if (isRealNull(cellValue)) {
+    if (isRealNull(cellValue) && !item.required) {
       return;
     }
 
@@ -1537,28 +1537,24 @@ const dataVerificationCtrl = {
       failureText = '<span style="color:#f72626;">失效：</span>';
     }
 
-    if (!status) {
-      failureText += message;
-    } else {
-      failureText += _this.getFailureText(item);
-    }
-    //   console.log(
-    //     "%c Line:1541 🍭",
-    //     "color:#ed9ec7",
-    //     132123132,
-    //     status,
-    //     message
-    //   );
-    // if (!status && message) {
-    //   failureText += message;
-    // } else {
-    //   failureText += _this.getFailureText(item);
-    // }
+    let failureTextExtra;
 
-    $("#MBLsheet-dataVerification-showHintBox").html(failureText).show().css({
-      left: col_pre,
-      top: row,
-    });
+    if (
+      (item.required && isRealNull(cellValue)) ||
+      typeof item.verifyFn === "function"
+    ) {
+      failureTextExtra = message;
+    } else {
+      failureTextExtra = _this.getFailureText(item);
+    }
+
+    $("#MBLsheet-dataVerification-showHintBox")
+      .html(failureText + failureTextExtra)
+      .show()
+      .css({
+        left: col_pre,
+        top: row,
+      });
   },
   getHintText: function (item) {
     let _this = this;
@@ -1664,7 +1660,6 @@ const dataVerificationCtrl = {
     return hintText;
   },
   getFailureText: function (item) {
-    console.log("%c Line:1663 🥐 item", "color:#4fff4B", item);
     let _this = this;
 
     let failureText = "";
@@ -1745,7 +1740,6 @@ const dataVerificationCtrl = {
           item.value1 +
           "的文本";
       } else if (item.type == "text_length") {
-        console.log("%c Line:1742 🥚", "color:#33a5ff", 13123);
         failureText +=
           "你输入的不是长度" + _this.optionLabel[item.type2] + item.value1;
 
@@ -1771,6 +1765,12 @@ const dataVerificationCtrl = {
     return failureText;
   },
   validateCellDataCustom: function (cellValue, item) {
+    if (item.required && isRealNull(cellValue)) {
+      return {
+        status: false,
+        message: "不能为空",
+      };
+    }
     if (typeof item.verifyFn === "function") {
       return item.verifyFn(cellValue);
     }
@@ -1780,7 +1780,6 @@ const dataVerificationCtrl = {
     };
   },
   validateCellData: function (cellValue, item) {
-    console.log("%c Line:1785 🍰 item", "color:#b03734", cellValue, item);
     let _this = this;
 
     let type = item.type,
@@ -1792,11 +1791,6 @@ const dataVerificationCtrl = {
       typeof item.verifyFn === "function" &&
       !item.verifyFn(cellValue).status
     ) {
-      console.log(
-        "%c Line:1793 🌽 item.verifyFn(cellValue)",
-        "color:#42b983",
-        item.verifyFn(cellValue)
-      );
       return false;
     }
 
@@ -1893,7 +1887,7 @@ const dataVerificationCtrl = {
         return false;
       }
     } else if (type == "text_length") {
-      cellValue = cellValue.toString().length;
+      cellValue = cellValue?.toString().length;
 
       value1 = Number(value1);
       value2 = Number(value2);

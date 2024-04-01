@@ -40,7 +40,7 @@ function initVerification(data, sheet, MBLsheet) {
           hintShow: !!status,
           hintText: verifyText,
           verifyFn: curVerifyFn,
-          required,
+          required: required,
         };
 
         if (type === "select" || type === AUTOCOMPLETE) {
