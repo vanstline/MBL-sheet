@@ -28,6 +28,7 @@ function initVerification(data, sheet, MBLsheet) {
           verifyText,
           compareInfo,
           verifyFn,
+          required,
         } = columns[j].fieldsProps;
         const { sign, range, value } = compareInfo ?? {};
 
@@ -39,6 +40,7 @@ function initVerification(data, sheet, MBLsheet) {
           hintShow: !!status,
           hintText: verifyText,
           verifyFn: curVerifyFn,
+          required,
         };
 
         if (type === "select" || type === AUTOCOMPLETE) {

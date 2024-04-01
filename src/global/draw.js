@@ -1857,7 +1857,10 @@ let cellRender = function (
   if (
     dataVerification != null &&
     dataVerification[r + "_" + c] != null &&
-    !dataVerificationCtrl.validateCellData(value, dataVerification[r + "_" + c])
+    !dataVerificationCtrl.validateCellDataCustom(
+      value,
+      dataVerification[r + "_" + c]
+    ).status
   ) {
     const maxRowLen = Store.flowdata.length;
     const maxColLen = Store.flowdata[0].length;

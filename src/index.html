@@ -247,10 +247,35 @@
           dataIndex: "sampleName",
           title: "样本名称",
           fieldsProps: {
+            required: true,
             type: "text",
-            compareInfo: {
-              sign: "in", // 比较符
-              range: [1, 10],
+            range: [-1, 999999],
+            verifyFn: function (text) {
+              var status = false;
+              var message = "";
+              if (text == "1") {
+                status = false;
+                message = "请输入样品名称";
+              } else {
+                if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
+                  status = true;
+                  message =
+                    "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
+                } else {
+                  status = true;
+                  message = "";
+                }
+              }
+
+              return {
+                status,
+                message,
+              };
+              // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
+              // return {
+              //   status: text === "123123",
+              //   message: `当前值为${text}，不符合规则`,
+              // };
             },
           },
           extra: {
@@ -311,19 +336,26 @@
               { label: "菌株", value: "4" },
               { label: "PCR产物(已纯化)", value: 1 },
             ],
+            verifyFn(text) {
+              // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
+              return {
+                status: text !== "123123",
+                message: `当前值为${text}，不符合规则`,
+              };
+            },
           },
           render: (text, record, index) => {
             return record?.cxSampleCartInfo?.sampleTypeId;
           },
           onchange: (text, record, i, config) => {
-            console.log(
-              "%c Line:318 🌮 text, record, i, config",
-              "color:#e41a6a",
-              text,
-              record,
-              i,
-              config
-            );
+            // console.log(
+            //   "%c Line:318 🌮 text, record, i, config",
+            //   "color:#e41a6a",
+            //   text,
+            //   record,
+            //   i,
+            //   config
+            // );
           },
         },
         // {
@@ -455,7 +487,7 @@
             // defaultValue: "菌株",
 
             verifyFn(text) {
-              console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
+              // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
               return {
                 status: text === "123123",
                 message: `当前值为${text}，不符合规则`,
@@ -469,13 +501,23 @@
               options: text,
             });
           },
-          // extra: {
-          //   style: {
-          //     width: 100,
-          //     height: 50,
-          //     background: "red",
-          //   },
-          // },
+          render: () => "删除",
+          extra: {
+            style: {
+              width: 100,
+              background: "red",
+            },
+            onclick: (text, data, index) => {
+              console.log(
+                "%c Line:409 🧀 text, index   jjljl",
+                "color:#7f2b82",
+                text,
+                data,
+                index
+              );
+              MBLsheet.deleteRow(index, 1);
+            },
+          },
         },
       ];
 

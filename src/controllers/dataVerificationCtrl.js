@@ -1498,6 +1498,13 @@ const dataVerificationCtrl = {
       $("#MBLsheet-dataVerification-dropdown-List").hide();
     }
 
+    //数据验证未通过
+    let cellValue = getcellvalue(r, c, null);
+    let { status, message } = _this.validateCellDataCustom(cellValue, item);
+    if (typeof item.verifyFn === "function" && status) {
+      return;
+    }
+
     //提示语
     if (item.hintShow) {
       let hintText;
@@ -1518,35 +1525,40 @@ const dataVerificationCtrl = {
       return;
     }
 
-    //数据验证未通过
-    let cellValue = getcellvalue(r, c, null);
-
     if (isRealNull(cellValue)) {
       return;
     }
 
-    let { status, message } = _this.validateCellDataCustom(cellValue, item);
+    let failureText;
+
+    if (Store.lang == "en") {
+      failureText = '<span style="color:#f72626;">Failure: </span>';
+    } else {
+      failureText = '<span style="color:#f72626;">失效：</span>';
+    }
 
     if (!status) {
-      let failureText;
-
-      if (Store.lang == "en") {
-        failureText = '<span style="color:#f72626;">Failure: </span>';
-      } else {
-        failureText = '<span style="color:#f72626;">失效：</span>';
-      }
-
-      if (message) {
-        failureText += message;
-      } else {
-        failureText += _this.getFailureText(item);
-      }
-
-      $("#MBLsheet-dataVerification-showHintBox").html(failureText).show().css({
-        left: col_pre,
-        top: row,
-      });
+      failureText += message;
+    } else {
+      failureText += _this.getFailureText(item);
     }
+    //   console.log(
+    //     "%c Line:1541 🍭",
+    //     "color:#ed9ec7",
+    //     132123132,
+    //     status,
+    //     message
+    //   );
+    // if (!status && message) {
+    //   failureText += message;
+    // } else {
+    //   failureText += _this.getFailureText(item);
+    // }
+
+    $("#MBLsheet-dataVerification-showHintBox").html(failureText).show().css({
+      left: col_pre,
+      top: row,
+    });
   },
   getHintText: function (item) {
     let _this = this;
@@ -1652,6 +1664,7 @@ const dataVerificationCtrl = {
     return hintText;
   },
   getFailureText: function (item) {
+    console.log("%c Line:1663 🥐 item", "color:#4fff4B", item);
     let _this = this;
 
     let failureText = "";
@@ -1732,6 +1745,7 @@ const dataVerificationCtrl = {
           item.value1 +
           "的文本";
       } else if (item.type == "text_length") {
+        console.log("%c Line:1742 🥚", "color:#33a5ff", 13123);
         failureText +=
           "你输入的不是长度" + _this.optionLabel[item.type2] + item.value1;
 
@@ -1761,17 +1775,30 @@ const dataVerificationCtrl = {
       return item.verifyFn(cellValue);
     }
     return {
-      status: this.validateCellData(cellValue, item),
+      status: !this.validateCellData(cellValue, item),
       message: undefined,
     };
   },
   validateCellData: function (cellValue, item) {
+    console.log("%c Line:1785 🍰 item", "color:#b03734", cellValue, item);
     let _this = this;
 
     let type = item.type,
       type2 = item.type2,
       value1 = item.value1,
       value2 = item.value2;
+
+    if (
+      typeof item.verifyFn === "function" &&
+      !item.verifyFn(cellValue).status
+    ) {
+      console.log(
+        "%c Line:1793 🌽 item.verifyFn(cellValue)",
+        "color:#42b983",
+        item.verifyFn(cellValue)
+      );
+      return false;
+    }
 
     if (type == "dropdown") {
       let list = _this.getDropdownList(value1);
