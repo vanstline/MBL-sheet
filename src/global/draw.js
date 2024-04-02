@@ -656,7 +656,12 @@ function MBLsheetDrawMain(
       continue;
     }
 
-    for (let c = dataset_col_st; c <= dataset_col_ed; c++) {
+    // for (let c = dataset_col_st; c <= dataset_col_ed; c++) {
+    for (
+      let c = dataset_col_st;
+      c <= sheetmanage.getSheetByIndex().column - 1;
+      c++
+    ) {
       let start_c;
       if (c == 0) {
         start_c = -scrollWidth;
@@ -1529,6 +1534,7 @@ let nullCellRender = function (
   bodrder05,
   isMerge
 ) {
+  dataset_col_ed = sheetmanage.getSheetByIndex().column - 1;
   let checksAF = alternateformat.checksAF(r, c, af_compute); //交替颜色
   let checksCF = conditionformat.checksCF(r, c, cf_compute); //条件格式
 
