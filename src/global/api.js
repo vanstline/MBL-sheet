@@ -133,6 +133,7 @@ export function getCellValue(row, column, options = {}) {
  * @param {Function} options.success 操作结束的回调函数
  */
 export function setCellValue(row, column, value, options = {}) {
+  console.log("%c Line:136 🍞 row, column", "color:#33a5ff", row, column);
   let curv = Store.flowdata?.[row]?.[column];
 
   // Store old value for hook function

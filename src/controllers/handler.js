@@ -80,6 +80,7 @@ import {
   createLuckyChart,
   hideAllNeedRangeShow,
 } from "../expendPlugins/chart/plugin";
+import { setRowData } from "./observer";
 
 //, columeflowset, rowflowset
 export default function MBLsheetHandler() {
@@ -1812,8 +1813,10 @@ export default function MBLsheetHandler() {
       const curRowData = Store.flowdata[row_index];
       const rowData = {};
 
-      curSheet.columns.forEach((item) => {
+      const keyNumMap = {};
+      curSheet.columns.forEach((item, i) => {
         if (item.dataIndex) {
+          keyNumMap[item.dataIndex] = i;
           const v = curRowData?.find(
             (sub) => sub?.dataIndex === item.dataIndex
           )?.v;
@@ -1830,8 +1833,8 @@ export default function MBLsheetHandler() {
           //   "color:#2eafb0",
           //   "没有 dataIndex 禁用"
           // );
-
-          changeFn(null, rowData, row_index, {});
+          const curSetRowData = (obj) => setRowData(obj, row_index, keyNumMap);
+          changeFn(null, rowData, row_index, { setRowData: curSetRowData });
         }
       }
 

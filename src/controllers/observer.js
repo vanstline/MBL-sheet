@@ -81,19 +81,20 @@ export function changeValue(r, c, value) {
     }
   }
 
-  const setRowData = (obj) => {
-    // setTimeout(() => {
-    for (let key in obj) {
-      const col = keyNumMap[key];
-      MBLsheet.setCellValue(r, col, obj[key]);
-    }
-    // });
-  };
-
   // 在这里处理内容变更后的逻辑
   const onchange = sheet?.columns?.[c]?.onchange;
 
   if (onchange && typeof onchange === "function") {
-    onchange(newVal, rowData, r, { setRowData });
+    const curSetRowData = (obj) => setRowData(obj, r, keyNumMap);
+    onchange(newVal, rowData, r, { setRowData: curSetRowData });
+  }
+}
+
+export function setRowData(obj, r, keyNumMap = {}) {
+  for (let key in obj) {
+    const col = keyNumMap[key];
+    if (r !== undefined && col !== undefined) {
+      MBLsheet.setCellValue(r, col, obj[key] ?? null);
+    }
   }
 }

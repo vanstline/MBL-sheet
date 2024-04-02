@@ -303,15 +303,19 @@
           render: (text, record, index) => {
             return record.cxSampleCartInfo?.name;
           },
-          onchange: (text, record, i, config) => {
+          onchange: (text, record, i, { setRowData }) => {
             console.log(
               "%c Line:282 🍐 text, record",
               "color:#465975",
               text,
               record,
               i,
-              config
+              setRowData
             );
+            setRowData({
+              sampleName: text,
+              sampleTypeId: text,
+            });
           },
         },
         {

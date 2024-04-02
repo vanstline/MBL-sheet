@@ -1545,6 +1545,7 @@ const dataVerificationCtrl = {
     ) {
       failureTextExtra = message;
     } else {
+      console.log("%c Line:1549 🎂", "color:#6ec1c2", item);
       failureTextExtra = _this.getFailureText(item);
     }
 
@@ -1795,7 +1796,9 @@ const dataVerificationCtrl = {
     }
 
     if (type == "dropdown") {
+      console.log("%c Line:1800 🍇", "color:#ea7e5c", cellValue, item);
       let list = _this.getDropdownList(value1);
+      console.log("%c Line:1801 🍏 list", "color:#6ec1c2", list);
 
       // 多选的情况 检查每个都在下拉列表中
       if (type2 && cellValue) {
