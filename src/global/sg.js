@@ -62,11 +62,21 @@ function sgInit(setting, config, MBLsheet) {
 
   MBLsheet.verify = verify;
 
-  MBLsheet.getData = (verifyData) => {
-    if (verifyData && verify()) {
-      return;
+  MBLsheet.getData = (filterVerify) => {
+    const data = getData(sheet);
+    if (!filterVerify) {
+      return data;
     }
-    return getData(sheet);
+
+    const rows = Object.keys(Store.verifyMap)?.reduce((prev, next) => {
+      const curR = next.split("_")[0];
+      if (curR && !prev.includes(+curR)) {
+        prev.push(+curR);
+      }
+      return prev;
+    }, []);
+
+    return { data, rows };
   };
 
   MBLsheet.setData = (data) => setData(data, sheet, MBLsheet);

@@ -82,7 +82,8 @@ function getData(sheet) {
 
       if (fieldsProps?.type === "select" && fieldsProps.options) {
         let curVal = item?.[index]?.v;
-        const valueArr = item?.[index]?.v?.split(",");
+        const valueArr =
+          typeof curVal === "string" ? curVal?.split(",") : curVal;
         if (valueArr?.length > 1) {
           curVal = valueArr
             ?.map((sub) => {

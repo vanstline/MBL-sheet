@@ -337,12 +337,12 @@
           fieldsProps: {
             // defaultValue: '菌株',
             type: "select",
-            type2: "multi",
-            // options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
-            options: [
-              { label: "菌株", value: "4" },
-              { label: "PCR产物(已纯化)", value: 1 },
-            ],
+            // type2: "multi",
+            options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
+            // options: [
+            //   { label: "菌株", value: "4" },
+            //   { label: "PCR产物(已纯化)", value: 1 },
+            // ],
             verifyFn(text) {
               // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
               return {
@@ -365,6 +365,17 @@
             // );
           },
         },
+        // {
+        //   dataIndex: "sampleTypeName",
+        //   title: "样本类型",
+        //   fieldsProps: {
+        //     type: "select",
+        //     options: ["PCR未纯化", "PCR已纯化", "菌株", "质粒"],
+        //   },
+        //   render: (text, record, index) => {
+        //     return record?.cxSampleCartInfo?.sampleTypeName;
+        //   },
+        // },
         // {
         //   dataIndex: "resistance",
         //   title: "抗性",
@@ -487,45 +498,45 @@
         //   // },
         // },
 
-        {
-          dataIndex: "options",
-          title: "操作",
-          fieldsProps: {
-            // defaultValue: "菌株",
+        // {
+        //   dataIndex: "options",
+        //   title: "操作",
+        //   fieldsProps: {
+        //     // defaultValue: "菌株",
 
-            verifyFn(text) {
-              // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
-              return {
-                status: text === "123123",
-                message: `当前值为${text}，不符合规则`,
-              };
-            },
-          },
-          onchange: (text, record, i, { setRowData }) => {
-            setRowData({
-              sampleName: text * 2,
-              sampleTypeId: text,
-              options: text,
-            });
-          },
-          render: () => "删除",
-          extra: {
-            style: {
-              width: 100,
-              background: "red",
-            },
-            onclick: (text, data, index) => {
-              console.log(
-                "%c Line:409 🧀 text, index   jjljl",
-                "color:#7f2b82",
-                text,
-                data,
-                index
-              );
-              MBLsheet.deleteRow(index, 1);
-            },
-          },
-        },
+        //     verifyFn(text) {
+        //       // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
+        //       return {
+        //         status: text === "123123",
+        //         message: `当前值为${text}，不符合规则`,
+        //       };
+        //     },
+        //   },
+        //   onchange: (text, record, i, { setRowData }) => {
+        //     setRowData({
+        //       sampleName: text * 2,
+        //       sampleTypeId: text,
+        //       options: text,
+        //     });
+        //   },
+        //   render: () => "删除",
+        //   extra: {
+        //     style: {
+        //       width: 100,
+        //       background: "red",
+        //     },
+        //     onclick: (text, data, index) => {
+        //       console.log(
+        //         "%c Line:409 🧀 text, index   jjljl",
+        //         "color:#7f2b82",
+        //         text,
+        //         data,
+        //         index
+        //       );
+        //       MBLsheet.deleteRow(index, 1);
+        //     },
+        //   },
+        // },
       ];
 
       // setTimeout(() => {
