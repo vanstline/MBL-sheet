@@ -19,9 +19,11 @@ function rowLocation(y) {
   let row_index = MBLsheet_searcharray(Store.visibledatarow, y);
 
   if (row_index == -1 && y > 0) {
-    row_index = Store.visibledatarow.length - 1;
+    // row_index = Store.visibledatarow.length - 1;
+    return -1;
   } else if (row_index == -1 && y <= 0) {
-    row_index = 0;
+    // row_index = 0;
+    return -1;
   }
 
   return rowLocationByIndex(row_index);
@@ -59,9 +61,11 @@ function colLocation(x) {
   let col_index = MBLsheet_searcharray(Store.visibledatacolumn, x);
 
   if (col_index == -1 && x > 0) {
-    col_index = Store.visibledatacolumn.length - 1;
+    // col_index = Store.visibledatacolumn.length - 1;
+    return -1;
   } else if (col_index == -1 && x <= 0) {
-    col_index = 0;
+    // col_index = 0;
+    return -1;
   }
 
   return colLocationByIndex(col_index);

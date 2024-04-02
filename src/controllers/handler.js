@@ -82,6 +82,8 @@ import {
 } from "../expendPlugins/chart/plugin";
 import { setRowData } from "./observer";
 
+const nonexistentCell = [undefined, -1];
+
 //, columeflowset, rowflowset
 export default function MBLsheetHandler() {
   const os = browser.detectOS(),
@@ -301,6 +303,7 @@ export default function MBLsheetHandler() {
       }
 
       let mouse = mouseposition(event.pageX, event.pageY);
+      console.log("%c Line:303 🧀", "color:#42b983", mouse);
 
       let x = mouse[0] + $("#MBLsheet-cell-main").scrollLeft();
       let y = mouse[1] + $("#MBLsheet-cell-main").scrollTop();
@@ -316,6 +319,20 @@ export default function MBLsheetHandler() {
 
       let row_index_ed = row_index,
         col_index_ed = col_index;
+
+      if (
+        nonexistentCell.includes(row_index) ||
+        nonexistentCell.includes(col_index)
+      ) {
+        formula.cancelNormalSelected();
+        return;
+      }
+      console.log(
+        "%c Line:320 🍓 col_index_ed",
+        "color:#b03734",
+        row_index,
+        col_index
+      );
       let sheetFile = sheetmanage.getSheetByIndex();
 
       var curColumn = sheetFile?.columns?.[col_index_ed] ?? {};
@@ -1826,15 +1843,13 @@ export default function MBLsheetHandler() {
       });
 
       if (curSheet.columns?.[0]?.[col_index]?.dataIndex == null) {
+        const curKey = curSheet.columns?.[0]?.dataIndex;
         const changeFn = curSheet.columns?.[0].onchange;
         if (changeFn && typeof changeFn === "function") {
-          // console.log(
-          //   "%c Line:1778 🍫",
-          //   "color:#2eafb0",
-          //   "没有 dataIndex 禁用"
-          // );
           const curSetRowData = (obj) => setRowData(obj, row_index, keyNumMap);
-          changeFn(null, rowData, row_index, { setRowData: curSetRowData });
+          changeFn(rowData[curKey], rowData, row_index, {
+            setRowData: curSetRowData,
+          });
         }
       }
 
