@@ -1719,6 +1719,7 @@ const dataVerificationCtrl = {
       }
     } else {
       if (item.type == "dropdown") {
+        console.log("%c Line:1725 🍌", "color:#42b983");
         failureText += "你选择的不是下拉列表中的选项";
       } else if (item.type == "checkbox") {
       } else if (
@@ -1776,7 +1777,7 @@ const dataVerificationCtrl = {
       return item.verifyFn(cellValue);
     }
     return {
-      status: !this.validateCellData(cellValue, item),
+      status: this.validateCellData(cellValue, item),
       message: undefined,
     };
   },
@@ -1796,9 +1797,7 @@ const dataVerificationCtrl = {
     }
 
     if (type == "dropdown") {
-      console.log("%c Line:1800 🍇", "color:#ea7e5c", cellValue, item);
       let list = _this.getDropdownList(value1);
-      console.log("%c Line:1801 🍏 list", "color:#6ec1c2", list);
 
       // 多选的情况 检查每个都在下拉列表中
       if (type2 && cellValue) {
