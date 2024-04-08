@@ -330,7 +330,11 @@ export default function MBLsheetHandler() {
         nonexistentCell.includes(row_index) ||
         nonexistentCell.includes(col_index)
       ) {
-        formula.cancelNormalSelected();
+        formula.updatecell(
+          Store.MBLsheetCellUpdate[0],
+          Store.MBLsheetCellUpdate[1]
+        );
+        MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
         return;
       }
       console.log(
@@ -360,7 +364,11 @@ export default function MBLsheetHandler() {
             }
           });
           extra.onclick(rowData[curColumn.dataIndex], rowData, row_index_ed);
-          formula.cancelNormalSelected();
+             formula.updatecell(
+               Store.MBLsheetCellUpdate[0],
+               Store.MBLsheetCellUpdate[1]
+             );
+             MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
           return;
         }
       }

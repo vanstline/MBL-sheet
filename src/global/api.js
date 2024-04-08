@@ -205,8 +205,15 @@ export function setCellValue(row, column, value, options = {}) {
     setcellvalue(row, column, data, value);
   } else if (value instanceof Object) {
     let curv = {};
-    if (isRealNull(data[row][column])) {
-      data[row][column] = {};
+    if (isRealNull(data?.[row]?.[column])) {
+      if (!data?.[row]) {
+        data[row] = {
+          [column]: {}
+        }
+      } else {
+         data[row][column] = {};
+      }
+     
     }
     let cell = data[row][column];
     if (value.f != null && value.v == null) {

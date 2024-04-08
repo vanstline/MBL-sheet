@@ -93,9 +93,9 @@ export default {
   plugins: [], //plugins, e.g. ['chart']
   forceCalculation: false, //强制刷新公式，公式较多会有性能问题，慎用
   rowHeaderWidth: 46,
-  columnHeaderHeight: 20,
+  columnHeaderHeight: 50,
   defaultColWidth: 73,
-  defaultRowHeight: 19,
+  defaultRowHeight: 30,
   defaultFontSize: 10,
   limitSheetNameLength: true, //是否限制工作表名的长度
   defaultSheetNameMaxLength: 31, //默认工作表名称的最大长度

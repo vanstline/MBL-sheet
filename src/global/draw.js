@@ -687,12 +687,6 @@ function MBLsheetDrawMain(
       ) {
         firstcolumnlen = Store.config["columnlen"][c];
       }
-      console.log(
-        "%c Line:688 🍧 firstcolumnlen",
-        "color:#f5ce50",
-        firstcolumnlen,
-        Store.config
-      );
 
       if (Store.flowdata[r] != null && Store.flowdata[r][c] != null) {
         let value = Store.flowdata[r][c];

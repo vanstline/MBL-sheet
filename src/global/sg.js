@@ -103,6 +103,9 @@ function sgInit(setting, config, MBLsheet) {
 }
 
 function setLength(len, MBLsheet) {
+  if (len == 0) {
+    throw new Error("length 不能为0");
+  }
   const curLen = MBLsheet.getSheetData().length - 1;
 
   const finlayLen = len - curLen - 1;
