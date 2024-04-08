@@ -158,85 +158,80 @@ var excelDataSource = [
         userInfo: null,
     },
 ];
-var columns = [  
-{
+var columns = [
+  {
     dataIndex: "sampleName",
-    title: "样本名称",
+    width: 100,
+    title: "样本名称11",
     fieldsProps: {
-    required: true,
-    type: "text",
-    range: [-1, 999999],
-    influence: ["sampleTypeId"],
-    verifyFn: function (text) {
+      required: true,
+      type: "text",
+      range: [-1, 999999],
+      influence: ["sampleTypeId"],
+      verifyFn: function (text) {
         var status = false;
         var message = "";
         if (text == "1") {
-        status = false;
-        message = "请输入样品名称";
+          status = false;
+          message = "请输入样品名称";
         } else {
-        if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
+          if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
             status = false;
             message =
-            "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
-        } else {
+              "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
+          } else {
             status = true;
             message = "";
-        }
+          }
         }
 
-        console.log(
-        "%c Line:270 🍢",
-        "color:#ed9ec7",
-        text,
-        status,
-        message
-        );
+        console.log("%c Line:270 🍢", "color:#ed9ec7", text, status, message);
 
         return {
-        status,
-        message,
+          status,
+          message,
         };
         // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
         // return {
         //   status: text === "123123",
         //   message: `当前值为${text}，不符合规则`,
         // };
-    },
+      },
     },
     extra: {
-    style: {
+      style: {
         width: 30,
         // background: "red",
-    },
-    onclick: (text, data, index) => {
+      },
+      onclick: (text, data, index) => {
         console.log(
-        "%c Line:409 🧀 text, index   jjljl",
-        "color:#7f2b82",
-        text,
-        data,
-        index
+          "%c Line:409 🧀 text, index   jjljl",
+          "color:#7f2b82",
+          text,
+          data,
+          index
         );
-    },
+      },
     },
     render: (text, record, index) => {
-    return record.cxSampleCartInfo?.name;
+      return record.cxSampleCartInfo?.name;
     },
     onchange: (text, record, i, { setRowData }) => {
-    console.log(
+      console.log(
         "%c Line:282 🍐 text, record",
         "color:#465975",
         text,
         record,
         i,
         setRowData
-    );
-    setRowData({
+      );
+      setRowData({
         sampleName: text,
         sampleTypeId: text,
-    });
+      });
     },
-},
-{
+  },
+  {
     // dataIndex: "sampleTypeName",
     // title: "样本类型",
     // fieldsProps: {
@@ -256,218 +251,220 @@ var columns = [
     // },
     dataIndex: "sampleTypeId",
     title: "样本类型",
+    width: 200,
     fieldsProps: {
-    // defaultValue: '菌株',
-    type: "select",
-    // type2: "multi",
-    options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
-    // options: [
-    //   { label: "菌株", value: "4" },
-    //   { label: "PCR产物(已纯化)", value: 1 },
-    // ],
-    // verifyFn(text, row) {
-    //   console.log(
-    //     "%c Line:352 🍫 text, row",
-    //     "color:#ffdd4d",
-    //     text,
-    //     row
-    //   );
-    //   // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
-    //   const d = {
-    //     status: row?.sampleName !== "123123",
-    //     message: `当前值为${text}，不符合规则`,
-    //   };
-    //   console.log("%c Line:365 🥪 d", "color:#93c0a4", d);
-    //   return d;
-    // },
+      // defaultValue: '菌株',
+      type: "select",
+      // type2: "multi",
+      options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
+      // options: [
+      //   { label: "菌株", value: "4" },
+      //   { label: "PCR产物(已纯化)", value: 1 },
+      // ],
+      // verifyFn(text, row) {
+      //   console.log(
+      //     "%c Line:352 🍫 text, row",
+      //     "color:#ffdd4d",
+      //     text,
+      //     row
+      //   );
+      //   // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
+      //   const d = {
+      //     status: row?.sampleName !== "123123",
+      //     message: `当前值为${text}，不符合规则`,
+      //   };
+      //   console.log("%c Line:365 🥪 d", "color:#93c0a4", d);
+      //   return d;
+      // },
     },
     render: (text, record, index) => {
-    return record?.cxSampleCartInfo?.sampleTypeId;
+      return record?.cxSampleCartInfo?.sampleTypeId;
     },
     onchange: (text, record, i, config) => {
-    // console.log(
-    //   "%c Line:318 🌮 text, record, i, config",
-    //   "color:#e41a6a",
-    //   text,
-    //   record,
-    //   i,
-    //   config
-    // );
+      // console.log(
+      //   "%c Line:318 🌮 text, record, i, config",
+      //   "color:#e41a6a",
+      //   text,
+      //   record,
+      //   i,
+      //   config
+      // );
     },
-},
-{
+  },
+  {
     dataIndex: "sampleTypeNamed",
     title: "样本类型",
+    width: 300,
     fieldsProps: {
-    required: true,
-    type: "select",
-    options: ["PCR未纯化", "PCR已纯化", "菌株", "质粒"],
+      required: true,
+      type: "select",
+      options: ["PCR未纯化", "PCR已纯化", "菌株", "质粒"],
     },
     // render: (text, record, index) => {
     //   return record?.cxSampleCartInfo?.sampleTypeName;
     // },
-},
-// {
-//   dataIndex: "resistance",
-//   title: "抗性",
-//   fieldsProps: {
-//     type: "autocomplete",
-//     type2: "multi",
-//     // type: "select",
-//     // type2: "select",
-//     options: ["Kan", "Amp"],
-//   },
-//   render: (text, record, index) => {
-//     return record.cxSampleCartInfo?.resistance;
-//   },
-// },
-// {
-//   dataIndex: "carrierName",
-//   title: "载体",
-//   render: (text, record, index) => {
-//     return record.cxSampleCartInfo?.carrierName;
-//   },
-// },
-// {
-//   dataIndex: "minFragmentLength",
+  },
+  // {
+  //   dataIndex: "resistance",
+  //   title: "抗性",
+  //   fieldsProps: {
+  //     type: "autocomplete",
+  //     type2: "multi",
+  //     // type: "select",
+  //     // type2: "select",
+  //     options: ["Kan", "Amp"],
+  //   },
+  //   render: (text, record, index) => {
+  //     return record.cxSampleCartInfo?.resistance;
+  //   },
+  // },
+  // {
+  //   dataIndex: "carrierName",
+  //   title: "载体",
+  //   render: (text, record, index) => {
+  //     return record.cxSampleCartInfo?.carrierName;
+  //   },
+  // },
+  // {
+  //   dataIndex: "minFragmentLength",
 
-//   title: "最小长度",
+  //   title: "最小长度",
 
-//   fieldsProps: {
-//     type: "text",
+  //   fieldsProps: {
+  //     type: "text",
 
-//     compareInfo: {
-//       sign: "in", // 比较符
+  //     compareInfo: {
+  //       sign: "in", // 比较符
 
-//       range: [0, 999999],
-//     },
-//   },
+  //       range: [0, 999999],
+  //     },
+  //   },
 
-//   render: (text, record, index) => {
-//     return record.cxSampleCartInfo?.minFragmentLength;
-//   },
-// },
+  //   render: (text, record, index) => {
+  //     return record.cxSampleCartInfo?.minFragmentLength;
+  //   },
+  // },
 
-// {
-//   dataIndex: "maxFragmentLength",
+  // {
+  //   dataIndex: "maxFragmentLength",
 
-//   title: "最大长度",
+  //   title: "最大长度",
 
-//   fieldsProps: {
-//     type: "text",
+  //   fieldsProps: {
+  //     type: "text",
 
-//     compareInfo: {
-//       sign: "in", // 比较符
+  //     compareInfo: {
+  //       sign: "in", // 比较符
 
-//       range: [0, 999999],
-//     },
-//   },
+  //       range: [0, 999999],
+  //     },
+  //   },
 
-//   render: (text, record, index) => {
-//     return record.cxSampleCartInfo?.maxFragmentLength;
-//   },
-// },
+  //   render: (text, record, index) => {
+  //     return record.cxSampleCartInfo?.maxFragmentLength;
+  //   },
+  // },
 
-// {
-//   dataIndex: "sampleConcentration",
+  // {
+  //   dataIndex: "sampleConcentration",
 
-//   title: "样品备注",
+  //   title: "样品备注",
 
-//   fieldsProps: {
-//     type: "select",
+  //   fieldsProps: {
+  //     type: "select",
 
-//     options: [
-//       "GC Rich",
-//       "复杂结构",
-//       "重复序列",
-//       "低拷贝",
-//       "病毒DNA",
-//       "噬菌体质粒",
-//     ],
-//   },
-// },
+  //     options: [
+  //       "GC Rich",
+  //       "复杂结构",
+  //       "重复序列",
+  //       "低拷贝",
+  //       "病毒DNA",
+  //       "噬菌体质粒",
+  //     ],
+  //   },
+  // },
 
-// {
-//   dataIndex: "sampleConcentration",
+  // {
+  //   dataIndex: "sampleConcentration",
 
-//   title: "要求",
+  //   title: "要求",
 
-//   fieldsProps: {
-//     type: "select",
+  //   fieldsProps: {
+  //     type: "select",
 
-//     options: ["单向", "测通", "双向", "多向"],
-//   },
+  //     options: ["单向", "测通", "双向", "多向"],
+  //   },
 
-//   render: (text, record, index) => {
-//     return record.seqText;
-//   },
-// },
+  //   render: (text, record, index) => {
+  //     return record.seqText;
+  //   },
+  // },
 
-// {
-//   dataIndex: "primerTypeName",
+  // {
+  //   dataIndex: "primerTypeName",
 
-//   title: "引物类型",
+  //   title: "引物类型",
 
-//   fieldsProps: {
-//     type: "select",
+  //   fieldsProps: {
+  //     type: "select",
 
-//     options: ["通用", "自带", "合成", "暂存引物"],
-//   },
+  //     options: ["通用", "自带", "合成", "暂存引物"],
+  //   },
 
-//   render: (text, record, index) => {
-//     return record.cxPrimerCartInfo?.[0]?.typeName;
-//   },
-// },
+  //   render: (text, record, index) => {
+  //     return record.cxPrimerCartInfo?.[0]?.typeName;
+  //   },
+  // },
 
-// {
-//   dataIndex: "primerName",
+  // {
+  //   dataIndex: "primerName",
 
-//   title: "引物名称",
+  //   title: "引物名称",
 
-//   // render: (text, record, index) => {
-//   //   return record.cxPrimerCartInfo?.[0]?.name;
-//   // },
-// },
+  //   // render: (text, record, index) => {
+  //   //   return record.cxPrimerCartInfo?.[0]?.name;
+  //   // },
+  // },
 
-// {
-//   dataIndex: "options",
-//   title: "操作",
-//   fieldsProps: {
-//     // defaultValue: "菌株",
+  // {
+  //   dataIndex: "options",
+  //   title: "操作",
+  //   fieldsProps: {
+  //     // defaultValue: "菌株",
 
-//     verifyFn(text) {
-//       // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
-//       return {
-//         status: text === "123123",
-//         message: `当前值为${text}，不符合规则`,
-//       };
-//     },
-//   },
-//   onchange: (text, record, i, { setRowData }) => {
-//     setRowData({
-//       sampleName: text * 2,
-//       sampleTypeId: text,
-//       options: text,
-//     });
-//   },
-//   render: () => "删除",
-//   extra: {
-//     style: {
-//       width: 100,
-//       background: "red",
-//     },
-//     onclick: (text, data, index) => {
-//       console.log(
-//         "%c Line:409 🧀 text, index   jjljl",
-//         "color:#7f2b82",
-//         text,
-//         data,
-//         index
-//       );
-//       MBLsheet.deleteRow(index, 1);
-//     },
-//   },
-// },
+  //     verifyFn(text) {
+  //       // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
+  //       return {
+  //         status: text === "123123",
+  //         message: `当前值为${text}，不符合规则`,
+  //       };
+  //     },
+  //   },
+  //   onchange: (text, record, i, { setRowData }) => {
+  //     setRowData({
+  //       sampleName: text * 2,
+  //       sampleTypeId: text,
+  //       options: text,
+  //     });
+  //   },
+  //   render: () => "删除",
+  //   extra: {
+  //     style: {
+  //       width: 100,
+  //       background: "red",
+  //     },
+  //     onclick: (text, data, index) => {
+  //       console.log(
+  //         "%c Line:409 🧀 text, index   jjljl",
+  //         "color:#7f2b82",
+  //         text,
+  //         data,
+  //         index
+  //       );
+  //       MBLsheet.deleteRow(index, 1);
+  //     },
+  //   },
+  // },
 ];
 
 

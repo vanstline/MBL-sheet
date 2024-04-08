@@ -336,8 +336,8 @@ const dataVerificationCtrl = {
 
             let row = Store.visibledatarow[r2],
               row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-            let col = Store.visibledatacolumn[c2],
-              col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+            let col = Store.cloumnLenSum[c2],
+              col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
             _this.selectRange.push({
               left: col_pre,
@@ -390,8 +390,8 @@ const dataVerificationCtrl = {
 
               let row = Store.visibledatarow[r2],
                 row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-              let col = Store.visibledatacolumn[c2],
-                col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+              let col = Store.cloumnLenSum[c2],
+                col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
               _this.selectRange.push({
                 left: col_pre,
@@ -1454,8 +1454,8 @@ const dataVerificationCtrl = {
 
     let row = Store.visibledatarow[r],
       row_pre = r == 0 ? 0 : Store.visibledatarow[r - 1];
-    let col = Store.visibledatacolumn[c],
-      col_pre = c == 0 ? 0 : Store.visibledatacolumn[c - 1];
+    let col = Store.cloumnLenSum[c],
+      col_pre = c == 0 ? 0 : Store.cloumnLenSum[c - 1];
 
     let margeset = menuButton.mergeborer(Store.flowdata, r, c);
     if (!!margeset) {
@@ -1992,8 +1992,8 @@ const dataVerificationCtrl = {
 
     let row = Store.visibledatarow[rowIndex],
       row_pre = rowIndex == 0 ? 0 : Store.visibledatarow[rowIndex - 1];
-    let col = Store.visibledatacolumn[colIndex],
-      col_pre = colIndex == 0 ? 0 : Store.visibledatacolumn[colIndex - 1];
+    let col = Store.cloumnLenSum[colIndex],
+      col_pre = colIndex == 0 ? 0 : Store.cloumnLenSum[colIndex - 1];
 
     let margeset = menuButton.mergeborer(Store.flowdata, rowIndex, colIndex);
     if (!!margeset) {

@@ -273,8 +273,8 @@ function createFilterOptions(MBLsheet_filter_save, filterObj) {
 
   let row = Store.visibledatarow[r2],
     row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-  let col = Store.visibledatacolumn[c2],
-    col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+  let col = Store.cloumnLenSum[c2],
+    col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
   let newSelectedHTML =
     '<div id="MBLsheet-filter-selected-sheet' +
@@ -306,7 +306,7 @@ function createFilterOptions(MBLsheet_filter_save, filterObj) {
         '" data-edc="' +
         c2 +
         '" class="MBLsheet-filter-options" style="left:' +
-        (Store.visibledatacolumn[c] - 20) +
+        (Store.cloumnLenSum[c] - 20) +
         "px;top:" +
         row_pre +
         'px;display:block;"><i class="fa fa-caret-down" aria-hidden="true"></i></div>';
@@ -369,7 +369,7 @@ function createFilterOptions(MBLsheet_filter_save, filterObj) {
         '" data-edc="' +
         c2 +
         '" class="MBLsheet-filter-options MBLsheet-filter-options-active" style="left:' +
-        (Store.visibledatacolumn[c] - 20) +
+        (Store.cloumnLenSum[c] - 20) +
         "px;top:" +
         row_pre +
         'px;display:block;"><i class="fa fa-filter MBLsheet-mousedown-cancel" aria-hidden="true"></i></div>';

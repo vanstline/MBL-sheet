@@ -15,11 +15,31 @@ function sgInit(setting, config, MBLsheet) {
     throw new Error("columns 是必填字段");
     // columns;
   }
+
+  config.columns.forEach((item, i) => {
+    if (Store.cloumnLens) {
+      Store.cloumnLens[i] = item.width;
+    } else {
+      Store.cloumnLens = [item.width];
+    }
+  });
+
+  Store.cloumnLenSum = Store.cloumnLens.reduce((prev, next, i) => {
+    const prevW = i == 0 ? 0 : prev[i-1];
+    const sum = prevW + next;
+    prev.push(sum + 1);
+    return prev
+  }, []);
+
+  
+
   sheet.row = config.row;
   sheet.column = config.columns.length;
   sheet.columnHeaderArr = config.columns.map((item) => item.title);
   sheet.defaultColWidth = config.defaultColWidth || 150;
   setting.lang = setting.lang || "zh";
+
+  
 
   initDataSource(config.dataSource, sheet, MBLsheet);
 

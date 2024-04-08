@@ -14,6 +14,8 @@ const Store = {
 
   visibledatarow: [],
   visibledatacolumn: [],
+  cloumnLenSum: [],
+  cloumnLens: [],
   ch_width: 0,
   rh_height: 0,
 

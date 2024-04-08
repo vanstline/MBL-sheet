@@ -133,7 +133,7 @@ export function getCellValue(row, column, options = {}) {
  * @param {Function} options.success 操作结束的回调函数
  */
 export function setCellValue(row, column, value, options = {}) {
-  console.log("%c Line:136 🍞 row, column", "color:#33a5ff", row, column);
+  
   let curv = Store.flowdata?.[row]?.[column];
 
   // Store old value for hook function
@@ -732,29 +732,29 @@ export function frozenFirstColumn(order) {
     let freezenverticaldata, col_st, left;
     if (MBLsheetFreezen.freezenRealFirstRowColumn) {
       col_st = 0;
-      left = Store.visibledatacolumn[col_st] - 2 + Store.rowHeaderWidth;
+      left = Store.cloumnLenSum[col_st] - 2 + Store.rowHeaderWidth;
       freezenverticaldata = [
-        Store.visibledatacolumn[col_st],
+        Store.cloumnLenSum[col_st],
         col_st + 1,
         0,
-        MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+        MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
         left,
       ];
     } else {
       let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
 
-      col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollLeft);
+      col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollLeft);
       if (col_st == -1) {
         col_st = 0;
       }
 
       left =
-        Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+        Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
       freezenverticaldata = [
-        Store.visibledatacolumn[col_st],
+        Store.cloumnLenSum[col_st],
         col_st + 1,
         scrollLeft,
-        MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+        MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
         left,
       ];
     }
@@ -868,7 +868,7 @@ export function frozenColumnRange(range, order) {
 
   if (!order || order == getSheetIndex(Store.currentSheetIndex)) {
     let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
-    let col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollLeft);
+    let col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollLeft);
 
     let column_focus = range.column_focus;
     if (column_focus > col_st) {
@@ -879,12 +879,12 @@ export function frozenColumnRange(range, order) {
     }
 
     let left =
-      Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+      Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
     let freezenverticaldata = [
-      Store.visibledatacolumn[col_st],
+      Store.cloumnLenSum[col_st],
       col_st + 1,
       scrollLeft,
-      MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+      MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
       left,
     ];
     MBLsheetFreezen.saveFreezen(null, null, freezenverticaldata, left);
@@ -1018,17 +1018,17 @@ export function setBothFrozen(isRange, options = {}) {
       MBLsheetFreezen.createFreezenHorizontal(freezenhorizontaldata, top);
 
       let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
-      let col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollLeft);
+      let col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollLeft);
       if (col_st == -1) {
         col_st = 0;
       }
       let left =
-        Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+        Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
       let freezenverticaldata = [
-        Store.visibledatacolumn[col_st],
+        Store.cloumnLenSum[col_st],
         col_st + 1,
         scrollLeft,
-        MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+        MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
         left,
       ];
       MBLsheetFreezen.saveFreezen(null, null, freezenverticaldata, left);
@@ -1096,7 +1096,7 @@ export function setBothFrozen(isRange, options = {}) {
       MBLsheetFreezen.createFreezenHorizontal(freezenhorizontaldata, top);
 
       let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
-      let col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollLeft);
+      let col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollLeft);
 
       let column_focus = range.column_focus;
 
@@ -1109,12 +1109,12 @@ export function setBothFrozen(isRange, options = {}) {
       }
 
       let left =
-        Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+        Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
       let freezenverticaldata = [
-        Store.visibledatacolumn[col_st],
+        Store.cloumnLenSum[col_st],
         col_st + 1,
         scrollLeft,
-        MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+        MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
         left,
       ];
       MBLsheetFreezen.saveFreezen(null, null, freezenverticaldata, left);
@@ -3039,8 +3039,8 @@ export function setSingleRangeFormat(attr, value, options = {}) {
 
   for (let r = range.row[0]; r <= range.row[1]; r++) {
     for (let c = range.column[0]; c <= range.column[1]; c++) {
-      console.log("r", r);
-      console.log("c", c);
+      
+      
       setCellValue(
         r,
         c,
@@ -4920,7 +4920,7 @@ export function matrixOperation(type, options = {}) {
       break;
     case "newMatrix":
       // TODO
-      console.log("TODO");
+      
       break;
   }
   editor.controlHandler(arr, range);
@@ -5793,9 +5793,9 @@ export function scroll(options = {}) {
       return tooltip.info("The targetColumn parameter is invalid.", "");
     }
 
-    let col = Store.visibledatacolumn[targetColumn],
+    let col = Store.cloumnLenSum[targetColumn],
       col_pre =
-        targetColumn <= 0 ? 0 : Store.visibledatacolumn[targetColumn - 1];
+        targetColumn <= 0 ? 0 : Store.cloumnLenSum[targetColumn - 1];
 
     $("#MBLsheet-scrollbar-x").scrollLeft(col_pre);
   }
@@ -5882,7 +5882,7 @@ export function getScreenshot(options = {}) {
   }
 
   let visibledatarow = Store.visibledatarow;
-  let visibledatacolumn = Store.visibledatacolumn;
+  let cloumnLenSum = Store.cloumnLenSum;
 
   let scrollHeight, rh_height;
   if (str - 1 < 0) {
@@ -5896,10 +5896,10 @@ export function getScreenshot(options = {}) {
   let scrollWidth, ch_width;
   if (stc - 1 < 0) {
     scrollWidth = 0;
-    ch_width = visibledatacolumn[edc];
+    ch_width = cloumnLenSum[edc];
   } else {
-    scrollWidth = visibledatacolumn[stc - 1];
-    ch_width = visibledatacolumn[edc] - visibledatacolumn[stc - 1];
+    scrollWidth = cloumnLenSum[stc - 1];
+    ch_width = cloumnLenSum[edc] - cloumnLenSum[stc - 1];
   }
 
   let newCanvas = $("<canvas>")
@@ -6581,11 +6581,11 @@ export function insertImage(src, options = {}) {
       colIndex = 0;
     }
 
-    if (colIndex > Store.visibledatacolumn.length) {
-      colIndex = Store.visibledatacolumn.length;
+    if (colIndex > Store.cloumnLenSum.length) {
+      colIndex = Store.cloumnLenSum.length;
     }
 
-    let left = colIndex == 0 ? 0 : Store.visibledatacolumn[colIndex - 1];
+    let left = colIndex == 0 ? 0 : Store.cloumnLenSum[colIndex - 1];
     let top = rowIndex == 0 ? 0 : Store.visibledatarow[rowIndex - 1];
 
     let image = new Image();
@@ -6637,8 +6637,8 @@ export function insertImage(src, options = {}) {
     }
 
     let colwidth = file.column;
-    let visibledatacolumn = file.visibledatacolumn || [];
-    if (visibledatacolumn.length === 0) {
+    let cloumnLenSum = file.cloumnLenSum || [];
+    if (cloumnLenSum.length === 0) {
       let ch_width = 0;
 
       for (let c = 0; c < colwidth; c++) {
@@ -6649,13 +6649,13 @@ export function insertImage(src, options = {}) {
         }
 
         if (config["colhidden"] != null && config["colhidden"][c] != null) {
-          visibledatacolumn.push(ch_width);
+          cloumnLenSum.push(ch_width);
           continue;
         }
 
         ch_width += Math.round((firstcolumnlen + 1) * zoomRatio);
 
-        visibledatacolumn.push(ch_width); //列的临时长度分布
+        cloumnLenSum.push(ch_width); //列的临时长度分布
       }
     }
 
@@ -6679,11 +6679,11 @@ export function insertImage(src, options = {}) {
       colIndex = 0;
     }
 
-    if (colIndex > visibledatacolumn.length) {
-      colIndex = visibledatacolumn.length;
+    if (colIndex > cloumnLenSum.length) {
+      colIndex = cloumnLenSum.length;
     }
 
-    let left = colIndex == 0 ? 0 : visibledatacolumn[colIndex - 1];
+    let left = colIndex == 0 ? 0 : cloumnLenSum[colIndex - 1];
     let top = rowIndex == 0 ? 0 : visibledatarow[rowIndex - 1];
 
     let image = new Image();

@@ -273,9 +273,9 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
   MBLsheetTableContent.fillStyle = MBLsheetdefaultstyle.fillStyle;
 
   let dataset_col_st, dataset_col_ed;
-  dataset_col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollWidth);
+  dataset_col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollWidth);
   dataset_col_ed = MBLsheet_searcharray(
-    Store.visibledatacolumn,
+    Store.cloumnLenSum,
     scrollWidth + drawWidth
   );
 
@@ -283,7 +283,7 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
     dataset_col_st = 0;
   }
   if (dataset_col_ed == -1) {
-    dataset_col_ed = Store.visibledatacolumn.length - 1;
+    dataset_col_ed = Store.cloumnLenSum.length - 1;
   }
 
   MBLsheetTableContent.save();
@@ -296,7 +296,7 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
   );
   MBLsheetTableContent.clip();
 
-  // console.log(offsetLeft, 0, drawWidth, Store.columnHeaderHeight -1);
+  // 
 
   let end_c, start_c;
   let bodrder05 = 0.5; //Default 0.5
@@ -305,9 +305,9 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
     if (c == 0) {
       start_c = -scrollWidth;
     } else {
-      start_c = Store.visibledatacolumn[c - 1] - scrollWidth;
+      start_c = Store.cloumnLenSum[c - 1] - scrollWidth;
     }
-    end_c = Store.visibledatacolumn[c] - scrollWidth;
+    end_c = Store.cloumnLenSum[c] - scrollWidth;
 
     //若超出绘制区域终止
     // if(end_c > scrollWidth + drawWidth+1){
@@ -571,9 +571,9 @@ function MBLsheetDrawMain(
     dataset_row_ed = Store.visibledatarow.length - 1;
   }
 
-  dataset_col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollWidth);
+  dataset_col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollWidth);
   dataset_col_ed = MBLsheet_searcharray(
-    Store.visibledatacolumn,
+    Store.cloumnLenSum,
     scrollWidth + drawWidth
   );
 
@@ -584,13 +584,13 @@ function MBLsheetDrawMain(
   dataset_col_st += columnOffsetCell;
 
   if (dataset_col_ed == -1) {
-    dataset_col_ed = Store.visibledatacolumn.length - 1;
+    dataset_col_ed = Store.cloumnLenSum.length - 1;
   }
 
   dataset_col_ed += columnOffsetCell;
 
-  if (dataset_col_ed >= Store.visibledatacolumn.length) {
-    dataset_col_ed = Store.visibledatacolumn.length - 1;
+  if (dataset_col_ed >= Store.cloumnLenSum.length) {
+    dataset_col_ed = Store.cloumnLenSum.length - 1;
   }
 
   //表格渲染区域 起止行列坐标
@@ -607,10 +607,10 @@ function MBLsheetDrawMain(
   if (dataset_col_st == 0) {
     fill_col_st = 0;
   } else {
-    fill_col_st = Store.visibledatacolumn[dataset_col_st - 1];
+    fill_col_st = Store.cloumnLenSum[dataset_col_st - 1];
   }
 
-  fill_col_ed = Store.visibledatacolumn[dataset_col_ed];
+  fill_col_ed = Store.cloumnLenSum[dataset_col_ed];
 
   //表格canvas 初始化处理
   MBLsheetTableContent.fillStyle = "#ffffff";
@@ -666,10 +666,11 @@ function MBLsheetDrawMain(
       if (c == 0) {
         start_c = -scrollWidth;
       } else {
-        start_c = Store.visibledatacolumn[c - 1] - scrollWidth;
+        start_c = Store.cloumnLenSum[c - 1] - scrollWidth;
       }
 
-      let end_c = Store.visibledatacolumn[c] - scrollWidth;
+      let end_c = Store.cloumnLenSum[c] - scrollWidth;
+      
 
       if (
         Store.config["colhidden"] != null &&
@@ -679,12 +680,19 @@ function MBLsheetDrawMain(
       }
 
       let firstcolumnlen = Store.defaultcollen;
+      
       if (
         Store.config["columnlen"] != null &&
         Store.config["columnlen"][c] != null
       ) {
         firstcolumnlen = Store.config["columnlen"][c];
       }
+      console.log(
+        "%c Line:688 🍧 firstcolumnlen",
+        "color:#f5ce50",
+        firstcolumnlen,
+        Store.config
+      );
 
       if (Store.flowdata[r] != null && Store.flowdata[r][c] != null) {
         let value = Store.flowdata[r][c];
@@ -946,7 +954,7 @@ function MBLsheetDrawMain(
     if (c == 0) {
       start_c = -scrollWidth;
     } else {
-      start_c = Store.visibledatacolumn[c - 1] - scrollWidth;
+      start_c = Store.cloumnLenSum[c - 1] - scrollWidth;
     }
 
     if (r == 0) {
@@ -956,7 +964,7 @@ function MBLsheetDrawMain(
     }
 
     end_r = Store.visibledatarow[r + mainCell["mc"].rs - 1] - scrollHeight;
-    end_c = Store.visibledatacolumn[c + mainCell["mc"].cs - 1] - scrollWidth;
+    end_c = Store.cloumnLenSum[c + mainCell["mc"].cs - 1] - scrollWidth;
 
     if (value == null || value.toString().length == 0) {
       nullCellRender(
@@ -1043,10 +1051,10 @@ function MBLsheetDrawMain(
       if (c == 0) {
         start_c = -scrollWidth;
       } else {
-        start_c = Store.visibledatacolumn[c - 1] - scrollWidth;
+        start_c = Store.cloumnLenSum[c - 1] - scrollWidth;
       }
 
-      let end_c = Store.visibledatacolumn[c] - scrollWidth;
+      let end_c = Store.cloumnLenSum[c] - scrollWidth;
 
       //数据透视表
       if (!!Store.MBLsheetcurrentisPivotTable && pivotTable.drawPivotTable) {
@@ -1378,11 +1386,11 @@ function MBLsheetDrawMain(
   }
 
   //渲染表格时有尾列时，清除右边灰色区域，防止表格有值溢出
-  if (dataset_col_ed == Store.visibledatacolumn.length - 1) {
+  if (dataset_col_ed == Store.cloumnLenSum.length - 1) {
     MBLsheetTableContent.clearRect(
       fill_col_ed - scrollWidth + offsetLeft - 1,
       offsetTop - 1,
-      Store.ch_width - Store.visibledatacolumn[dataset_col_ed],
+      Store.ch_width - Store.cloumnLenSum[dataset_col_ed],
       fill_row_ed - scrollHeight
     );
   }
@@ -1411,10 +1419,10 @@ function MBLsheetDrawMain(
       if (c == 0) {
         start_c = -scrollWidth;
       } else {
-        start_c = Store.visibledatacolumn[c - 1] - scrollWidth;
+        start_c = Store.cloumnLenSum[c - 1] - scrollWidth;
       }
 
-      let end_c = Store.visibledatacolumn[c] - scrollWidth;
+      let end_c = Store.cloumnLenSum[c] - scrollWidth;
       if (curSheet?.disabled?.[`${r}_${c}`]) {
         MBLsheetTableContent.beginPath();
 
@@ -2552,10 +2560,10 @@ let cellOverflowRender = function (
   if (stc == 0) {
     start_c = -scrollWidth;
   } else {
-    start_c = Store.visibledatacolumn[stc - 1] - scrollWidth;
+    start_c = Store.cloumnLenSum[stc - 1] - scrollWidth;
   }
 
-  let end_c = Store.visibledatacolumn[edc] - scrollWidth;
+  let end_c = Store.cloumnLenSum[edc] - scrollWidth;
 
   //
   let cell = Store.flowdata[r][c];
@@ -2668,8 +2676,8 @@ function getCellOverflowMap(canvas, col_st, col_ed, row_st, row_end) {
 
         //canvas.measureText(value).width;
 
-        let start_c = c - 1 < 0 ? 0 : Store.visibledatacolumn[c - 1];
-        let end_c = Store.visibledatacolumn[c];
+        let start_c = c - 1 < 0 ? 0 : Store.cloumnLenSum[c - 1];
+        let end_c = Store.cloumnLenSum[c];
 
         let stc, edc;
 
@@ -2810,8 +2818,8 @@ function cellOverflow_trace(
     };
   }
 
-  let start_curC = curC - 1 < 0 ? 0 : Store.visibledatacolumn[curC - 1];
-  let end_curC = Store.visibledatacolumn[curC];
+  let start_curC = curC - 1 < 0 ? 0 : Store.cloumnLenSum[curC - 1];
+  let end_curC = Store.cloumnLenSum[curC];
 
   let w = textMetrics - (end_curC - start_curC);
 
@@ -2827,8 +2835,8 @@ function cellOverflow_trace(
     start_curC -= w;
   }
 
-  let start_traceC = traceC - 1 < 0 ? 0 : Store.visibledatacolumn[traceC - 1];
-  let end_traceC = Store.visibledatacolumn[traceC];
+  let start_traceC = traceC - 1 < 0 ? 0 : Store.cloumnLenSum[traceC - 1];
+  let end_traceC = Store.cloumnLenSum[traceC];
 
   if (traceDir == "forward") {
     if (start_curC < start_traceC) {
@@ -2936,7 +2944,7 @@ function cellTextRender(textInfo, ctx, option) {
   if (values == null) {
     return;
   }
-  // console.log(textInfo, pos_x, pos_y, values[0].width, values[0].left, ctx);
+  // 
 
   // for(let i=0;i<values.length;i++){
   //     let word = values[i];

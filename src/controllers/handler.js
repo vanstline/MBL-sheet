@@ -160,7 +160,7 @@ export default function MBLsheetHandler() {
   $("#MBLsheet-grid-window-1").mousewheel(function (event, delta) {
     let scrollLeft = $("#MBLsheet-scrollbar-x").scrollLeft(),
       scrollTop = $("#MBLsheet-scrollbar-y").scrollTop();
-    let visibledatacolumn_c = Store.visibledatacolumn,
+    let visibledatacolumn_c = Store.cloumnLenSum,
       visibledatarow_c = Store.visibledatarow;
 
     if (MBLsheetFreezen.freezenhorizontaldata != null) {
@@ -320,6 +320,12 @@ export default function MBLsheetHandler() {
       let row_index_ed = row_index,
         col_index_ed = col_index;
 
+        console.log(
+          "%c Line:325 🎂 row_index",
+          "color:#b03734",
+          row_index,
+          col_index
+        );
       if (
         nonexistentCell.includes(row_index) ||
         nonexistentCell.includes(col_index)
@@ -2267,7 +2273,7 @@ export default function MBLsheetHandler() {
           col,
           col_index + 1,
           scrollLeft,
-          MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_index + 1),
+          MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_index + 1),
           left,
         ];
       } else {
@@ -2276,7 +2282,7 @@ export default function MBLsheetHandler() {
           col_pre,
           col_index,
           scrollLeft,
-          MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_index),
+          MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_index),
           left,
         ];
       }
@@ -2833,8 +2839,8 @@ export default function MBLsheetHandler() {
             row = row_location[1],
             row_pre = row_location[0],
             row_index = row_location[2];
-          let col_index = Store.visibledatacolumn.length - 1,
-            col = Store.visibledatacolumn[col_index],
+          let col_index = Store.cloumnLenSum.length - 1,
+            col = Store.cloumnLenSum[col_index],
             col_pre = 0;
 
           let last = $.extend(
@@ -3018,19 +3024,19 @@ export default function MBLsheetHandler() {
 
           if (
             col_e >=
-              Store.visibledatacolumn[Store.visibledatacolumn.length - 1] ||
+              Store.cloumnLenSum[Store.cloumnLenSum.length - 1] ||
             x > winW
           ) {
             col_s =
-              Store.visibledatacolumn.length -
+              Store.cloumnLenSum.length -
               1 -
               Store.MBLsheet_select_save[0]["column"][1] +
               Store.MBLsheet_select_save[0]["column"][0];
-            col_e = Store.visibledatacolumn.length - 1;
+            col_e = Store.cloumnLenSum.length - 1;
           }
 
-          col_pre = col_s - 1 == -1 ? 0 : Store.visibledatacolumn[col_s - 1];
-          col = Store.visibledatacolumn[col_e];
+          col_pre = col_s - 1 == -1 ? 0 : Store.cloumnLenSum[col_s - 1];
+          col = Store.cloumnLenSum[col_e];
           row_pre = row_s - 1 == -1 ? 0 : Store.visibledatarow[row_s - 1];
           row = Store.visibledatarow[row_e];
 
@@ -3101,15 +3107,15 @@ export default function MBLsheetHandler() {
 
           if (
             col_e >=
-              Store.visibledatacolumn[Store.visibledatacolumn.length - 1] ||
+              Store.cloumnLenSum[Store.cloumnLenSum.length - 1] ||
             x > winW
           ) {
             col_s =
-              Store.visibledatacolumn.length -
+              Store.cloumnLenSum.length -
               1 -
               Store.MBLsheet_select_save[0]["column"][1] +
               Store.MBLsheet_select_save[0]["column"][0];
-            col_e = Store.visibledatacolumn.length - 1;
+            col_e = Store.cloumnLenSum.length - 1;
           }
 
           let top = Store.MBLsheet_select_save[0].top_move,
@@ -5078,15 +5084,15 @@ export default function MBLsheetHandler() {
       }
 
       if (
-        col_e >= Store.visibledatacolumn[Store.visibledatacolumn.length - 1] ||
+        col_e >= Store.cloumnLenSum[Store.cloumnLenSum.length - 1] ||
         x > winW
       ) {
         col_s =
-          Store.visibledatacolumn.length -
+          Store.cloumnLenSum.length -
           1 -
           last["column"][1] +
           last["column"][0];
-        col_e = Store.visibledatacolumn.length - 1;
+        col_e = Store.cloumnLenSum.length - 1;
       }
 
       //替换的位置包含部分单元格
@@ -5380,15 +5386,15 @@ export default function MBLsheetHandler() {
       }
 
       if (
-        col_e >= Store.visibledatacolumn[Store.visibledatacolumn.length - 1] ||
+        col_e >= Store.cloumnLenSum[Store.cloumnLenSum.length - 1] ||
         x > winW
       ) {
         col_s =
-          Store.visibledatacolumn.length -
+          Store.cloumnLenSum.length -
           1 -
           last["column"][1] +
           last["column"][0];
-        col_e = Store.visibledatacolumn.length - 1;
+        col_e = Store.cloumnLenSum.length - 1;
       }
 
       //复制范围
@@ -6057,11 +6063,10 @@ export default function MBLsheetHandler() {
     let scrollWidth, ch_width;
     if (st_c - 1 < 0) {
       scrollWidth = 0;
-      ch_width = Store.visibledatacolumn[ed_c];
+      ch_width = Store.cloumnLenSum[ed_c];
     } else {
-      scrollWidth = Store.visibledatacolumn[st_c - 1];
-      ch_width =
-        Store.visibledatacolumn[ed_c] - Store.visibledatacolumn[st_c - 1];
+      scrollWidth = Store.cloumnLenSum[st_c - 1];
+      ch_width = Store.cloumnLenSum[ed_c] - Store.cloumnLenSum[st_c - 1];
     }
 
     let newCanvas = $("<canvas>")
