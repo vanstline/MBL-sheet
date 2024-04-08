@@ -1536,7 +1536,8 @@ let nullCellRender = function (
   bodrder05,
   isMerge
 ) {
-  dataset_col_ed = sheetmanage.getSheetByIndex().column - 1;
+  const curSheet = sheetmanage.getSheetByIndex();
+  dataset_col_ed = curSheet.column - 1;
   let checksAF = alternateformat.checksAF(r, c, af_compute); //交替颜色
   let checksCF = conditionformat.checksCF(r, c, cf_compute); //条件格式
 
@@ -1774,6 +1775,30 @@ let nullCellRender = function (
     clearVerify(r + "_" + c);
   }
 
+  let pos_x = start_c + offsetLeft;
+  let pos_y = start_r + offsetTop + 1;
+
+  if (curSheet.columns[c]["placeholder"]) {
+    const curTextInfo = {
+      type: "plain",
+      values: [
+        {
+          content: curSheet.columns[c]["placeholder"],
+          height: 12,
+          left: 2,
+          top: 18,
+        },
+      ],
+    };
+
+    MBLsheetTableContent.fillStyle = "#bfbfbf";
+    cellTextRender(curTextInfo, MBLsheetTableContent, {
+      pos_x: pos_x,
+      pos_y: pos_y,
+    });
+
+  }
+
   // 单元格渲染后
   method.createHookFunction(
     "cellRenderAfter",
@@ -1998,6 +2023,7 @@ let cellRender = function (
     clearVerify(r + "_" + c);
   }
 
+
   //若单元格有批注（单元格右上角红色小三角标示）
   if (cell.ps != null) {
     let ps_w = 8 * Store.zoomRatio,
@@ -2011,6 +2037,8 @@ let cellRender = function (
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
   }
+
+
 
   //若单元格强制为字符串，则显示绿色小三角
   if (cell.qp == 1 && isRealNum(cell.v)) {
@@ -2041,6 +2069,9 @@ let cellRender = function (
     dataset_col_st,
     dataset_col_ed
   );
+
+
+
 
   if (cell.tb == "1" && cellOverflow_colInObj.colIn) {
     //此单元格 为 溢出单元格渲染范围最后一列，绘制溢出单元格内容
@@ -2358,13 +2389,9 @@ let cellRender = function (
       }
     }
 
+    const fillStyle = menuButton.checkstatus(Store.flowdata, r, c, "fc");
     //单元格 文本颜色
-    MBLsheetTableContent.fillStyle = menuButton.checkstatus(
-      Store.flowdata,
-      r,
-      c,
-      "fc"
-    );
+    MBLsheetTableContent.fillStyle = fillStyle;
 
     //若单元格有交替颜色 文本颜色
     if (checksAF != null && checksAF[0] != null) {
@@ -2386,6 +2413,7 @@ let cellRender = function (
       MBLsheetTableContent.fillStyle = "#ff0000";
     }
 
+    
     cellTextRender(textInfo, MBLsheetTableContent, {
       pos_x: pos_x,
       pos_y: pos_y,
@@ -2393,6 +2421,7 @@ let cellRender = function (
 
     MBLsheetTableContent.restore();
   }
+
 
   if (cellOverflow_bd_r_render) {
     // 右边框
@@ -2474,6 +2503,7 @@ let cellRender = function (
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
   }
+
 
   if (value?.nodeType) {
     MBLsheetTableContent.beginPath();

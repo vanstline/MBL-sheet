@@ -295,6 +295,7 @@ var columns = [
     dataIndex: "sampleTypeNamed",
     title: "样本类型",
     width: 300,
+    placeholder: '我是占位符',
     fieldsProps: {
       required: true,
       type: "select",
