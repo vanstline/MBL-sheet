@@ -5219,7 +5219,7 @@ const menuButton = {
   },
   checkstatus: function (d, r, c, a) {
     if (d == null || d[r] == null) {
-      console.warn("It's incorrect data", r, c);
+      // console.warn("It's incorrect data", r, c);
       return null;
     }
     let foucsStatus = d[r][c];
@@ -5351,7 +5351,7 @@ const menuButton = {
   },
   mergeborer: function (d, row_index, col_index) {
     if (d == null || d[row_index] == null) {
-      console.warn("Merge info is null", row_index, col_index);
+      // console.warn("Merge info is null", row_index, col_index);
       return null;
     }
     let value = d[row_index][col_index];
@@ -5359,14 +5359,14 @@ const menuButton = {
     if (getObjType(value) == "object" && "mc" in value) {
       let margeMaindata = value["mc"];
       if (margeMaindata == null) {
-        console.warn("Merge info is null", row_index, col_index);
+        // console.warn("Merge info is null", row_index, col_index);
         return null;
       }
       col_index = margeMaindata.c;
       row_index = margeMaindata.r;
 
       if (d[row_index][col_index] == null) {
-        console.warn("Main merge Cell info is null", row_index, col_index);
+        // console.warn("Main merge Cell info is null", row_index, col_index);
         return null;
       }
       let col_rs = d[row_index][col_index].mc.cs;
