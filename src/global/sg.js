@@ -77,7 +77,14 @@ function sgInit(setting, config, MBLsheet) {
 
   MBLsheet.setLength = (len) => setLength(len, MBLsheet);
 
-  MBLsheet.delRow = (cur, length) => MBLsheetdeletetable("row", cur, length);
+  MBLsheet.delRow = (cur, length) => {
+    const data = getData(sheet);
+    const needRm = length - cur
+    if (needRm >= data.length) {
+      throw new Error('至少保留一条数据')
+    }
+     MBLsheetdeletetable("row", cur, length);
+  };
   MBLsheet.addRow = (cur, length) => MBLsheetextendtable("row", cur, length);
 
   MBLsheet.verify = verify;

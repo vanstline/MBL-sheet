@@ -2388,10 +2388,11 @@ let cellRender = function (
           horizonAlignPos + textInfo.textHeightAll / Store.zoomRatio;
       }
     }
-
     const fillStyle = menuButton.checkstatus(Store.flowdata, r, c, "fc");
+    const style = columns[c]?.extra?.style;
+
     //单元格 文本颜色
-    MBLsheetTableContent.fillStyle = fillStyle;
+    MBLsheetTableContent.fillStyle = style?.color ?? fillStyle;
 
     //若单元格有交替颜色 文本颜色
     if (checksAF != null && checksAF[0] != null) {
@@ -2402,6 +2403,16 @@ let cellRender = function (
       MBLsheetTableContent.fillStyle = checksCF["textColor"];
     }
 
+    
+    if (style != null && textInfo?.values?.[0]) {
+      const curValues = textInfo.values[0]
+      textInfo.values[0] = {
+        ...curValues,
+        left: style.left != null ? style.left : curValues.left,
+        top: style.top != null ? style.top : curValues.top,
+        
+      };
+    }
     //若单元格格式为自定义数字格式（[red]） 文本颜色为红色
     if (
       cell.ct &&
@@ -2413,6 +2424,7 @@ let cellRender = function (
       MBLsheetTableContent.fillStyle = "#ff0000";
     }
 
+    
     
     cellTextRender(textInfo, MBLsheetTableContent, {
       pos_x: pos_x,

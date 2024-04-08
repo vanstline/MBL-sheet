@@ -185,13 +185,13 @@ var columns = [
           }
         }
 
-        console.log("%c Line:270 🍢", "color:#ed9ec7", text, status, message);
+        
 
         return {
           status,
           message,
         };
-        // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
+        // 
         // return {
         //   status: text === "123123",
         //   message: `当前值为${text}，不符合规则`,
@@ -268,12 +268,12 @@ var columns = [
       //     text,
       //     row
       //   );
-      //   // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
+      //   // 
       //   const d = {
       //     status: row?.sampleName !== "123123",
       //     message: `当前值为${text}，不符合规则`,
       //   };
-      //   console.log("%c Line:365 🥪 d", "color:#93c0a4", d);
+      //   
       //   return d;
       // },
     },
@@ -295,7 +295,7 @@ var columns = [
     dataIndex: "sampleTypeNamed",
     title: "样本类型",
     width: 300,
-    placeholder: '我是占位符',
+    placeholder: "我是占位符",
     fieldsProps: {
       required: true,
       type: "select",
@@ -427,46 +427,22 @@ var columns = [
   //   // },
   // },
 
-  // {
-  //   dataIndex: "options",
-  //   title: "操作",
-  //   fieldsProps: {
-  //     // defaultValue: "菌株",
-
-  //     verifyFn(text) {
-  //       // console.log("%c Line:458 🥃 text", "color:#93c0a4", text);
-  //       return {
-  //         status: text === "123123",
-  //         message: `当前值为${text}，不符合规则`,
-  //       };
-  //     },
-  //   },
-  //   onchange: (text, record, i, { setRowData }) => {
-  //     setRowData({
-  //       sampleName: text * 2,
-  //       sampleTypeId: text,
-  //       options: text,
-  //     });
-  //   },
-  //   render: () => "删除",
-  //   extra: {
-  //     style: {
-  //       width: 100,
-  //       background: "red",
-  //     },
-  //     onclick: (text, data, index) => {
-  //       console.log(
-  //         "%c Line:409 🧀 text, index   jjljl",
-  //         "color:#7f2b82",
-  //         text,
-  //         data,
-  //         index
-  //       );
-  //       MBLsheet.deleteRow(index, 1);
-  //     },
-  //   },
-  // },
+  {
+    title: "操作",
+    width: 100,
+    render: () => "删除",
+    extra: {
+      style: {
+        width: 100,
+        left: 32,
+        background: "#fff",
+        color: "#4096ff",
+      },
+      onclick: (text, data, index) => {
+        MBLsheet.delRow(index, 1);
+      },
+    },
+  },
 ];
 
 
-console.log("%c Line:162 🍬 columns", "color:#465975", columns);
