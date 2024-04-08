@@ -282,9 +282,9 @@ const MBLsheetPostil = {
 
     let row = Store.visibledatarow[row_index],
       row_pre = row_index - 1 == -1 ? 0 : Store.visibledatarow[row_index - 1];
-    let col = Store.visibledatacolumn[col_index],
+    let col = Store.cloumnLenSum[col_index],
       col_pre =
-        col_index - 1 == -1 ? 0 : Store.visibledatacolumn[col_index - 1];
+        col_index - 1 == -1 ? 0 : Store.cloumnLenSum[col_index - 1];
 
     if (!!margeset) {
       row = margeset.row[1];
@@ -469,8 +469,8 @@ const MBLsheetPostil = {
     if (isshow) {
       let row = Store.visibledatarow[r],
         row_pre = r - 1 == -1 ? 0 : Store.visibledatarow[r - 1];
-      let col = Store.visibledatacolumn[c],
-        col_pre = c - 1 == -1 ? 0 : Store.visibledatacolumn[c - 1];
+      let col = Store.cloumnLenSum[c],
+        col_pre = c - 1 == -1 ? 0 : Store.cloumnLenSum[c - 1];
 
       let margeset = menuButton.mergeborer(Store.flowdata, r, c);
       if (!!margeset) {
@@ -591,8 +591,8 @@ const MBLsheetPostil = {
 
     let row = Store.visibledatarow[r],
       row_pre = r - 1 == -1 ? 0 : Store.visibledatarow[r - 1];
-    let col = Store.visibledatacolumn[c],
-      col_pre = c - 1 == -1 ? 0 : Store.visibledatacolumn[c - 1];
+    let col = Store.cloumnLenSum[c],
+      col_pre = c - 1 == -1 ? 0 : Store.cloumnLenSum[c - 1];
 
     let margeset = menuButton.mergeborer(Store.flowdata, r, c);
     if (!!margeset) {
@@ -723,8 +723,8 @@ const MBLsheetPostil = {
 
       let row = Store.visibledatarow[r],
         row_pre = r - 1 == -1 ? 0 : Store.visibledatarow[r - 1];
-      let col = Store.visibledatacolumn[c],
-        col_pre = c - 1 == -1 ? 0 : Store.visibledatacolumn[c - 1];
+      let col = Store.cloumnLenSum[c],
+        col_pre = c - 1 == -1 ? 0 : Store.cloumnLenSum[c - 1];
 
       let margeset = menuButton.mergeborer(Store.flowdata, r, c);
       if (!!margeset) {
@@ -895,8 +895,8 @@ const MBLsheetPostil = {
 
       let row = Store.visibledatarow[r],
         row_pre = r - 1 == -1 ? 0 : Store.visibledatarow[r - 1];
-      let col = Store.visibledatacolumn[c],
-        col_pre = c - 1 == -1 ? 0 : Store.visibledatacolumn[c - 1];
+      let col = Store.cloumnLenSum[c],
+        col_pre = c - 1 == -1 ? 0 : Store.cloumnLenSum[c - 1];
 
       let margeset = menuButton.mergeborer(Store.flowdata, r, c);
       if (!!margeset) {
@@ -1074,9 +1074,9 @@ const MBLsheetPostil = {
             let row = Store.visibledatarow[rowIndex],
               row_pre =
                 rowIndex - 1 == -1 ? 0 : Store.visibledatarow[rowIndex - 1];
-            let col = Store.visibledatacolumn[colIndex],
+            let col = Store.cloumnLenSum[colIndex],
               col_pre =
-                colIndex - 1 == -1 ? 0 : Store.visibledatacolumn[colIndex - 1];
+                colIndex - 1 == -1 ? 0 : Store.cloumnLenSum[colIndex - 1];
 
             let margeset = menuButton.mergeborer(
               Store.flowdata,

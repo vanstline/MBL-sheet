@@ -1145,7 +1145,7 @@ const sheetmanage = {
     file["config"] = Store.config;
     
     file["visibledatarow"] = Store.visibledatarow;
-    file["visibledatacolumn"] = Store.visibledatacolumn;
+    file["cloumnLenSum"] = Store.cloumnLenSum;
     file["ch_width"] = Store.ch_width;
     file["rh_height"] = Store.rh_height;
     file["MBLsheet_select_save"] = $.extend(

@@ -3225,9 +3225,9 @@ const MBLsheetformula = {
       row_pre = row_location[0],
       row_index = row_location[2];
 
-    let visibledatacolumn = Store.visibledatacolumn;
-    let col_index = visibledatacolumn.length - 1,
-      col = visibledatacolumn[col_index],
+    let cloumnLenSum = Store.cloumnLenSum;
+    let col_index = cloumnLenSum.length - 1,
+      col = cloumnLenSum[col_index],
       col_pre = 0;
 
     let top = 0,
@@ -3576,18 +3576,18 @@ const MBLsheetformula = {
         MBLsheet_select_save["row"][0];
       row_e = visibledatarow.length - 1;
     }
-    let visibledatacolumn = Store.visibledatacolumn;
-    if (col_e >= visibledatacolumn[visibledatacolumn.length - 1] || x > winW) {
+    let cloumnLenSum = Store.cloumnLenSum;
+    if (col_e >= cloumnLenSum[cloumnLenSum.length - 1] || x > winW) {
       col_s =
-        visibledatacolumn.length -
+        cloumnLenSum.length -
         1 -
         MBLsheet_select_save["column"][1] +
         MBLsheet_select_save["column"][0];
-      col_e = visibledatacolumn.length - 1;
+      col_e = cloumnLenSum.length - 1;
     }
 
-    let col_pre = col_s - 1 == -1 ? 0 : visibledatacolumn[col_s - 1],
-      col = visibledatacolumn[col_e];
+    let col_pre = col_s - 1 == -1 ? 0 : cloumnLenSum[col_s - 1],
+      col = cloumnLenSum[col_e];
     let row_pre = row_s - 1 == -1 ? 0 : visibledatarow[row_s - 1],
       row = visibledatarow[row_e];
     let rangeindex = _this.rangeMoveIndex;

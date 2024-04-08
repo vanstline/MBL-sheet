@@ -145,18 +145,18 @@ const MBLsheetFreezen = {
       if (_this.freezenRealFirstRowColumn) {
         let dataset_col_st = 0;
         left =
-          Store.visibledatacolumn[dataset_col_st] - 2 + Store.rowHeaderWidth;
+          Store.cloumnLenSum[dataset_col_st] - 2 + Store.rowHeaderWidth;
         freezenverticaldata = [
-          Store.visibledatacolumn[dataset_col_st],
+          Store.cloumnLenSum[dataset_col_st],
           dataset_col_st + 1,
           0,
-          _this.cutVolumn(Store.visibledatacolumn, dataset_col_st + 1),
+          _this.cutVolumn(Store.cloumnLenSum, dataset_col_st + 1),
           left,
         ];
       } else {
         let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
         let dataset_col_st = MBLsheet_searcharray(
-          Store.visibledatacolumn,
+          Store.cloumnLenSum,
           scrollLeft
         );
         if (dataset_col_st == -1) {
@@ -164,15 +164,15 @@ const MBLsheetFreezen = {
         }
 
         left =
-          Store.visibledatacolumn[dataset_col_st] -
+          Store.cloumnLenSum[dataset_col_st] -
           2 -
           scrollLeft +
           Store.rowHeaderWidth;
         freezenverticaldata = [
-          Store.visibledatacolumn[dataset_col_st],
+          Store.cloumnLenSum[dataset_col_st],
           dataset_col_st + 1,
           scrollLeft,
-          _this.cutVolumn(Store.visibledatacolumn, dataset_col_st + 1),
+          _this.cutVolumn(Store.cloumnLenSum, dataset_col_st + 1),
           left,
         ];
       }
@@ -295,7 +295,7 @@ const MBLsheetFreezen = {
     if (type == "v" && _this.freezenverticaldata != null) {
       let freezen_colindex = _this.freezenverticaldata[1];
       let offset = MBLsheet_searcharray(
-        Store.visibledatacolumn,
+        Store.cloumnLenSum,
         $("#MBLsheet-cell-main").scrollLeft()
       );
 
@@ -347,16 +347,16 @@ const MBLsheetFreezen = {
 
       freezen_colindex += offset;
 
-      if (column >= Store.visibledatacolumn.length) {
-        column = Store.visibledatacolumn.length - 1;
+      if (column >= Store.cloumnLenSum.length) {
+        column = Store.cloumnLenSum.length - 1;
       }
 
-      if (freezen_colindex >= Store.visibledatacolumn.length) {
-        freezen_colindex = Store.visibledatacolumn.length - 1;
+      if (freezen_colindex >= Store.cloumnLenSum.length) {
+        freezen_colindex = Store.cloumnLenSum.length - 1;
       }
 
-      let column_px = Store.visibledatacolumn[column],
-        freezen_px = Store.visibledatacolumn[freezen_colindex];
+      let column_px = Store.cloumnLenSum[column],
+        freezen_px = Store.cloumnLenSum[freezen_colindex];
 
       if (column_px <= freezen_px + top) {
         setTimeout(function () {
@@ -826,8 +826,8 @@ const MBLsheetFreezen = {
         let c1 = obj.column[0],
           c2 = obj.column[1];
 
-        let col = Store.visibledatacolumn[c2],
-          col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+        let col = Store.cloumnLenSum[c2],
+          col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
         let left_move = col_pre;
         let width_move = col - col_pre - 1;
@@ -898,8 +898,8 @@ const MBLsheetFreezen = {
 
           let row_f = Store.visibledatarow[rf],
             row_pre_f = rf - 1 == -1 ? 0 : Store.visibledatarow[rf - 1];
-          let col_f = Store.visibledatacolumn[cf],
-            col_pre_f = cf - 1 == -1 ? 0 : Store.visibledatacolumn[cf - 1];
+          let col_f = Store.cloumnLenSum[cf],
+            col_pre_f = cf - 1 == -1 ? 0 : Store.cloumnLenSum[cf - 1];
 
           let margeset = menuButton.mergeborer(Store.flowdata, rf, cf);
           if (!!margeset) {
@@ -1138,8 +1138,8 @@ const MBLsheetFreezen = {
         let c1 = obj.column[0],
           c2 = obj.column[1];
 
-        let col = Store.visibledatacolumn[c2],
-          col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+        let col = Store.cloumnLenSum[c2],
+          col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
         let left_move = col_pre;
         let width_move = col - col_pre - 1;
@@ -1204,8 +1204,8 @@ const MBLsheetFreezen = {
           let rf = obj.row_focus == null ? obj.row[0] : obj.row_focus;
           let cf = obj.column_focus == null ? c1 : obj.column_focus;
 
-          let col_f = Store.visibledatacolumn[cf],
-            col_pre_f = cf - 1 == -1 ? 0 : Store.visibledatacolumn[cf - 1];
+          let col_f = Store.cloumnLenSum[cf],
+            col_pre_f = cf - 1 == -1 ? 0 : Store.cloumnLenSum[cf - 1];
 
           let margeset = menuButton.mergeborer(Store.flowdata, rf, cf);
           if (!!margeset) {
@@ -1461,8 +1461,8 @@ const MBLsheetFreezen = {
 
         let row = Store.visibledatarow[r],
           row_pre = r - 1 == -1 ? 0 : Store.visibledatarow[r - 1];
-        let col = Store.visibledatacolumn[c],
-          col_pre = c - 1 == -1 ? 0 : Store.visibledatacolumn[c - 1];
+        let col = Store.cloumnLenSum[c],
+          col_pre = c - 1 == -1 ? 0 : Store.cloumnLenSum[c - 1];
 
         let margeset = menuButton.mergeborer(Store.flowdata, r, c);
         if (!!margeset) {
@@ -1627,8 +1627,8 @@ const MBLsheetFreezen = {
 
         let row = Store.visibledatarow[r],
           row_pre = r - 1 == -1 ? 0 : Store.visibledatarow[r - 1];
-        let col = Store.visibledatacolumn[c],
-          col_pre = c - 1 == -1 ? 0 : Store.visibledatacolumn[c - 1];
+        let col = Store.cloumnLenSum[c],
+          col_pre = c - 1 == -1 ? 0 : Store.cloumnLenSum[c - 1];
 
         let margeset = menuButton.mergeborer(Store.flowdata, r, c);
         if (!!margeset) {
@@ -1724,8 +1724,8 @@ const MBLsheetFreezen = {
 
         let row = Store.visibledatarow[r],
           row_pre = r - 1 == -1 ? 0 : Store.visibledatarow[r - 1];
-        let col = Store.visibledatacolumn[c],
-          col_pre = c - 1 == -1 ? 0 : Store.visibledatacolumn[c - 1];
+        let col = Store.cloumnLenSum[c],
+          col_pre = c - 1 == -1 ? 0 : Store.cloumnLenSum[c - 1];
 
         let margeset = menuButton.mergeborer(Store.flowdata, r, c);
         if (!!margeset) {
@@ -1967,7 +1967,7 @@ const MBLsheetFreezen = {
           if (top < freezen_top) {
             $(e).hide();
           } else {
-            let left = Store.visibledatacolumn[col_index + offsetColumn] - 20;
+            let left = Store.cloumnLenSum[col_index + offsetColumn] - 20;
 
             $(e).show().css("left", left);
           }
@@ -1980,7 +1980,7 @@ const MBLsheetFreezen = {
               .css("top", top + $("#MBLsheet-cell-main").scrollTop());
           }
         } else {
-          let left = Store.visibledatacolumn[col_index + offsetColumn] - 20;
+          let left = Store.cloumnLenSum[col_index + offsetColumn] - 20;
 
           $(e)
             .show()
@@ -2036,7 +2036,7 @@ const MBLsheetFreezen = {
             $(e).show();
           }
         } else {
-          let left = Store.visibledatacolumn[col_index + offsetColumn] - 20;
+          let left = Store.cloumnLenSum[col_index + offsetColumn] - 20;
 
           $(e).show().css("left", left);
         }
@@ -2144,17 +2144,17 @@ const MBLsheetFreezen = {
       };
     } else if (frozen.type === "column") {
       let scrollLeft = 0;
-      let col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollLeft);
+      let col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollLeft);
       if (col_st == -1) {
         col_st = 0;
       }
       let left =
-        Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+        Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
       let freezenverticaldata = [
-        Store.visibledatacolumn[col_st],
+        Store.cloumnLenSum[col_st],
         col_st + 1,
         scrollLeft,
-        MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+        MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
         left,
       ];
 
@@ -2181,17 +2181,17 @@ const MBLsheetFreezen = {
       ];
 
       let scrollLeft = 0;
-      let col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollLeft);
+      let col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollLeft);
       if (col_st == -1) {
         col_st = 0;
       }
       let left =
-        Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+        Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
       let freezenverticaldata = [
-        Store.visibledatacolumn[col_st],
+        Store.cloumnLenSum[col_st],
         col_st + 1,
         scrollLeft,
-        MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+        MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
         left,
       ];
 
@@ -2237,7 +2237,7 @@ const MBLsheetFreezen = {
       };
     } else if (frozen.type === "rangeColumn") {
       let scrollLeft = 0;
-      let col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollLeft);
+      let col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollLeft);
 
       let column_focus = frozen.range["column_focus"];
 
@@ -2250,12 +2250,12 @@ const MBLsheetFreezen = {
       }
 
       let left =
-        Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+        Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
       let freezenverticaldata = [
-        Store.visibledatacolumn[col_st],
+        Store.cloumnLenSum[col_st],
         col_st + 1,
         scrollLeft,
-        MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+        MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
         left,
       ];
 
@@ -2292,7 +2292,7 @@ const MBLsheetFreezen = {
       ];
 
       let scrollLeft = 0;
-      let col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollLeft);
+      let col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollLeft);
 
       let column_focus = frozen.range["column_focus"];
 
@@ -2305,12 +2305,12 @@ const MBLsheetFreezen = {
       }
 
       let left =
-        Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+        Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
       let freezenverticaldata = [
-        Store.visibledatacolumn[col_st],
+        Store.cloumnLenSum[col_st],
         col_st + 1,
         scrollLeft,
-        MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+        MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
         left,
       ];
 

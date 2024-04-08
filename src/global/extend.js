@@ -486,16 +486,16 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
     }
 
     let freezen_left =
-      Store.visibledatacolumn[freezen_col_st] -
+      Store.cloumnLenSum[freezen_col_st] -
       2 -
       freezen_scrollLeft +
       Store.rowHeaderWidth;
 
     newFreezen.freezenverticaldata = [
-      Store.visibledatacolumn[freezen_col_st],
+      Store.cloumnLenSum[freezen_col_st],
       freezen_col_st + 1,
       freezen_scrollLeft,
-      MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, freezen_col_st + 1),
+      MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, freezen_col_st + 1),
       freezen_left,
     ];
   } else {
@@ -1577,7 +1577,7 @@ function MBLsheetdeletetable(type, st, ed, sheetIndex) {
   if (MBLsheetFreezen.freezenverticaldata != null && type == "column") {
     let freezen_scrollLeft = MBLsheetFreezen.freezenverticaldata[2];
     let freezen_st2 = MBLsheet_searcharray(
-      Store.visibledatacolumn,
+      Store.cloumnLenSum,
       freezen_scrollLeft
     );
     if (freezen_st2 == -1) {
@@ -1599,16 +1599,16 @@ function MBLsheetdeletetable(type, st, ed, sheetIndex) {
     }
 
     let freezen_left =
-      Store.visibledatacolumn[freezen_col_st] -
+      Store.cloumnLenSum[freezen_col_st] -
       2 -
       freezen_scrollLeft +
       Store.rowHeaderWidth;
 
     newFreezen.freezenverticaldata = [
-      Store.visibledatacolumn[freezen_col_st],
+      Store.cloumnLenSum[freezen_col_st],
       freezen_col_st + 1,
       freezen_scrollLeft,
-      MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, freezen_col_st + 1),
+      MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, freezen_col_st + 1),
       freezen_left,
     ];
   } else {

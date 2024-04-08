@@ -83,8 +83,8 @@ export function rowColumnOperationInitial() {
         row = row_location[1],
         row_pre = row_location[0],
         row_index = row_location[2];
-      let col_index = Store.visibledatacolumn.length - 1,
-        col = Store.visibledatacolumn[col_index],
+      let col_index = Store.cloumnLenSum.length - 1,
+        col = Store.cloumnLenSum[col_index],
         col_pre = 0;
 
       $("#MBLsheet-rightclick-menu").hide();

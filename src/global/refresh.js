@@ -1286,12 +1286,12 @@ function jfrefreshgrid_rhcw(rowheight, colwidth, isRefreshCanvas = true) {
       top,
     ];
     let left =
-      Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+      Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
     let freezenverticaldata = [
-      Store.visibledatacolumn[col_st],
+      Store.cloumnLenSum[col_st],
       col_st + 1,
       scrollLeft,
-      MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+      MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
       left,
     ];
 
@@ -1326,12 +1326,12 @@ function jfrefreshgrid_rhcw(rowheight, colwidth, isRefreshCanvas = true) {
     let scrollLeft = MBLsheetFreezen.freezenverticaldata[2];
 
     let left =
-      Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+      Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
     let freezenverticaldata = [
-      Store.visibledatacolumn[col_st],
+      Store.cloumnLenSum[col_st],
       col_st + 1,
       scrollLeft,
-      MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+      MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
       left,
     ];
 
@@ -1355,7 +1355,7 @@ function jfrefreshgrid_rhcw(rowheight, colwidth, isRefreshCanvas = true) {
         let str = $(e).data("str"),
           cindex = $(e).data("cindex");
 
-        let left = Store.visibledatacolumn[cindex] - 20;
+        let left = Store.cloumnLenSum[cindex] - 20;
         let top = str - 1 == -1 ? 0 : Store.visibledatarow[str - 1];
 
         $(e).css({ left: left, top: top });
@@ -1376,8 +1376,8 @@ function jfrefreshgrid_rhcw(rowheight, colwidth, isRefreshCanvas = true) {
 
     let row = Store.visibledatarow[r2],
       row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-    let col = Store.visibledatacolumn[c2],
-      col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+    let col = Store.cloumnLenSum[c2],
+      col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
     $("#MBLsheet-filter-selected-sheet" + Store.currentSheetIndex).css({
       left: col_pre,
