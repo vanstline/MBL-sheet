@@ -1431,7 +1431,7 @@ const MBLsheetformula = {
       if (
         dvItem != null &&
         dvItem.prohibitInput &&
-        !dataVerificationCtrl.validateCellData(inputText, dvItem)
+        !dataVerificationCtrl.validateCellData(inputText, dvItem, r)
       ) {
         let failureText = dataVerificationCtrl.getFailureText(dvItem);
         tooltip.info(failureText, "");

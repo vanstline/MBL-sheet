@@ -90,7 +90,7 @@ var columns = [
       type: "text",
       range: [-1, 999999],
       influence: ["sampleTypeId"],
-      verifyFn: function (text) {
+      verifyFn: function (text, r) {
         var status = false;
         var message = "";
         if (text == "1") {

@@ -1500,7 +1500,7 @@ const dataVerificationCtrl = {
 
     //数据验证未通过
     let cellValue = getcellvalue(r, c, null);
-    let { status, message } = _this.validateCellDataCustom(cellValue, item);
+    let { status, message } = _this.validateCellDataCustom(cellValue, item, r);
     if (status) {
       return;
     }
@@ -1766,7 +1766,8 @@ const dataVerificationCtrl = {
 
     return failureText;
   },
-  validateCellDataCustom: function (cellValue, item) {
+  validateCellDataCustom: function (cellValue, item, r) {
+    console.log("%c Line:1770 🍻 cellValue, item", "color:#2eafb0", cellValue, item);
     if (item.required && isRealNull(cellValue)) {
       return {
         status: false,
@@ -1774,14 +1775,14 @@ const dataVerificationCtrl = {
       };
     }
     if (typeof item.verifyFn === "function") {
-      return item.verifyFn(cellValue);
+      return item.verifyFn(cellValue, r);
     }
     return {
-      status: this.validateCellData(cellValue, item),
+      status: this.validateCellData(cellValue, item, r),
       message: undefined,
     };
   },
-  validateCellData: function (cellValue, item) {
+  validateCellData: function (cellValue, item, r) {
     let _this = this;
 
     let type = item.type,
@@ -1791,7 +1792,7 @@ const dataVerificationCtrl = {
 
     if (
       typeof item.verifyFn === "function" &&
-      !item.verifyFn(cellValue).status
+      !item.verifyFn(cellValue, r).status
     ) {
       return false;
     }

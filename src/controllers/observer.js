@@ -69,7 +69,7 @@ export function changeValue(r, c, value) {
   if (typeof sheet.dataVerification[`${r}_${c}`]?.verifyFn === "function") {
     const curVerifyInfo = sheet.dataVerification[`${r}_${c}`]?.verifyFn(
       value,
-      rowData
+      r
     );
 
     if (curVerifyInfo.status === true) {
