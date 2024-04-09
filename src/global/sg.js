@@ -25,8 +25,9 @@ function sgInit(setting, config, MBLsheet) {
   });
 
   Store.cloumnLenSum = Store.cloumnLens.reduce((prev, next, i) => {
+    const curNext = next ?? config.defaultColWidth ?? 73; 
     const prevW = i == 0 ? 0 : prev[i-1];
-    const sum = prevW + next;
+    const sum = prevW + curNext;
     prev.push(sum + 1);
     return prev
   }, []);

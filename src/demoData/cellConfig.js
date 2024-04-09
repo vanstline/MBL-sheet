@@ -1,163 +1,85 @@
 var excelDataSource = [
-    // {
-    //   createDate: "2024-03-25 19:44:36.0",
-    //   cxPrimerCartId: 1731287,
-    //   cxPrimerCartInfo: [
-    //     {
-    //       baseNumber: 0,
-    //       concentration: "",
-    //       createDate: "2024-03-25 19:44:36.0",
-    //       cxPrimerCode: "U1011200",
-    //       cxPrimerId: 2250,
-    //       endDate: null,
-    //       id: 1731287,
-    //       ids: null,
-    //       isOldPrimer: 1,
-    //       mark: null,
-    //       name: "ITS3",
-    //       page: 1,
-    //       primerTypeIds: null,
-    //       reverseSequence: "",
-    //       rows: 20,
-    //       sequence: "GCATCGATGAAGAACGCAGC",
-    //       startDate: null,
-    //       status: 0,
-    //       targetLength: 0,
-    //       type: 1,
-    //       typeName: "通用",
-    //       updateMark: null,
-    //       userId: 375760,
-    //       userInfo: null,
-    //     },
-    //   ],
-    //   cxPrimerCartList: [],
-    //   cxSampleCartId: 8684104,
-    //   cxSampleCartInfo: [
-    //     {
-    //       carrierId: 0,
-    //       carrierName: "1212",
-    //       createDate: "2024-03-25 19:44:36.0",
-    //       cxSampleCode: "31224032500002",
-    //       cxSampleId: 32208228,
-    //       endDate: null,
-    //       id: 8684104,
-    //       ids: null,
-    //       isOldSample: 1,
-    //       mark: null,
-    //       maxFragmentLength: "23",
-    //       minFragmentLength: "12",
-    //       name: "qwer",
-    //       note: "",
-    //       page: 1,
-    //       resistance: "12",
-    //       rows: 20,
-    //       sampleSequence: "",
-    //       sampleTypeId: 1,
-    //       sampleTypeIds: null,
-    //       sampleTypeName: "PCR产物(已纯化)",
-    //       startDate: null,
-    //       status: 0,
-    //       updateMark: null,
-    //       userId: 375760,
-    //       userInfo: null,
-    //     },
-    //   ],
-    //   endDate: null,
-    //   id: 22955773,
-    //   ids: null,
-    //   mark: null,
-    //   page: 1,
-    //   rows: 20,
-    //   seqMark: "噬菌体质粒",
-    //   seqText: "单向",
-    //   sequenceMethod: 0,
-    //   sequenceQuest: 1,
-    //   sort: 1,
-    //   startDate: null,
-    //   status: 0,
-    //   updateMark: null,
-    //   userId: 375760,
-    //   userInfo: null,
-    // },
-    {
-        createDate: "2024-03-25 19:44:36.0",
-        cxPrimerCartId: 1731287,
-        cxPrimerCartInfo: [
-        {
-            baseNumber: 0,
-            concentration: "",
-            createDate: "2024-03-25 19:44:36.0",
-            cxPrimerCode: "U1011200",
-            cxPrimerId: 2250,
-            endDate: null,
-            id: 1731287,
-            ids: null,
-            isOldPrimer: 1,
-            mark: null,
-            name: "ITS3",
-            page: 1,
-            primerTypeIds: null,
-            reverseSequence: "",
-            rows: 20,
-            sequence: "GCATCGATGAAGAACGCAGC",
-            startDate: null,
-            status: 0,
-            targetLength: 0,
-            type: 1,
-            typeName: "通用",
-            updateMark: null,
-            userId: 375760,
-            userInfo: null,
-        },
-        ],
-        cxPrimerCartList: [],
-        cxSampleCartId: 8684105,
-        cxSampleCartInfo: {
-        carrierId: 0,
-        carrierName: "123",
-        createDate: "2024-03-25 19:44:36.0",
-        cxSampleCode: "31224032500001",
-        cxSampleId: 32208227,
+  {
+    createDate: "2024-04-09 08:35:26.0",
+    cxPrimerCartId: 1731596,
+    cxPrimerCartInfo: [
+      {
+        baseNumber: 0,
+        concentration: "",
+        createDate: "2024-04-09 08:35:26.0",
+        cxPrimerCode: "U1011203",
+        cxPrimerId: 2253,
         endDate: null,
-        id: 8684105,
+        id: 1731596,
         ids: null,
-        isOldSample: 1,
+        isOldPrimer: 1,
         mark: null,
-        maxFragmentLength: "34",
-        minFragmentLength: "12",
-        name: "12312312",
-        note: "",
+        name: "H15915",
         page: 1,
-        resistance: "123",
+        primerTypeIds: null,
+        reverseSequence: "",
         rows: 20,
-        sampleSequence: "",
-        sampleTypeId: 1,
-        sampleTypeIds: null,
-        sampleTypeName: "菌株",
+        sequence: "CTCCGATCTCCGGATTACAAGAC",
         startDate: null,
         status: 0,
+        targetLength: 0,
+        type: 1,
+        typeName: "通用",
         updateMark: null,
         userId: 375760,
         userInfo: null,
-        },
-        endDate: null,
-        id: 22955774,
-        ids: null,
-        mark: null,
-        page: 1,
-        rows: 20,
-        seqMark: "",
-        seqText: "单向",
-        sequenceMethod: 0,
-        sequenceQuest: 1,
-        sort: 2,
-        startDate: null,
-        status: 0,
-        updateMark: null,
-        userId: 375760,
-        userInfo: null,
+      },
+    ],
+    cxPrimerCartList: [],
+    cxSampleCartId: 8684441,
+    cxSampleCartInfo: {
+      carrierId: 0,
+      carrierName: "",
+      createDate: "2024-04-09 08:35:26.0",
+      cxSampleCode: "",
+      cxSampleId: 0,
+      endDate: null,
+      id: 8684441,
+      ids: null,
+      isOldSample: 0,
+      mark: null,
+      maxFragmentLength: "",
+      minFragmentLength: "",
+      name: "1",
+      note: "",
+      page: 1,
+      resistance: "",
+      rows: 20,
+      sampleSequence: "",
+      sampleTypeId: 4,
+      sampleTypeIds: null,
+      sampleTypeName: "菌株",
+      startDate: null,
+      status: 0,
+      updateMark: null,
+      userId: 375760,
+      userInfo: null,
     },
+    endDate: null,
+    id: 22956518,
+    ids: null,
+    mark: null,
+    page: 1,
+    rows: 20,
+    seqMark: "",
+    seqText: "单向",
+    sequenceMethod: 0,
+    sequenceQuest: 1,
+    sort: 1,
+    startDate: null,
+    status: 0,
+    updateMark: null,
+    userId: 375760,
+    userInfo: null,
+  },
 ];
+
+// 本地开发
 var columns = [
   {
     dataIndex: "sampleName",
@@ -185,13 +107,11 @@ var columns = [
           }
         }
 
-        
-
         return {
           status,
           message,
         };
-        // 
+        //
         // return {
         //   status: text === "123123",
         //   message: `当前值为${text}，不符合规则`,
@@ -268,12 +188,12 @@ var columns = [
       //     text,
       //     row
       //   );
-      //   // 
+      //   //
       //   const d = {
       //     status: row?.sampleName !== "123123",
       //     message: `当前值为${text}，不符合规则`,
       //   };
-      //   
+      //
       //   return d;
       // },
     },
@@ -305,128 +225,6 @@ var columns = [
     //   return record?.cxSampleCartInfo?.sampleTypeName;
     // },
   },
-  // {
-  //   dataIndex: "resistance",
-  //   title: "抗性",
-  //   fieldsProps: {
-  //     type: "autocomplete",
-  //     type2: "multi",
-  //     // type: "select",
-  //     // type2: "select",
-  //     options: ["Kan", "Amp"],
-  //   },
-  //   render: (text, record, index) => {
-  //     return record.cxSampleCartInfo?.resistance;
-  //   },
-  // },
-  // {
-  //   dataIndex: "carrierName",
-  //   title: "载体",
-  //   render: (text, record, index) => {
-  //     return record.cxSampleCartInfo?.carrierName;
-  //   },
-  // },
-  // {
-  //   dataIndex: "minFragmentLength",
-
-  //   title: "最小长度",
-
-  //   fieldsProps: {
-  //     type: "text",
-
-  //     compareInfo: {
-  //       sign: "in", // 比较符
-
-  //       range: [0, 999999],
-  //     },
-  //   },
-
-  //   render: (text, record, index) => {
-  //     return record.cxSampleCartInfo?.minFragmentLength;
-  //   },
-  // },
-
-  // {
-  //   dataIndex: "maxFragmentLength",
-
-  //   title: "最大长度",
-
-  //   fieldsProps: {
-  //     type: "text",
-
-  //     compareInfo: {
-  //       sign: "in", // 比较符
-
-  //       range: [0, 999999],
-  //     },
-  //   },
-
-  //   render: (text, record, index) => {
-  //     return record.cxSampleCartInfo?.maxFragmentLength;
-  //   },
-  // },
-
-  // {
-  //   dataIndex: "sampleConcentration",
-
-  //   title: "样品备注",
-
-  //   fieldsProps: {
-  //     type: "select",
-
-  //     options: [
-  //       "GC Rich",
-  //       "复杂结构",
-  //       "重复序列",
-  //       "低拷贝",
-  //       "病毒DNA",
-  //       "噬菌体质粒",
-  //     ],
-  //   },
-  // },
-
-  // {
-  //   dataIndex: "sampleConcentration",
-
-  //   title: "要求",
-
-  //   fieldsProps: {
-  //     type: "select",
-
-  //     options: ["单向", "测通", "双向", "多向"],
-  //   },
-
-  //   render: (text, record, index) => {
-  //     return record.seqText;
-  //   },
-  // },
-
-  // {
-  //   dataIndex: "primerTypeName",
-
-  //   title: "引物类型",
-
-  //   fieldsProps: {
-  //     type: "select",
-
-  //     options: ["通用", "自带", "合成", "暂存引物"],
-  //   },
-
-  //   render: (text, record, index) => {
-  //     return record.cxPrimerCartInfo?.[0]?.typeName;
-  //   },
-  // },
-
-  // {
-  //   dataIndex: "primerName",
-
-  //   title: "引物名称",
-
-  //   // render: (text, record, index) => {
-  //   //   return record.cxPrimerCartInfo?.[0]?.name;
-  //   // },
-  // },
-
   {
     title: "操作",
     width: 100,
@@ -443,6 +241,419 @@ var columns = [
       },
     },
   },
+  {
+    title: "操作",
+    width: 100,
+    render: () => "删除",
+    extra: {
+      style: {
+        width: 100,
+        left: 32,
+        background: "#fff",
+        color: "#4096ff",
+      },
+      onclick: (text, data, index) => {
+        MBLsheet.delRow(index, 1);
+      },
+    },
+  },
+  {
+    title: "操作",
+    width: 100,
+    render: () => "删除",
+    extra: {
+      style: {
+        width: 100,
+        left: 32,
+        background: "#fff",
+        color: "#4096ff",
+      },
+      onclick: (text, data, index) => {
+        MBLsheet.delRow(index, 1);
+      },
+    },
+  },
+  
 ];
+
+
+// 调试使用
+// var columns = [
+//   {
+//     dataIndex: "sampleName",
+
+//     title: "样品名称",
+
+//     fieldsProps: {
+//       type: "text",
+
+//       required: true,
+//     },
+
+//     extra: {
+//       style: {
+//         width: 30,
+
+//         height: 30,
+
+//         background: "pink",
+//       },
+//     },
+//   },
+
+//   {
+//     dataIndex: "sampleTypeName",
+
+//     title: "样本类型",
+
+//     fieldsProps: {
+//       type: "select",
+
+//       required: true,
+
+//       options: ["PCR未纯化", "PCR已纯化", "菌株", "质粒"],
+//     },
+//   },
+
+//   {
+//     dataIndex: "resistance",
+
+//     title: "抗性",
+
+//     fieldsProps: {
+//       type: "autocomplete",
+
+//       options: ["Kan", "Amp"],
+//     },
+//   },
+
+//   {
+//     dataIndex: "carrierName",
+
+//     title: "载体",
+
+//     fieldsProps: {
+//       type: "autocomplete",
+
+//       options: [
+//         "PMD18-T",
+
+//         "PMD19-T",
+
+//         "PMD20-T",
+
+//         "PET28",
+
+//         "PET30",
+
+//         "PET22a",
+
+//         "PET22b",
+
+//         "PET22c",
+
+//         "PET15",
+
+//         "PET32a",
+
+//         "PET32b",
+
+//         "PET32c",
+
+//         "PET39",
+
+//         "PET42a",
+
+//         "PET42b",
+
+//         "PET42c",
+
+//         "PET44",
+
+//         "PET50",
+
+//         "PGEX4T-1",
+
+//         "PGEX4T-2",
+
+//         "PGEX4T-3",
+
+//         "PGEX6P-1",
+
+//         "PGEX6P-2",
+
+//         "PGEX6P-3",
+
+//         "PGEX5P-1",
+
+//         "PGEX5P-2",
+
+//         "PGEX5P-3",
+
+//         "PCDNA3",
+
+//         "PCDNA3.1",
+
+//         "PCDNA4.0",
+
+//         "PCDNA6/V5-His A",
+
+//         "PCMV-SPORT2",
+
+//         "PCMV-SPORT4",
+
+//         "PCMV-SPORT1",
+
+//         "PCMV6",
+
+//         "PCMV6-entry",
+
+//         "PCMV6-XL4",
+
+//         "PCMV6-XL5",
+
+//         "PCMV-Tag3C",
+
+//         "PCMV-Tag3A",
+
+//         "PCMV-Tag2B",
+
+//         "PCMV-Tag2A",
+
+//         "PCMV6-XL3",
+
+//         "PCMV-MYC",
+
+//         "PCMV-HA",
+
+//         "PEGFP-N1",
+
+//         "PEGFP-N2",
+
+//         "PEGFP-N3",
+
+//         "PECFP-N1",
+
+//         "PECFP-N2",
+
+//         "PECFP-N3",
+
+//         "PEYFP-N1",
+
+//         "PEYFP-N2",
+
+//         "PEYFP-N3",
+
+//         "PEGFP-C1",
+
+//         "PEGFP-C2",
+
+//         "PEGFP-C3",
+
+//         "PECFP-C1",
+
+//         "PECFP-C2",
+
+//         "PECFP-C3",
+
+//         "PEYFP-C1",
+
+//         "PEYFP-C2",
+
+//         "PEYFP-C3",
+
+//         "PEASY-E1",
+
+//         "PEASY-E2",
+
+//         "PEASY-E3",
+
+//         "PUC18",
+
+//         "PUC19",
+
+//         "PUC8",
+
+//         "PUC9",
+
+//         "PUC57",
+
+//         "PGM-T",
+
+//         "PGEM-T",
+
+//         "PGEM-Teasy",
+
+//         "PCR2.1",
+
+//         "PCR4",
+
+//         "PCR3.1",
+
+//         "PENTR",
+
+//         "PENTR221",
+
+//         "PENTR-U6",
+
+//         "TOPO",
+
+//         "BLUNT",
+
+//         "TEASY-BLUNT",
+
+//         "PDNR-LIB",
+
+//         "PDNR-CMV",
+
+//         "PQE30",
+
+//         "PQE40",
+
+//         "PQE2",
+
+//         "PGADT7",
+
+//         "PGAD424",
+
+//         "PGBKT7",
+
+//         "pMAL-c2E",
+
+//         "pMAL-p2X",
+
+//         "pMAL-C2x",
+
+//         "pBlueScript SK(+)",
+
+//         "pBluescript II SK(+)",
+
+//         "pBluescript II KS(-)",
+
+//         "pBlue",
+
+//         "pCDNA5.0",
+
+//         "ppp1",
+
+//         "ASIA2",
+
+//         "ASIA001",
+//       ],
+//     },
+//   },
+
+//   {
+//     dataIndex: "minFragmentLength",
+
+//     title: "最小长度",
+
+//     fieldsProps: {
+//       type: "number",
+
+//       compareInfo: {
+//         sign: "in",
+
+//         range: [
+//           0,
+
+//           999999,
+//         ],
+//       },
+//     },
+//   },
+
+//   {
+//     dataIndex: "maxFragmentLength",
+
+//     title: "最大长度",
+
+//     fieldsProps: {
+//       type: "number",
+
+//       compareInfo: {
+//         sign: "in",
+
+//         range: [
+//           0,
+
+//           999999,
+//         ],
+//       },
+//     },
+//   },
+
+//   {
+//     dataIndex: "seqMark",
+
+//     title: "样品备注",
+
+//     fieldsProps: {
+//       type: "select",
+
+//       options: [
+//         "GC Rich",
+
+//         "复杂结构",
+
+//         "重复序列",
+
+//         "低拷贝",
+
+//         "病毒DNA",
+
+//         "噬菌体质粒",
+//       ],
+//     },
+//   },
+
+//   {
+//     dataIndex: "seqText",
+
+//     title: "要求",
+
+//     fieldsProps: {
+//       type: "select",
+
+//       options: ["单向", "测通", "双向", "多向"],
+//     },
+//   },
+
+//   {
+//     dataIndex: "primerName",
+
+//     title: "引物名称",
+
+//     fieldsProps: {
+//       required: true,
+//     },
+
+//     extra: {
+//       style: {
+//         width: 30,
+
+//         height: 30,
+
+//         background: "pink",
+//       },
+//     },
+//   },
+
+//   {
+//     dataIndex: "options",
+
+//     title: "操作",
+
+//     extra: {
+//       style: {
+//         width: 30,
+
+//         height: 30,
+
+//         background: "pink",
+//       },
+//     },
+//   },
+// ];
 
 
