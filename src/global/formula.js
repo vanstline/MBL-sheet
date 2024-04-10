@@ -1407,6 +1407,9 @@ const MBLsheetformula = {
       });
   },
   updatecell: function (r, c, value, isRefresh = true) {
+    if (r == null || c == null) {
+      return;
+    }
     let _this = this;
 
     let $input = $("#MBLsheet-rich-text-editor");

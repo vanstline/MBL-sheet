@@ -17,6 +17,7 @@ import {
 } from "../controllers/protection";
 import { getSheetIndex } from "../methods/get";
 import Store from "../store";
+import sheetmanage from "../controllers/sheetmanage";
 
 /**
  * 增加行列
@@ -48,7 +49,6 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
 
   value = Math.floor(value);
   let cfg = $.extend(true, {}, file.config);
-
   //合并单元格配置变动
   if (cfg["merge"] == null) {
     cfg["merge"] = {};
@@ -667,12 +667,13 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
     //     row.push(null);
     //   }
     // }
+    const columns = sheetmanage.getSheetByIndex().columns;
     for (let c = 0; c < d[0].length; c++) {
       const defaultV = d?.[0]?.[c]?.fieldsProps?.defaultValue;
       if (defaultV !== undefined) {
         row.push({ ...d[0][c], v: defaultV, m: defaultV });
       } else {
-        row.push(null);
+        row.push(columns[c] ?? null);
       }
     }
 

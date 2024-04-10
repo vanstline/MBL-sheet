@@ -221,6 +221,16 @@ var columns = [
       type: "select",
       options: ["PCR未纯化", "PCR已纯化", "菌株", "质粒"],
     },
+    onchange: (text, record, i, { setRowData }) => {
+      console.log(
+        "%c Line:282 🍐 text, record",
+        "color:#465975",
+        text,
+        record,
+        i,
+        setRowData
+      );
+    },
     // render: (text, record, index) => {
     //   return record?.cxSampleCartInfo?.sampleTypeName;
     // },
@@ -237,7 +247,7 @@ var columns = [
         color: "#4096ff",
       },
       onclick: (text, data, index) => {
-        MBLsheet.delRow(index, 1);
+        MBLsheet.delRow(index);
       },
     },
   },
@@ -273,9 +283,7 @@ var columns = [
       },
     },
   },
-  
 ];
-
 
 // 调试使用
 // var columns = [
@@ -655,5 +663,3 @@ var columns = [
 //     },
 //   },
 // ];
-
-

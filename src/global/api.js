@@ -133,7 +133,6 @@ export function getCellValue(row, column, options = {}) {
  * @param {Function} options.success 操作结束的回调函数
  */
 export function setCellValue(row, column, value, options = {}) {
-  
   let curv = Store.flowdata?.[row]?.[column];
 
   // Store old value for hook function
@@ -208,12 +207,11 @@ export function setCellValue(row, column, value, options = {}) {
     if (isRealNull(data?.[row]?.[column])) {
       if (!data?.[row]) {
         data[row] = {
-          [column]: {}
-        }
+          [column]: {},
+        };
       } else {
-         data[row][column] = {};
+        data[row][column] = {};
       }
-     
     }
     let cell = data[row][column];
     if (value.f != null && value.v == null) {
@@ -755,8 +753,7 @@ export function frozenFirstColumn(order) {
         col_st = 0;
       }
 
-      left =
-        Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+      left = Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
       freezenverticaldata = [
         Store.cloumnLenSum[col_st],
         col_st + 1,
@@ -3046,8 +3043,6 @@ export function setSingleRangeFormat(attr, value, options = {}) {
 
   for (let r = range.row[0]; r <= range.row[1]; r++) {
     for (let c = range.column[0]; c <= range.column[1]; c++) {
-      
-      
       setCellValue(
         r,
         c,
@@ -4927,7 +4922,7 @@ export function matrixOperation(type, options = {}) {
       break;
     case "newMatrix":
       // TODO
-      
+
       break;
   }
   editor.controlHandler(arr, range);
@@ -5801,8 +5796,7 @@ export function scroll(options = {}) {
     }
 
     let col = Store.cloumnLenSum[targetColumn],
-      col_pre =
-        targetColumn <= 0 ? 0 : Store.cloumnLenSum[targetColumn - 1];
+      col_pre = targetColumn <= 0 ? 0 : Store.cloumnLenSum[targetColumn - 1];
 
     $("#MBLsheet-scrollbar-x").scrollLeft(col_pre);
   }

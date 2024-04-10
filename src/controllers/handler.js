@@ -320,12 +320,12 @@ export default function MBLsheetHandler() {
       let row_index_ed = row_index,
         col_index_ed = col_index;
 
-        console.log(
-          "%c Line:325 🎂 row_index",
-          "color:#b03734",
-          row_index,
-          col_index
-        );
+      console.log(
+        "%c Line:325 🎂 row_index",
+        "color:#b03734",
+        row_index,
+        col_index
+      );
       if (
         nonexistentCell.includes(row_index) ||
         nonexistentCell.includes(col_index)
@@ -364,11 +364,11 @@ export default function MBLsheetHandler() {
             }
           });
           extra.onclick(rowData[curColumn.dataIndex], rowData, row_index_ed);
-             formula.updatecell(
-               Store.MBLsheetCellUpdate[0],
-               Store.MBLsheetCellUpdate[1]
-             );
-             MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
+          formula.updatecell(
+            Store.MBLsheetCellUpdate[0],
+            Store.MBLsheetCellUpdate[1]
+          );
+          MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
           return;
         }
       }
@@ -3031,8 +3031,7 @@ export default function MBLsheetHandler() {
           }
 
           if (
-            col_e >=
-              Store.cloumnLenSum[Store.cloumnLenSum.length - 1] ||
+            col_e >= Store.cloumnLenSum[Store.cloumnLenSum.length - 1] ||
             x > winW
           ) {
             col_s =
@@ -3114,8 +3113,7 @@ export default function MBLsheetHandler() {
           }
 
           if (
-            col_e >=
-              Store.cloumnLenSum[Store.cloumnLenSum.length - 1] ||
+            col_e >= Store.cloumnLenSum[Store.cloumnLenSum.length - 1] ||
             x > winW
           ) {
             col_s =
@@ -5096,10 +5094,7 @@ export default function MBLsheetHandler() {
         x > winW
       ) {
         col_s =
-          Store.cloumnLenSum.length -
-          1 -
-          last["column"][1] +
-          last["column"][0];
+          Store.cloumnLenSum.length - 1 - last["column"][1] + last["column"][0];
         col_e = Store.cloumnLenSum.length - 1;
       }
 
@@ -5398,10 +5393,7 @@ export default function MBLsheetHandler() {
         x > winW
       ) {
         col_s =
-          Store.cloumnLenSum.length -
-          1 -
-          last["column"][1] +
-          last["column"][0];
+          Store.cloumnLenSum.length - 1 - last["column"][1] + last["column"][0];
         col_e = Store.cloumnLenSum.length - 1;
       }
 

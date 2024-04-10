@@ -25,22 +25,18 @@ function sgInit(setting, config, MBLsheet) {
   });
 
   Store.cloumnLenSum = Store.cloumnLens.reduce((prev, next, i) => {
-    const curNext = next ?? config.defaultColWidth ?? 73; 
-    const prevW = i == 0 ? 0 : prev[i-1];
+    const curNext = next ?? config.defaultColWidth ?? 73;
+    const prevW = i == 0 ? 0 : prev[i - 1];
     const sum = prevW + curNext;
     prev.push(sum + 1);
-    return prev
+    return prev;
   }, []);
-
-  
 
   sheet.row = config.row;
   sheet.column = config.columns.length;
   sheet.columnHeaderArr = config.columns.map((item) => item.title);
   sheet.defaultColWidth = config.defaultColWidth || 150;
   setting.lang = setting.lang || "zh";
-
-  
 
   initDataSource(config.dataSource, sheet, MBLsheet);
 
@@ -78,13 +74,13 @@ function sgInit(setting, config, MBLsheet) {
 
   MBLsheet.setLength = (len) => setLength(len, MBLsheet);
 
-  MBLsheet.delRow = (cur, length) => {
+  MBLsheet.delRow = (cur, length = cur) => {
     const data = getData(sheet);
-    const needRm = length - cur
-    if (needRm >= data.length) {
-      throw new Error('至少保留一条数据')
+    const needRm = length - cur;
+    if (data.length <= needRm + 1) {
+      throw new Error("至少保留一条数据");
     }
-     MBLsheetdeletetable("row", cur, length);
+    MBLsheetdeletetable("row", cur, length);
   };
   MBLsheet.addRow = (cur, length) => MBLsheetextendtable("row", cur, length);
 
@@ -108,6 +104,14 @@ function sgInit(setting, config, MBLsheet) {
   };
 
   MBLsheet.setData = (data) => setData(data, sheet, MBLsheet);
+
+  MBLsheet.clearTable = () => {
+    const data = getData(sheet);
+    const newData = data.map(() => {
+      return config.columns;
+    });
+    setData(newData, sheet, MBLsheet);
+  };
 }
 
 function setLength(len, MBLsheet) {
