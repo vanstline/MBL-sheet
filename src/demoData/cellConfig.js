@@ -227,8 +227,8 @@ var columns = [
         "color:#465975",
         text,
         record,
-        i,
-        setRowData
+        i
+        // setRowData
       );
     },
     // render: (text, record, index) => {

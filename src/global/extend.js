@@ -669,13 +669,24 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
     // }
     const columns = sheetmanage.getSheetByIndex().columns;
     for (let c = 0; c < d[0].length; c++) {
-      const defaultV = d?.[0]?.[c]?.fieldsProps?.defaultValue;
+      const curCol = d?.[0]?.[c];
+      const defaultV = curCol?.fieldsProps?.defaultValue;
       if (defaultV !== undefined) {
-        row.push({ ...d[0][c], v: defaultV, m: defaultV });
+        row.push({ v: defaultV, m: defaultV, ...curCol });
       } else {
-        row.push(columns[c] ?? null);
+        if (
+          curCol.extra &&
+          !curCol.dataIndex &&
+          typeof curCol?.render === "function"
+        ) {
+          const curV = curCol.render();
+          row.push({ v: curV, m: curV, ...curCol });
+        } else {
+          row.push(columns[c] ?? null);
+        }
       }
     }
+    console.log("%c Line:677 🍩 row", "color:#b03734", row);
 
     var cellBorderConfig = [];
     //边框

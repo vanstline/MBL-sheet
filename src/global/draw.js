@@ -296,7 +296,7 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
   );
   MBLsheetTableContent.clip();
 
-  // 
+  //
 
   let end_c, start_c;
   let bodrder05 = 0.5; //Default 0.5
@@ -670,7 +670,6 @@ function MBLsheetDrawMain(
       }
 
       let end_c = Store.cloumnLenSum[c] - scrollWidth;
-      
 
       if (
         Store.config["colhidden"] != null &&
@@ -680,7 +679,7 @@ function MBLsheetDrawMain(
       }
 
       let firstcolumnlen = Store.defaultcollen;
-      
+
       if (
         Store.config["columnlen"] != null &&
         Store.config["columnlen"][c] != null
@@ -1536,6 +1535,14 @@ let nullCellRender = function (
   bodrder05,
   isMerge
 ) {
+  let cell = Store.flowdata[r][c];
+  console.log("%c Line:1539 🍤 cell", "color:#ea7e5c", cell, Store.flowdata);
+  let cellWidth = end_c - start_c - 2;
+  let cellHeight = end_r - start_r - 2;
+  let space_width = 2,
+    space_height = 2; //宽高方向 间隙
+
+  console.log("%c Line:1540 🥐", "color:#ea7e5c", r, c);
   const curSheet = sheetmanage.getSheetByIndex();
   dataset_col_ed = curSheet.column - 1;
   let checksAF = alternateformat.checksAF(r, c, af_compute); //交替颜色
@@ -1713,6 +1720,43 @@ let nullCellRender = function (
     MBLsheetTableContent.closePath();
   }
 
+  // 自定义额外渲染区
+  const columns = sheetmanage.getSheetByIndex().columns;
+  if (typeof columns[c]?.extra === "object") {
+    const { style = {} } = columns[c]?.extra;
+    MBLsheetTableContent.beginPath();
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+
+    MBLsheetTableContent.fillStyle = style.background || "rgba(0, 0, 0, .1)";
+    MBLsheetTableContent.fill();
+    MBLsheetTableContent.closePath();
+  }
+
   let dataVerification = dataVerificationCtrl.dataVerification;
 
   if (dataVerification != null && dataVerification[r + "_" + c] != null) {
@@ -1773,11 +1817,72 @@ let nullCellRender = function (
     }
   } else {
     clearVerify(r + "_" + c);
+
+    let pos_x = start_c + offsetLeft;
+    let pos_y = start_r + offsetTop + 1;
+
+    MBLsheetTableContent.save();
+    MBLsheetTableContent.beginPath();
+    MBLsheetTableContent.rect(pos_x, pos_y, cellWidth, cellHeight);
+    MBLsheetTableContent.clip();
+    MBLsheetTableContent.scale(Store.zoomRatio, Store.zoomRatio);
+
+    let textInfo = getCellTextInfo(cell, MBLsheetTableContent, {
+      cellWidth: cellWidth,
+      cellHeight: cellHeight,
+      space_width: space_width,
+      space_height: space_height,
+      r: r,
+      c: c,
+    });
+
+    console.log("%c Line:1823 🍧", "color:#4fff4B", r, c, cell, textInfo);
+    const fillStyle = menuButton.checkstatus(Store.flowdata, r, c, "fc");
+    const style = columns[c]?.extra?.style;
+
+    //单元格 文本颜色
+    MBLsheetTableContent.fillStyle = style?.color ?? fillStyle;
+
+    //若单元格有交替颜色 文本颜色
+    if (checksAF != null && checksAF[0] != null) {
+      MBLsheetTableContent.fillStyle = checksAF[0];
+    }
+    //若单元格有条件格式 文本颜色
+    if (checksCF != null && checksCF["textColor"] != null) {
+      MBLsheetTableContent.fillStyle = checksCF["textColor"];
+    }
+
+    if (style != null && textInfo?.values?.[0]) {
+      const curValues = textInfo.values[0];
+      textInfo.values[0] = {
+        ...curValues,
+        left: style.left != null ? style.left : curValues.left,
+        top: style.top != null ? style.top : curValues.top,
+      };
+    }
+    //若单元格格式为自定义数字格式（[red]） 文本颜色为红色
+    if (
+      cell.ct &&
+      cell.ct.fa &&
+      cell.ct.fa.indexOf("[Red]") > -1 &&
+      cell.ct.t == "n" &&
+      cell.v < 0
+    ) {
+      MBLsheetTableContent.fillStyle = "#ff0000";
+    }
+
+    cellTextRender(textInfo, MBLsheetTableContent, {
+      pos_x: pos_x,
+      pos_y: pos_y,
+    });
+
+    MBLsheetTableContent.restore();
   }
 
   let pos_x = start_c + offsetLeft;
   let pos_y = start_r + offsetTop + 1;
 
+  // ploaceholder
   if (curSheet.columns[c]["placeholder"]) {
     const curTextInfo = {
       type: "plain",
@@ -1796,7 +1901,6 @@ let nullCellRender = function (
       pos_x: pos_x,
       pos_y: pos_y,
     });
-
   }
 
   // 单元格渲染后
@@ -1839,6 +1943,7 @@ let cellRender = function (
   isMerge
 ) {
   let cell = Store.flowdata[r][c];
+  console.log("%c Line:1946 🥪 cell", "color:#3f7cff", cell);
   let cellWidth = end_c - start_c - 2;
   let cellHeight = end_r - start_r - 2;
   let space_width = 2,
@@ -1910,10 +2015,10 @@ let cellRender = function (
     cellsize[3]
   );
 
+  // 自定义额外渲染区
   const columns = sheetmanage.getSheetByIndex().columns;
   if (typeof columns[c]?.extra === "object") {
     const { style = {} } = columns[c]?.extra;
-    // TODO: 优化
     MBLsheetTableContent.beginPath();
 
     // 左上起点
@@ -2024,7 +2129,6 @@ let cellRender = function (
     clearVerify(r + "_" + c);
   }
 
-
   //若单元格有批注（单元格右上角红色小三角标示）
   if (cell.ps != null) {
     let ps_w = 8 * Store.zoomRatio,
@@ -2038,8 +2142,6 @@ let cellRender = function (
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
   }
-
-
 
   //若单元格强制为字符串，则显示绿色小三角
   if (cell.qp == 1 && isRealNum(cell.v)) {
@@ -2070,9 +2172,6 @@ let cellRender = function (
     dataset_col_st,
     dataset_col_ed
   );
-
-
-
 
   if (cell.tb == "1" && cellOverflow_colInObj.colIn) {
     //此单元格 为 溢出单元格渲染范围最后一列，绘制溢出单元格内容
@@ -2404,14 +2503,12 @@ let cellRender = function (
       MBLsheetTableContent.fillStyle = checksCF["textColor"];
     }
 
-    
     if (style != null && textInfo?.values?.[0]) {
-      const curValues = textInfo.values[0]
+      const curValues = textInfo.values[0];
       textInfo.values[0] = {
         ...curValues,
         left: style.left != null ? style.left : curValues.left,
         top: style.top != null ? style.top : curValues.top,
-        
       };
     }
     //若单元格格式为自定义数字格式（[red]） 文本颜色为红色
@@ -2425,8 +2522,6 @@ let cellRender = function (
       MBLsheetTableContent.fillStyle = "#ff0000";
     }
 
-    
-    
     cellTextRender(textInfo, MBLsheetTableContent, {
       pos_x: pos_x,
       pos_y: pos_y,
@@ -2434,7 +2529,6 @@ let cellRender = function (
 
     MBLsheetTableContent.restore();
   }
-
 
   if (cellOverflow_bd_r_render) {
     // 右边框
@@ -2482,7 +2576,7 @@ let cellRender = function (
     MBLsheetTableContent.closePath();
   }
 
-  const res = sheetmanage.getSheetByIndex();
+  // const res = sheetmanage.getSheetByIndex();
   if (sheetmanage.getSheetByIndex()?.disabled?.[`${r}_${c}`]) {
     MBLsheetTableContent.beginPath();
 
@@ -2516,7 +2610,6 @@ let cellRender = function (
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
   }
-
 
   if (value?.nodeType) {
     MBLsheetTableContent.beginPath();
@@ -2981,7 +3074,7 @@ function cellTextRender(textInfo, ctx, option) {
   if (values == null) {
     return;
   }
-  // 
+  //
 
   // for(let i=0;i<values.length;i++){
   //     let word = values[i];

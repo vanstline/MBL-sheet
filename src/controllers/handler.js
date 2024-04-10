@@ -363,11 +363,11 @@ export default function MBLsheetHandler() {
               rowData[item.dataIndex] = v;
             }
           });
-          extra.onclick(rowData[curColumn.dataIndex], rowData, row_index_ed);
           formula.updatecell(
             Store.MBLsheetCellUpdate[0],
             Store.MBLsheetCellUpdate[1]
           );
+          extra.onclick(rowData[curColumn.dataIndex], rowData, row_index_ed);
           MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
           return;
         }
