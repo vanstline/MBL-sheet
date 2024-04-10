@@ -1443,6 +1443,10 @@ const MBLsheetformula = {
       }
     }
 
+    if (!Store.flowdata?.[r]?.[c]) {
+      return;
+    }
+
     let curv = Store.flowdata[r][c];
 
     // Store old value for hook function

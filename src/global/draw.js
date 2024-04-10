@@ -1942,6 +1942,7 @@ let cellRender = function (
   bodrder05,
   isMerge
 ) {
+  console.log("%c Line:1946 🍿", "color:#7f2b82", MBLsheetTableContent);
   let cell = Store.flowdata[r][c];
   console.log("%c Line:1946 🥪 cell", "color:#3f7cff", cell);
   let cellWidth = end_c - start_c - 2;

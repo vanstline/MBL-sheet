@@ -320,12 +320,6 @@ export default function MBLsheetHandler() {
       let row_index_ed = row_index,
         col_index_ed = col_index;
 
-      console.log(
-        "%c Line:325 🎂 row_index",
-        "color:#b03734",
-        row_index,
-        col_index
-      );
       if (
         nonexistentCell.includes(row_index) ||
         nonexistentCell.includes(col_index)
@@ -363,6 +357,12 @@ export default function MBLsheetHandler() {
               rowData[item.dataIndex] = v;
             }
           });
+
+          console.log(
+            "%c Line:361 🍓",
+            "color:#b03734",
+            Store.MBLsheetCellUpdate
+          );
           formula.updatecell(
             Store.MBLsheetCellUpdate[0],
             Store.MBLsheetCellUpdate[1]
