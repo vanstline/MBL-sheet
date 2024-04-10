@@ -91,6 +91,13 @@ var columns = [
       range: [-1, 999999],
       influence: ["sampleTypeId"],
       verifyFn: function (text, r) {
+        const d = {
+          status: text === "123123",
+          message: `当前值为${text}，不符合规则`,
+        };
+        if (!d.status) {
+          return d;
+        }
         var status = false;
         var message = "";
         if (text == "1") {
@@ -145,10 +152,13 @@ var columns = [
         i,
         setRowData
       );
-      setRowData({
-        sampleName: text,
-        sampleTypeId: text,
-      });
+      setRowData(
+        {
+          sampleName: text,
+          sampleTypeId: text,
+        },
+        ["sampleTypeId"]
+      );
     },
   },
   {
@@ -181,34 +191,26 @@ var columns = [
       //   { label: "菌株", value: "4" },
       //   { label: "PCR产物(已纯化)", value: 1 },
       // ],
-      // verifyFn(text, row) {
-      //   console.log(
-      //     "%c Line:352 🍫 text, row",
-      //     "color:#ffdd4d",
-      //     text,
-      //     row
-      //   );
-      //   //
-      //   const d = {
-      //     status: row?.sampleName !== "123123",
-      //     message: `当前值为${text}，不符合规则`,
-      //   };
-      //
-      //   return d;
-      // },
+      verifyFn(text, row) {
+        const d = {
+          status: text !== "123123",
+          message: `当前值为${text}，不符合规则`,
+        };
+
+        return d;
+      },
     },
     render: (text, record, index) => {
       return record?.cxSampleCartInfo?.sampleTypeId;
     },
     onchange: (text, record, i, config) => {
-      // console.log(
-      //   "%c Line:318 🌮 text, record, i, config",
-      //   "color:#e41a6a",
-      //   text,
-      //   record,
-      //   i,
-      //   config
-      // );
+      config.setRowData(
+        {
+          sampleName: text,
+          sampleTypeId: text,
+        },
+        ["sampleName"]
+      );
     },
   },
   {

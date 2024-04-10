@@ -1860,7 +1860,8 @@ export default function MBLsheetHandler() {
         const curKey = curSheet.columns?.[0]?.dataIndex;
         const changeFn = curSheet.columns?.[0].onchange;
         if (changeFn && typeof changeFn === "function") {
-          const curSetRowData = (obj) => setRowData(obj, row_index, keyNumMap);
+          const curSetRowData = (obj, dependence = []) =>
+            setRowData(obj, row_index, keyNumMap, true, dependence);
           changeFn(rowData[curKey], rowData, row_index, {
             setRowData: curSetRowData,
           });

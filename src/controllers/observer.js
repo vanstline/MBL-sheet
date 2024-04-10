@@ -31,7 +31,10 @@ $(document).ready(function () {
   });
 });
 
-export function changeValue(r, c, value) {
+export function changeValue(r, c, value, falg = true) {
+  if (c === 1) {
+    console.log("%c Line:37 🍓", "color:#b03734", value);
+  }
   const sheet = sheetmanage.getSheetByIndex();
   const curRowData = Store.flowdata[r];
   const rowData = {};
@@ -85,16 +88,28 @@ export function changeValue(r, c, value) {
   const onchange = sheet?.columns?.[c]?.onchange;
 
   if (onchange && typeof onchange === "function") {
-    const curSetRowData = (obj) => setRowData(obj, r, keyNumMap);
+    const curSetRowData = (obj, dependence = []) =>
+      setRowData(obj, r, keyNumMap, falg, dependence);
     onchange(newVal, rowData, r, { setRowData: curSetRowData });
   }
 }
 
-export function setRowData(obj, r, keyNumMap = {}) {
+export function setRowData(obj, r, keyNumMap = {}, falg, dependence = []) {
   for (let key in obj) {
-    const col = keyNumMap[key];
-    if (r !== undefined && col !== undefined) {
-      MBLsheet.setCellValue(r, col, obj[key] ?? null);
+    const c = keyNumMap[key];
+    if (r !== undefined && c !== undefined) {
+      if (falg && dependence.includes(key)) {
+        console.log(
+          "%c Line:95 🥤 obj",
+          "color:#6ec1c2",
+          obj,
+          falg,
+          key,
+          dependence
+        );
+        changeValue(r, c, obj[key] ?? null, false);
+      }
+      MBLsheet.setCellValue(r, c, obj[key] ?? null, false);
     }
   }
 }
