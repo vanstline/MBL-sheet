@@ -1,8 +1,8 @@
 import Store from "../store";
-import { scroll, transToData } from "./api";
-import formula from "../global/formula";
+import { scroll } from "./api";
 import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
 import { getData, initDataSource, setData } from "./sg/data";
+import { changeValue } from "../controllers/observer";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -116,6 +116,8 @@ function sgInit(setting, config, MBLsheet) {
 
   MBLsheet.setDisabledMap = (obj = {}) => setDisabledMap(obj, config, MBLsheet);
   MBLsheet.getDisabledMap = () => getDisabledMap(config);
+
+  MBLsheet.changeSomeValue = (obj = {}) => changeSomeValue(obj, config);
 }
 
 function setLength(len, MBLsheet) {
@@ -144,36 +146,48 @@ function verify() {
   return false;
 }
 
+// 全局设置disabled状态
 function setDisabledMap(obj, config, MBLsheet) {
-  var newObj = {};
   const keyNums = config.columns
     .map((item) => item?.dataIndex)
     ?.filter((item) => item);
   Object.entries(obj).forEach(([k, v]) => {
-    const [r, c] = k?.split("_") ?? [];
-    const curI = keyNums.findIndex((item) => item === c);
-    if (r > -1 && curI !== -1) {
-      newObj[`${r}_${curI}`] = v;
+    const [r, dataIndex] = k?.split("_") ?? [];
+    const c = keyNums.findIndex((item) => item === dataIndex);
+    if (r > -1 && c !== -1 && Store.flowdata?.[r]?.[c]) {
+      Store.flowdata[r][c].disabled = v;
     }
   });
-  config.disabled = newObj;
-  for (let rc in newObj) {
-    const [r, c] = rc?.split("_");
-    formula.updatecell(r, c);
-  }
+
+  MBLsheet.refresh();
 }
 
-function getDisabledMap(config) {
-  var disabledMap = config.disabled ?? {};
+// 获取全局disabled状态
+function getDisabledMap() {
+  var flowdata = Store.flowdata;
+  const newObj = {};
+  flowdata.forEach((subData, i) => {
+    subData?.forEach((item) => {
+      if (item.hasOwnProperty("disabled")) {
+        newObj[`${i}_${item.dataIndex}`] = item.disabled;
+      }
+    });
+  });
+  return newObj;
+}
+
+function changeSomeValue(obj, config) {
   const keyNums = config.columns
     .map((item) => item?.dataIndex)
     ?.filter((item) => item);
-  const newObj = {};
-  Object.entries(disabledMap).forEach(([k, v]) => {
-    const [r, c] = k?.split("_") ?? [];
-    newObj[`${r}_${keyNums[c]}`] = v;
+
+  Object.entries(obj).forEach(([k, v]) => {
+    const [r, dataIndex] = k?.split("_") ?? [];
+    const c = keyNums.findIndex((item) => item === dataIndex);
+    if (r > -1 && c >= -1) {
+      changeValue(r, c, v);
+    }
   });
-  return newObj;
 }
 
 export { sgInit };

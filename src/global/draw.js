@@ -1877,6 +1877,7 @@ let nullCellRender = function (
     MBLsheetTableContent.restore();
   }
 
+  // console.log("%c Line:1881 🥑", "color:#6ec1c2", cell);
   if (cell?.disabled) {
     MBLsheetTableContent.beginPath();
 
@@ -2474,6 +2475,12 @@ let cellRender = function (
       c: c,
     });
 
+    // console.log(
+    //   "%c Line:2505 🌽 MBLsheetTableContent",
+    //   "color:#e41a6a",
+    //   MBLsheetTableContent
+    // );
+
     //若单元格有条件格式图标集
     if (
       checksCF != null &&
@@ -2607,6 +2614,7 @@ let cellRender = function (
     MBLsheetTableContent.closePath();
   }
 
+  console.log("%c Line:2611 🥒", "color:#ffdd4d", cell);
   if (cell?.disabled) {
     MBLsheetTableContent.beginPath();
 
