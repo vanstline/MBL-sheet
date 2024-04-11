@@ -6826,11 +6826,6 @@ export function getImageOption(options = {}) {
  * @param {Function} options.success 操作结束的回调函数
  */
 export function transToCellData(data, options = {}) {
-  console.log(
-    "%c Line:6827 🥒 data",
-    "color:#33a5ff",
-    JSON.parse(JSON.stringify(data))
-  );
   let { success } = { ...options };
 
   setTimeout(() => {

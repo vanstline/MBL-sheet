@@ -144,8 +144,7 @@ const MBLsheetFreezen = {
     if (freezenverticaldata == null) {
       if (_this.freezenRealFirstRowColumn) {
         let dataset_col_st = 0;
-        left =
-          Store.cloumnLenSum[dataset_col_st] - 2 + Store.rowHeaderWidth;
+        left = Store.cloumnLenSum[dataset_col_st] - 2 + Store.rowHeaderWidth;
         freezenverticaldata = [
           Store.cloumnLenSum[dataset_col_st],
           dataset_col_st + 1,
@@ -2265,8 +2264,6 @@ const MBLsheetFreezen = {
           left: left,
         },
       };
-
-      console.log("%c Line:2263 🍉 freezen", "color:#2eafb0", freezen.vertical);
     } else if (frozen.type === "rangeBoth") {
       let scrollTop = 0;
       let row_st = MBLsheet_searcharray(Store.visibledatarow, scrollTop);

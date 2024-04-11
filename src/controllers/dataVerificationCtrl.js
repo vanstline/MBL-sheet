@@ -1545,7 +1545,6 @@ const dataVerificationCtrl = {
     ) {
       failureTextExtra = message;
     } else {
-      console.log("%c Line:1549 🎂", "color:#6ec1c2", item);
       failureTextExtra = _this.getFailureText(item);
     }
 
@@ -1719,7 +1718,6 @@ const dataVerificationCtrl = {
       }
     } else {
       if (item.type == "dropdown") {
-        console.log("%c Line:1725 🍌", "color:#42b983");
         failureText += "你选择的不是下拉列表中的选项";
       } else if (item.type == "checkbox") {
       } else if (
@@ -1767,7 +1765,6 @@ const dataVerificationCtrl = {
     return failureText;
   },
   validateCellDataCustom: function (cellValue, item, r) {
-    console.log("%c Line:1770 🍻 cellValue, item", "color:#2eafb0", cellValue, item);
     if (item.required && isRealNull(cellValue)) {
       return {
         status: false,

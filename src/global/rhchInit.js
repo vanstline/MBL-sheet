@@ -34,11 +34,6 @@ export default function rhchInit(rowheight, colwidth) {
     }
 
     // 如果增加行和回到顶部按钮隐藏，则减少底部空白区域，但是预留足够空间给单元格下拉按钮
-    console.log(
-      "%c Line:39 🥔 MBLsheetConfigsetting",
-      "color:#b03734",
-      MBLsheetConfigsetting
-    );
     if (
       !MBLsheetConfigsetting.enableAddRow &&
       !MBLsheetConfigsetting.enableAddBackTop
@@ -48,11 +43,6 @@ export default function rhchInit(rowheight, colwidth) {
       const sheetRowHeight = MBLsheetConfigsetting.showsheetbar
         ? 29
         : curHeight;
-      console.log(
-        "%c Line:49 🥛 sheetRowHeight",
-        "color:#42b983",
-        sheetRowHeight
-      );
       Store.rh_height += sheetRowHeight;
     } else {
       Store.rh_height += 80; //最底部增加空白
@@ -106,7 +96,7 @@ export default function rhchInit(rowheight, colwidth) {
       }
       // Store.ch_width += Math.round((firstcolumnlen + 1) * Store.zoomRatio);
       Store.ch_width = Math.round(
-        Store.cloumnLenSum[Store.cloumnLenSum.length -1] * Store.zoomRatio
+        Store.cloumnLenSum[Store.cloumnLenSum.length - 1] * Store.zoomRatio
       );
 
       Store.visibledatacolumn.push(Store.ch_width); //列的临时长度分布

@@ -32,9 +32,6 @@ $(document).ready(function () {
 });
 
 export function changeValue(r, c, value, falg = true) {
-  if (c === 1) {
-    console.log("%c Line:37 🍓", "color:#b03734", value);
-  }
   const sheet = sheetmanage.getSheetByIndex();
   const curRowData = Store.flowdata[r];
   const rowData = {};
@@ -88,31 +85,46 @@ export function changeValue(r, c, value, falg = true) {
   const onchange = sheet?.columns?.[c]?.onchange;
 
   if (onchange && typeof onchange === "function") {
+    const curSetDisabled = (disabledMap) =>
+      setDisabled(disabledMap, r, keyNumMap, falg);
+
     const curSetRowData = (obj, dependence = []) =>
       setRowData(obj, r, keyNumMap, falg, dependence);
-    onchange(newVal, rowData, r, { setRowData: curSetRowData });
+    onchange(newVal, rowData, r, {
+      setRowData: curSetRowData,
+      setDisabled: curSetDisabled,
+    });
   }
 }
 
 export function setRowData(obj, r, keyNumMap = {}, falg, dependence = []) {
-  // if (dependence.includes("sampleTypeId1")) {
-  //   debugger;
-  // }
   for (let key in obj) {
     const c = keyNumMap[key];
     if (r !== undefined && c !== undefined) {
       if (falg && dependence.includes(key)) {
-        console.log(
-          "%c Line:95 🥤 obj",
-          "color:#6ec1c2",
-          obj,
-          falg,
-          key,
-          dependence
-        );
         changeValue(r, c, obj[key] ?? null, false);
       }
       MBLsheet.setCellValue(r, c, obj[key] ?? null, false);
+    }
+  }
+}
+
+export function setDisabled(obj, r, keyNumMap = {}, falg) {
+  if (!falg || !Store) {
+    return;
+  }
+  const curData = Store.flowdata[r];
+  for (let key in obj) {
+    const c = keyNumMap[key];
+    if (r !== undefined && c !== undefined && falg) {
+      if (curData[c]?.hasOwnProperty("disabled")) {
+        curData[c].disabled = obj[key];
+      } else {
+        curData[c] = {
+          ...curData[c],
+          disabled: obj[key],
+        };
+      }
     }
   }
 }

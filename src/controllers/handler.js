@@ -80,7 +80,7 @@ import {
   createLuckyChart,
   hideAllNeedRangeShow,
 } from "../expendPlugins/chart/plugin";
-import { setRowData } from "./observer";
+import { setDisabled, setRowData } from "./observer";
 
 const nonexistentCell = [undefined, -1];
 
@@ -303,7 +303,6 @@ export default function MBLsheetHandler() {
       }
 
       let mouse = mouseposition(event.pageX, event.pageY);
-      console.log("%c Line:303 🧀", "color:#42b983", mouse);
 
       let x = mouse[0] + $("#MBLsheet-cell-main").scrollLeft();
       let y = mouse[1] + $("#MBLsheet-cell-main").scrollTop();
@@ -331,12 +330,6 @@ export default function MBLsheetHandler() {
         MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
         return;
       }
-      console.log(
-        "%c Line:320 🍓 col_index_ed",
-        "color:#b03734",
-        row_index,
-        col_index
-      );
       let sheetFile = sheetmanage.getSheetByIndex();
 
       function update() {
@@ -354,11 +347,6 @@ export default function MBLsheetHandler() {
           }
         });
 
-        console.log(
-          "%c Line:361 🍓",
-          "color:#b03734",
-          Store.MBLsheetCellUpdate
-        );
         formula.updatecell(
           Store.MBLsheetCellUpdate[0],
           Store.MBLsheetCellUpdate[1]
@@ -379,18 +367,11 @@ export default function MBLsheetHandler() {
       }
 
       // 单元格禁用
-      const curDisabledMap = sheetFile?.disabled ?? {};
-      if (curDisabledMap[`${row_index}_${col_index}`]) {
+      if (Store.flowdata[row_index][col_index].disabled) {
         update();
         MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
         return;
       }
-      // // 单元格禁用
-      // const curDisabledMap = sheetFile?.disabled ?? {};
-
-      // if (curDisabledMap[`${row_index}_${col_index}`]) {
-      //   return;
-      // }
 
       // 协同编辑其他用户不在操作的时候，用户名框隐藏
       hideUsername();
@@ -1849,7 +1830,7 @@ export default function MBLsheetHandler() {
         const { width = 0 } = extra?.style ?? {};
         if (col_location[1] - x <= width) {
           // TODO: 双击事件
-          console.log("%c Line:1792 🌰", "color:#6ec1c2 禁用了");
+
           return;
         }
       }
@@ -1873,20 +1854,19 @@ export default function MBLsheetHandler() {
         const curKey = curSheet.columns?.[0]?.dataIndex;
         const changeFn = curSheet.columns?.[0].onchange;
         if (changeFn && typeof changeFn === "function") {
+          const curSetDisabled = (obj) =>
+            setDisabled(obj, row_index, keyNumMap, true);
           const curSetRowData = (obj, dependence = []) =>
             setRowData(obj, row_index, keyNumMap, true, dependence);
           changeFn(rowData[curKey], rowData, row_index, {
             setRowData: curSetRowData,
+            setDisabled: curSetDisabled,
           });
         }
       }
 
       // 单元格禁用
-      const curDisabledMap = curSheet?.disabled ?? {};
-
-      var columns = sheetmanage.getSheetByIndex();
-
-      if (curDisabledMap[`${row_index}_${col_index}`]) {
+      if (Store.flowdata[row_index][col_index].disabled) {
         return;
       }
 

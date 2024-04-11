@@ -686,7 +686,6 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
         }
       }
     }
-    console.log("%c Line:677 🍩 row", "color:#b03734", row);
 
     var cellBorderConfig = [];
     //边框

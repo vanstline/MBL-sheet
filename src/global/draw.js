@@ -1416,7 +1416,7 @@ function MBLsheetDrawMain(
       }
 
       let end_c = Store.cloumnLenSum[c] - scrollWidth;
-      if (curSheet?.disabled?.[`${r}_${c}`]) {
+      if (curSheet?.columns?.[r]?.[c]?.disabled) {
         MBLsheetTableContent.beginPath();
 
         // 左上起点
@@ -1536,13 +1536,12 @@ let nullCellRender = function (
   isMerge
 ) {
   let cell = Store.flowdata[r][c];
-  console.log("%c Line:1539 🍤 cell", "color:#ea7e5c", cell, Store.flowdata);
+
   let cellWidth = end_c - start_c - 2;
   let cellHeight = end_r - start_r - 2;
   let space_width = 2,
     space_height = 2; //宽高方向 间隙
 
-  console.log("%c Line:1540 🥐", "color:#ea7e5c", r, c);
   const curSheet = sheetmanage.getSheetByIndex();
   dataset_col_ed = curSheet.column - 1;
   let checksAF = alternateformat.checksAF(r, c, af_compute); //交替颜色
@@ -1836,7 +1835,6 @@ let nullCellRender = function (
       c: c,
     });
 
-    console.log("%c Line:1823 🍧", "color:#4fff4B", r, c, cell, textInfo);
     const fillStyle = menuButton.checkstatus(Store.flowdata, r, c, "fc");
     const style = columns[c]?.extra?.style;
 
@@ -1877,6 +1875,40 @@ let nullCellRender = function (
     });
 
     MBLsheetTableContent.restore();
+  }
+
+  if (cell?.disabled) {
+    MBLsheetTableContent.beginPath();
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+
+    MBLsheetTableContent.fillStyle = "rgba(0, 0, 0, .1)";
+    MBLsheetTableContent.fill();
+    MBLsheetTableContent.closePath();
   }
 
   let pos_x = start_c + offsetLeft;
@@ -1942,9 +1974,7 @@ let cellRender = function (
   bodrder05,
   isMerge
 ) {
-  console.log("%c Line:1946 🍿", "color:#7f2b82", MBLsheetTableContent);
   let cell = Store.flowdata[r][c];
-  console.log("%c Line:1946 🥪 cell", "color:#3f7cff", cell);
   let cellWidth = end_c - start_c - 2;
   let cellHeight = end_r - start_r - 2;
   let space_width = 2,
@@ -2577,8 +2607,7 @@ let cellRender = function (
     MBLsheetTableContent.closePath();
   }
 
-  // const res = sheetmanage.getSheetByIndex();
-  if (sheetmanage.getSheetByIndex()?.disabled?.[`${r}_${c}`]) {
+  if (cell?.disabled) {
     MBLsheetTableContent.beginPath();
 
     // 左上起点

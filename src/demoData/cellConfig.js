@@ -143,16 +143,17 @@ var columns = [
     render: (text, record, index) => {
       return record.cxSampleCartInfo?.name;
     },
-    onchange: (text, record, i, { setRowData }) => {
+    onchange: (text, record, i, config) => {
       console.log(
         "%c Line:282 🍐 text, record",
         "color:#465975",
         text,
         record,
         i,
-        setRowData
+        config
       );
-      setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
+      config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
+      config.setDisabled({ sampleTypeNamed: text === "123" });
       // setRowData({ ...record, sampleTypeId1: "" }, ["sampleTypeId1"]);
     },
   },
@@ -170,7 +171,6 @@ var columns = [
       //   { label: "PCR产物(已纯化)", value: 1 },
       // ],
       verifyFn(text, row) {
-        console.log("%c Line:172 🍞 !!text", "color:#fca650", !!text);
         const d = {
           status: !!text,
           // status: !text,
