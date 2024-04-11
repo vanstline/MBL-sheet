@@ -75,7 +75,7 @@ export function changeValue(r, c, value, falg = true) {
       r
     );
 
-    if (curVerifyInfo.status === true) {
+    if (curVerifyInfo.status !== true) {
       sheet.dataVerification[`${r}_${c}`] = {
         ...sheet.dataVerification[`${r}_${c}`],
         hintShow: curVerifyInfo.status,
@@ -95,6 +95,9 @@ export function changeValue(r, c, value, falg = true) {
 }
 
 export function setRowData(obj, r, keyNumMap = {}, falg, dependence = []) {
+  // if (dependence.includes("sampleTypeId1")) {
+  //   debugger;
+  // }
   for (let key in obj) {
     const c = keyNumMap[key];
     if (r !== undefined && c !== undefined) {

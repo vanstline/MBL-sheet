@@ -67,7 +67,7 @@ function setcellvalue(r, c, d, v) {
     cell = {};
   }
 
-  let vupdateStr = vupdate.toString();
+  let vupdateStr = isRealNull(vupdate) ? "" : vupdate.toString();
 
   if (vupdateStr.substr(0, 1) == "'") {
     cell.m = vupdateStr.substr(1);
@@ -234,6 +234,7 @@ function setcellvalue(r, c, d, v) {
   //     })
   //     .join(",");
   // }
+
   d[r][c] = cell;
 }
 

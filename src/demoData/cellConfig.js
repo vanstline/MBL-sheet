@@ -152,57 +152,37 @@ var columns = [
         i,
         setRowData
       );
-      setRowData(
-        {
-          sampleName: text,
-          sampleTypeId: text,
-        },
-        ["sampleTypeId"]
-      );
+      setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
+      // setRowData({ ...record, sampleTypeId1: "" }, ["sampleTypeId1"]);
     },
   },
   {
-    // dataIndex: "sampleTypeName",
-    // title: "样本类型",
-    // fieldsProps: {
-    //   type: "select",
-    //   type2: "multi",
-    //   defaultValue: "PCR已纯化-Value",
-    //   options: [
-    //     // "PCR已纯化", "PCR未纯化", "菌株", "质粒"
-    //     { label: "PCR已纯化111", value: "PCR已纯化-Value" },
-    //     { label: "PCR未纯化", value: "PCR未纯化-Value" },
-    //     { label: "菌株", value: "菌株-Value" },
-    //     { label: "质粒", value: "质粒-Value" },
-    //   ],
-    // },
-    // render: (text, record, index) => {
-    //   return record.cxSampleCartInfo?.sampleTypeName;
-    // },
-    dataIndex: "sampleTypeId",
+    dataIndex: "sampleTypeId1",
     title: "样本类型",
     width: 200,
     fieldsProps: {
       // defaultValue: '菌株',
-      type: "select",
-      // type2: "multi",
-      options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
+      // type: "select",
+      // // type2: "multi",
+      // options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
       // options: [
       //   { label: "菌株", value: "4" },
       //   { label: "PCR产物(已纯化)", value: 1 },
       // ],
       verifyFn(text, row) {
+        console.log("%c Line:172 🍞 !!text", "color:#fca650", !!text);
         const d = {
-          status: text !== "123123",
+          status: !!text,
+          // status: !text,
           message: `当前值为${text}，不符合规则`,
         };
 
         return d;
       },
     },
-    render: (text, record, index) => {
-      return record?.cxSampleCartInfo?.sampleTypeId;
-    },
+    // render: (text, record, index) => {
+    //   return record?.cxSampleCartInfo?.sampleTypeId;
+    // },
     onchange: (text, record, i, config) => {
       config.setRowData(
         {

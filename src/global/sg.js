@@ -1,5 +1,6 @@
 import Store from "../store";
 import { scroll, transToData } from "./api";
+import formula from "../global/formula";
 import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
 import { getData, initDataSource, setData } from "./sg/data";
 
@@ -112,6 +113,9 @@ function sgInit(setting, config, MBLsheet) {
     });
     setData(newData, sheet, MBLsheet);
   };
+
+  MBLsheet.setDisabledMap = (obj = {}) => setDisabledMap(obj, config, MBLsheet);
+  MBLsheet.getDisabledMap = () => getDisabledMap(config);
 }
 
 function setLength(len, MBLsheet) {
@@ -138,6 +142,38 @@ function verify() {
     return true;
   }
   return false;
+}
+
+function setDisabledMap(obj, config, MBLsheet) {
+  var newObj = {};
+  const keyNums = config.columns
+    .map((item) => item?.dataIndex)
+    ?.filter((item) => item);
+  Object.entries(obj).forEach(([k, v]) => {
+    const [r, c] = k?.split("_") ?? [];
+    const curI = keyNums.findIndex((item) => item === c);
+    if (r > -1 && curI !== -1) {
+      newObj[`${r}_${curI}`] = v;
+    }
+  });
+  config.disabled = newObj;
+  for (let rc in newObj) {
+    const [r, c] = rc?.split("_");
+    formula.updatecell(r, c);
+  }
+}
+
+function getDisabledMap(config) {
+  var disabledMap = config.disabled ?? {};
+  const keyNums = config.columns
+    .map((item) => item?.dataIndex)
+    ?.filter((item) => item);
+  const newObj = {};
+  Object.entries(disabledMap).forEach(([k, v]) => {
+    const [r, c] = k?.split("_") ?? [];
+    newObj[`${r}_${keyNums[c]}`] = v;
+  });
+  return newObj;
 }
 
 export { sgInit };

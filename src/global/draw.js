@@ -843,7 +843,7 @@ function MBLsheetDrawMain(
         }
       }
 
-      if (value == null || value.toString().length == 0) {
+      if (value == null) {
         nullCellRender(
           r,
           c,
@@ -959,7 +959,7 @@ function MBLsheetDrawMain(
     end_r = Store.visibledatarow[r + mainCell["mc"].rs - 1] - scrollHeight;
     end_c = Store.cloumnLenSum[c + mainCell["mc"].cs - 1] - scrollWidth;
 
-    if (value == null || value.toString().length == 0) {
+    if (value == null) {
       nullCellRender(
         r,
         c,

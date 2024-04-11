@@ -339,38 +339,51 @@ export default function MBLsheetHandler() {
       );
       let sheetFile = sheetmanage.getSheetByIndex();
 
+      function update() {
+        const curRowData = Store.flowdata[row_index_ed];
+        const rowData = {};
+        const curKey = curRowData?.[col_index]?.dataIndex;
+
+        sheetFile.columns.forEach((item, i) => {
+          if (item.dataIndex) {
+            const v = curRowData?.find(
+              (sub) => sub?.dataIndex === item.dataIndex
+            )?.v;
+
+            rowData[item.dataIndex] = v;
+          }
+        });
+
+        console.log(
+          "%c Line:361 🍓",
+          "color:#b03734",
+          Store.MBLsheetCellUpdate
+        );
+        formula.updatecell(
+          Store.MBLsheetCellUpdate[0],
+          Store.MBLsheetCellUpdate[1]
+        );
+        return rowData;
+      }
+
       var curColumn = sheetFile?.columns?.[col_index_ed] ?? {};
       if (typeof curColumn?.extra === "object") {
         const extra = curColumn.extra;
         const { width = 0 } = extra?.style ?? {};
         if (col - x <= width && typeof extra.onclick === "function") {
-          const curRowData = Store.flowdata[row_index_ed];
-          const rowData = {};
-          const curKey = curRowData?.[col_index]?.dataIndex;
-
-          sheetFile.columns.forEach((item, i) => {
-            if (item.dataIndex) {
-              const v = curRowData?.find(
-                (sub) => sub?.dataIndex === item.dataIndex
-              )?.v;
-
-              rowData[item.dataIndex] = v;
-            }
-          });
-
-          console.log(
-            "%c Line:361 🍓",
-            "color:#b03734",
-            Store.MBLsheetCellUpdate
-          );
-          formula.updatecell(
-            Store.MBLsheetCellUpdate[0],
-            Store.MBLsheetCellUpdate[1]
-          );
+          const rowData = update();
           extra.onclick(rowData[curColumn.dataIndex], rowData, row_index_ed);
           MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
           return;
         }
+      }
+
+      // 单元格禁用
+      const curDisabledMap = sheetFile?.disabled ?? {};
+      if (curDisabledMap[`${row_index}_${col_index}`]) {
+        update();
+        MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
+        return;
       }
       // // 单元格禁用
       // const curDisabledMap = sheetFile?.disabled ?? {};
