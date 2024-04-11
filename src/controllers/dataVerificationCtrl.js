@@ -1541,6 +1541,7 @@ const dataVerificationCtrl = {
 
     if (
       (item.required && isRealNull(cellValue)) ||
+      cellValue === "" ||
       typeof item.verifyFn === "function"
     ) {
       failureTextExtra = message;
@@ -1765,7 +1766,7 @@ const dataVerificationCtrl = {
     return failureText;
   },
   validateCellDataCustom: function (cellValue, item, r) {
-    if (item.required && isRealNull(cellValue)) {
+    if (item.required && (isRealNull(cellValue) || cellValue === "")) {
       return {
         status: false,
         message: "不能为空",
