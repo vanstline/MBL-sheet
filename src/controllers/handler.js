@@ -1850,6 +1850,11 @@ export default function MBLsheetHandler() {
         }
       });
 
+      // 单元格禁用
+      if (Store.flowdata[row_index][col_index].disabled) {
+        return;
+      }
+
       if (curSheet.columns?.[0]?.[col_index]?.dataIndex == null) {
         const curKey = curSheet.columns?.[0]?.dataIndex;
         const changeFn = curSheet.columns?.[0].onchange;
@@ -1863,11 +1868,6 @@ export default function MBLsheetHandler() {
             setDisabled: curSetDisabled,
           });
         }
-      }
-
-      // 单元格禁用
-      if (Store.flowdata[row_index][col_index].disabled) {
-        return;
       }
 
       if (pivotTable.isPivotRange(row_index, col_index)) {
@@ -5750,7 +5750,6 @@ export default function MBLsheetHandler() {
         event.stopPropagation();
         return;
       }
-
       //复制范围
       MBLsheetDropCell.copyRange = { row: [r0, r1], column: [c0, c1] };
 
