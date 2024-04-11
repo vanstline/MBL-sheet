@@ -301,6 +301,9 @@ var columns = [
         resistance: text === "123",
       });
     },
+    onblur(val, r, c) {
+      console.log("%c Line:305 🍇 val, r, c", "color:#4fff4B", val, r, c);
+    },
   },
 
   {

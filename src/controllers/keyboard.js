@@ -26,6 +26,7 @@ import tooltip from "../global/tooltip";
 import locale from "../locale/locale";
 import { enterKeyControll } from "./inlineString";
 import Store from "../store";
+import { updateBlur } from "./observer";
 
 let MBLsheet_shiftkeydown = false;
 
@@ -97,7 +98,7 @@ function formulaMoveEvent(dir, ctrlKey, shiftKey, event) {
       event.preventDefault();
     } else if (formula.israngeseleciton()) {
       let anchor = $(window.getSelection().anchorNode);
-      // console.log(anchor.parent().next().text());
+      //
       if (
         anchor.parent().next().text() == null ||
         anchor.parent().next().text() == ""
@@ -477,6 +478,7 @@ export function keyboardInitial() {
           $("#MBLsheet-search-formula-parm-select").hide();
         }
         event.preventDefault();
+        updateBlur(event);
       } else if (kcode == keycode.TAB) {
         if (parseInt($inputbox.css("top")) > 0) {
           return;
@@ -1142,6 +1144,7 @@ export function keyboardInitial() {
         formula.dontupdate();
         MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
         event.preventDefault();
+        updateBlur(event);
       } else if (kcode == keycode.ENTER && parseInt($inputbox.css("top")) > 0) {
         if (
           $("#MBLsheet-formula-search-c").is(":visible") &&
@@ -1154,6 +1157,8 @@ export function keyboardInitial() {
           );
           event.preventDefault();
         }
+
+        updateBlur(event);
       } else if (kcode == keycode.TAB && parseInt($inputbox.css("top")) > 0) {
         if (
           $("#MBLsheet-formula-search-c").is(":visible") &&
@@ -1173,15 +1178,19 @@ export function keyboardInitial() {
         }
 
         event.preventDefault();
+        updateBlur(event);
       } else if (kcode == keycode.F4 && parseInt($inputbox.css("top")) > 0) {
         formula.setfreezonFuc(event);
         event.preventDefault();
       } else if (kcode == keycode.UP && parseInt($inputbox.css("top")) > 0) {
         formulaMoveEvent("up", ctrlKey, shiftKey, event);
+        updateBlur(event);
       } else if (kcode == keycode.DOWN && parseInt($inputbox.css("top")) > 0) {
         formulaMoveEvent("down", ctrlKey, shiftKey, event);
+        updateBlur(event);
       } else if (kcode == keycode.LEFT && parseInt($inputbox.css("top")) > 0) {
         formulaMoveEvent("left", ctrlKey, shiftKey, event);
+        updateBlur(event);
       } else if (kcode == keycode.RIGHT && parseInt($inputbox.css("top")) > 0) {
         formulaMoveEvent("right", ctrlKey, shiftKey, event);
       } else if (
@@ -1251,6 +1260,7 @@ export function keyboardInitial() {
       let shiftKey = event.shiftKey;
       let kcode = event.keyCode;
       let $t = $(this);
+
       if (kcode == keycode.ENTER) {
         $t.blur().change();
       }

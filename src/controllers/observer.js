@@ -1,15 +1,23 @@
 import { MBLsheet } from "../core";
 import { getcellvalue } from "../global/getdata";
-import { rowLocation, colLocation } from "../global/location";
+import formula from "../global/formula";
+import { rowLocation, colLocation, mouseposition } from "../global/location";
+import { MBLsheetMoveHighlightCell } from "./sheetMove";
 import Store from "../store";
 import sheetmanage from "./sheetmanage";
+import { event } from "jquery";
+
+const nonexistentCell = [undefined, -1];
 
 $(document).ready(function () {
+  let isEdit = false;
+
   setTimeout(() => {
     // 获取contenteditable元素
-    var editableElement = document.querySelector(".MBLsheet-cell-input");
+    var editableElement = document.querySelector("#MBLsheet-rich-text-editor");
 
     function processChange(event) {
+      isEdit = true;
       let c = Store.MBLsheet_select_save[0]["column_focus"];
       let r = Store.MBLsheet_select_save[0]["row_focus"];
 
@@ -17,9 +25,23 @@ $(document).ready(function () {
       changeValue(r, c, currentContent);
     }
 
+    function processBlur(event) {
+      if (isEdit) {
+        updateBlur(event);
+        isEdit = false;
+      }
+    }
+
     if (editableElement) {
       // 添加input事件监听器
       editableElement?.addEventListener("input", processChange);
+      editableElement?.addEventListener("blur", processBlur);
+      // editableElement?.addEventListener("keydown", function (event) {
+      //   if (event.key === "Enter") {
+      //     processBlur(event);
+      //     // 这里可以执行你的其他操作
+      //   }
+      // });
 
       // 如果需要兼容旧版IE浏览器（IE9及更低版本不支持input事件）
       if ("oninput" in document.createElement("div")) {
@@ -126,5 +148,31 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
         };
       }
     }
+  }
+}
+
+export function updateBlur(event) {
+  console.log("%c Line:18 kcode observer 🥔", "color:#ffdd4d");
+  let mouse = mouseposition(event.pageX, event.pageY);
+
+  let x = mouse[0] + $("#MBLsheet-cell-main").scrollLeft();
+  let y = mouse[1] + $("#MBLsheet-cell-main").scrollTop();
+  let row_location = rowLocation(y),
+    row_index = row_location[2];
+
+  let col_location = colLocation(x),
+    col_index = col_location[2];
+
+  const [r, c] = Store.MBLsheetCellUpdate;
+  if (
+    nonexistentCell.includes(row_index) ||
+    nonexistentCell.includes(col_index)
+  ) {
+    formula.updatecell(r, c);
+    const curEle = Store?.flowdata?.[r]?.[c];
+    if (curEle && curEle?.onblur && typeof curEle?.onblur === "function") {
+      Store?.flowdata?.[r]?.[c].onblur(curEle.v, r, c);
+    }
+    MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
   }
 }
