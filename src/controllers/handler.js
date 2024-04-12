@@ -366,12 +366,12 @@ export default function MBLsheetHandler() {
         }
       }
 
-      // 单元格禁用
-      if (Store.flowdata[row_index][col_index].disabled) {
-        update();
-        MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
-        return;
-      }
+      // // 单元格禁用
+      // if (Store.flowdata[row_index][col_index].disabled) {
+      //   update();
+      //   MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
+      //   return;
+      // }
 
       // 协同编辑其他用户不在操作的时候，用户名框隐藏
       hideUsername();
