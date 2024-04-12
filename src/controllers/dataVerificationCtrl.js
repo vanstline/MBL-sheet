@@ -1475,7 +1475,7 @@ const dataVerificationCtrl = {
     }
 
     //单元格数据验证 类型是 下拉列表
-    if (item.type == "dropdown") {
+    if (item.type == "dropdown" && !Store.flowdata?.[r]?.[c]?.disabled) {
       $("#MBLsheet-dataVerification-dropdown-btn")
         .show()
         .css({

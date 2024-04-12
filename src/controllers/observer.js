@@ -173,8 +173,69 @@ export function updateBlur(event) {
     formula.updatecell(r, c);
     const curEle = Store?.flowdata?.[r]?.[c];
     if (curEle && curEle?.onblur && typeof curEle?.onblur === "function") {
-      Store?.flowdata?.[r]?.[c].onblur(curEle.v, r, c);
+      const sheet = sheetmanage.getSheetByIndex();
+      const curRowData = Store.flowdata[r];
+      const rowData = {};
+      const curKey = curRowData?.[c]?.dataIndex;
+      const keyNumMap = {};
+      let newVal = curEle.v;
+
+      sheet.columns.forEach((item, i) => {
+        if (item.dataIndex) {
+          keyNumMap[item.dataIndex] = i;
+          const v = curRowData?.find(
+            (sub) => sub?.dataIndex === item.dataIndex
+          )?.v;
+
+          if (item.dataIndex === curKey) {
+            if (typeof item?.fieldsProps?.options === "object") {
+              const valueStr = newVal
+                ?.split(",")
+                .map((sub) => {
+                  const curOption = item.fieldsProps.options.find(
+                    (min) => min.label === sub
+                  );
+                  return curOption?.value || sub;
+                })
+                .join(",");
+              rowData[item.dataIndex] = valueStr;
+              newVal = valueStr;
+            }
+          } else {
+            rowData[item.dataIndex] = v;
+          }
+        }
+      });
+
+      rowData[curKey] = curEle.v;
+
+      if (typeof sheet.dataVerification[`${r}_${c}`]?.verifyFn === "function") {
+        const curVerifyInfo = sheet.dataVerification[`${r}_${c}`]?.verifyFn(
+          curEle.v,
+          r
+        );
+
+        if (curVerifyInfo.status !== true) {
+          sheet.dataVerification[`${r}_${c}`] = {
+            ...sheet.dataVerification[`${r}_${c}`],
+            hintShow: curVerifyInfo.status,
+            hintText: curVerifyInfo.message,
+          };
+        }
+      }
+
+      const curSetDisabled = (disabledMap) =>
+        setDisabled(disabledMap, r, keyNumMap, true);
+
+      const curSetRowData = (obj, dependence = []) =>
+        setRowData(obj, r, keyNumMap, true, dependence);
+
+      Store?.flowdata?.[r]?.[c].onblur(curEle.v, rowData, r, {
+        setRowData: curSetRowData,
+        setDisabled: curSetDisabled,
+      });
     }
+
     MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
   }
 }
