@@ -56,13 +56,11 @@ $(document).ready(function () {
   });
 });
 
-export function changeValue(r, c, value, falg = true) {
+export function getRowData(r, c, newVal, keyNumMap = {}) {
   const sheet = sheetmanage.getSheetByIndex();
   const curRowData = Store.flowdata[r];
   const rowData = {};
   const curKey = curRowData?.[c]?.dataIndex;
-  const keyNumMap = {};
-  let newVal = value;
 
   sheet.columns.forEach((item, i) => {
     if (item.dataIndex) {
@@ -89,7 +87,17 @@ export function changeValue(r, c, value, falg = true) {
     }
   });
 
-  rowData[curKey] = value;
+  rowData[curKey] = newVal;
+  return rowData;
+}
+
+export function changeValue(r, c, value, falg = true) {
+  const keyNumMap = {};
+  let newVal = value;
+
+  const rowData = getRowData(r, c, newVal);
+
+  const sheet = sheetmanage.getSheetByIndex();
 
   if (typeof sheet.dataVerification[`${r}_${c}`]?.verifyFn === "function") {
     const curVerifyInfo = sheet.dataVerification[`${r}_${c}`]?.verifyFn(
@@ -135,6 +143,7 @@ export function setRowData(obj, r, keyNumMap = {}, falg, dependence = []) {
 }
 
 export function setDisabled(obj, r, keyNumMap = {}, falg) {
+  console.log("%c Line:146 🍅 obj", "color:#6ec1c2", obj);
   if (!falg || !Store) {
     return;
   }
@@ -143,6 +152,7 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
     const c = keyNumMap[key];
     if (r !== undefined && c !== undefined && falg) {
       if (curData[c]?.hasOwnProperty("disabled")) {
+        console.log("%c Line:156 🍕", "color:#b03734", obj[key]);
         curData[c].disabled = obj[key];
       } else {
         curData[c] = {
@@ -173,45 +183,16 @@ export function updateBlur(event) {
     formula.updatecell(r, c);
     const curEle = Store?.flowdata?.[r]?.[c];
     if (curEle && curEle?.onblur && typeof curEle?.onblur === "function") {
-      const sheet = sheetmanage.getSheetByIndex();
-      const curRowData = Store.flowdata[r];
-      const rowData = {};
-      const curKey = curRowData?.[c]?.dataIndex;
       const keyNumMap = {};
       let newVal = curEle.v;
 
-      sheet.columns.forEach((item, i) => {
-        if (item.dataIndex) {
-          keyNumMap[item.dataIndex] = i;
-          const v = curRowData?.find(
-            (sub) => sub?.dataIndex === item.dataIndex
-          )?.v;
+      const rowData = getRowData(r, c, newVal, keyNumMap);
 
-          if (item.dataIndex === curKey) {
-            if (typeof item?.fieldsProps?.options === "object") {
-              const valueStr = newVal
-                ?.split(",")
-                .map((sub) => {
-                  const curOption = item.fieldsProps.options.find(
-                    (min) => min.label === sub
-                  );
-                  return curOption?.value || sub;
-                })
-                .join(",");
-              rowData[item.dataIndex] = valueStr;
-              newVal = valueStr;
-            }
-          } else {
-            rowData[item.dataIndex] = v;
-          }
-        }
-      });
-
-      rowData[curKey] = curEle.v;
+      const sheet = sheetmanage.getSheetByIndex();
 
       if (typeof sheet.dataVerification[`${r}_${c}`]?.verifyFn === "function") {
         const curVerifyInfo = sheet.dataVerification[`${r}_${c}`]?.verifyFn(
-          curEle.v,
+          newVal,
           r
         );
 
@@ -230,7 +211,7 @@ export function updateBlur(event) {
       const curSetRowData = (obj, dependence = []) =>
         setRowData(obj, r, keyNumMap, true, dependence);
 
-      Store?.flowdata?.[r]?.[c].onblur(curEle.v, rowData, r, {
+      Store?.flowdata?.[r]?.[c].onblur(newVal, rowData, r, {
         setRowData: curSetRowData,
         setDisabled: curSetDisabled,
       });

@@ -1570,6 +1570,16 @@ function customSheetRightClickConfig() {
   return config;
 }
 
+const icons = {
+  SearchOutlined: "SearchOutlined",
+  DeleteOutlined: "DeleteOutlined",
+  QuestionCircleOutlined: "QuestionCircleOutlined",
+  ArrowDown: "ArrowDown",
+  CloseCircleOutlined: "CloseCircleOutlined",
+  DownOutlined: "DownOutlined",
+  UpDownCircleOutlined: "UpDownCircleOutlined",
+};
+
 export {
   gridHTML,
   columeHeader_word,
@@ -1601,4 +1611,5 @@ export {
   MBLsheet_CFiconsImg,
   MBLsheetdefaultFont,
   iconfontObjects,
+  icons,
 };

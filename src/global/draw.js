@@ -24,6 +24,9 @@ import Store from "../store";
 import locale from "../locale/locale";
 import sheetmanage from "../controllers/sheetmanage";
 import { setVerifyByKey, clearVerify, hasVerifyByKey } from "./verify";
+import { getRowData } from "../controllers/observer";
+
+const iconsPath = "../assets/icons/";
 
 function MBLsheetDrawgridRowTitle(scrollHeight, drawHeight, offsetTop) {
   if (scrollHeight == null) {
@@ -1389,6 +1392,7 @@ function MBLsheetDrawMain(
   }
 
   const curSheet = sheetmanage.getSheetByIndex();
+  console.log("%c Line:1395 🥖 curSheet", "color:#42b983", curSheet);
 
   for (let r = dataset_row_st; r <= dataset_row_ed; r++) {
     let start_r;
@@ -1877,7 +1881,6 @@ let nullCellRender = function (
     MBLsheetTableContent.restore();
   }
 
-  // console.log("%c Line:1881 🥑", "color:#6ec1c2", cell);
   if (cell?.disabled) {
     MBLsheetTableContent.beginPath();
 
@@ -2049,15 +2052,16 @@ let cellRender = function (
 
   // 自定义额外渲染区
   const columns = sheetmanage.getSheetByIndex().columns;
-  if (typeof columns[c]?.extra === "object") {
-    const { style = {} } = columns[c]?.extra;
+  const extra = columns[c]?.extra;
+  if (typeof extra === "object") {
+    const { style = {} } = extra;
     MBLsheetTableContent.beginPath();
 
+    const drawStartR = start_r + offsetTop - bodrder05;
+    const drawStartC = end_c - style.width + offsetLeft - 1 - bodrder05;
+
     // 左上起点
-    MBLsheetTableContent.moveTo(
-      end_c - style.width + offsetLeft - 1 - bodrder05,
-      start_r + offsetTop - bodrder05
-    );
+    MBLsheetTableContent.moveTo(drawStartC, drawStartR);
     // 右上 向右移动
     MBLsheetTableContent.lineTo(
       end_c + offsetLeft - 1 - bodrder05,
@@ -2082,6 +2086,34 @@ let cellRender = function (
     MBLsheetTableContent.fillStyle = style.background || "rgba(0, 0, 0, .1)";
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
+
+    // if (extra.icons) {
+    //   console.log(
+    //     "%c Line:2091 🍢",
+    //     "color:#6ec1c2",
+    //     extra.icons,
+    //     MBLsheetTableContent
+    //   );
+    //   const curIcon = `${iconsPath}${extra.icons}.png`;
+    //   const curImg = new Image();
+    //   console.log(
+    //     "%c Line:2094 🍤 curImg",
+    //     "color:#b03734",
+    //     curImg,
+    //     drawStartR + (style.top ?? 0),
+    //     drawStartC + (style.left ?? 0)
+    //   );
+    //   curImg.src = curIcon;
+    //   MBLsheetTableContent.beginPath();
+    //   MBLsheetTableContent.drawImage(
+    //     curImg,
+    //     drawStartC + style.left ?? 0,
+    //     drawStartR + style.top ?? 0,
+    //     20,
+    //     20
+    //   );
+    //   MBLsheetTableContent.closePath();
+    // }
   }
 
   let dataVerification = dataVerificationCtrl.dataVerification;
