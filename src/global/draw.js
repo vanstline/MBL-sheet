@@ -2614,7 +2614,7 @@ let cellRender = function (
     MBLsheetTableContent.closePath();
   }
 
-  console.log("%c Line:2611 🥒", "color:#ffdd4d", cell);
+  // console.log("%c Line:2611 🥒", "color:#ffdd4d", cell);
   if (cell?.disabled) {
     MBLsheetTableContent.beginPath();
 

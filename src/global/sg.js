@@ -81,8 +81,10 @@ function sgInit(setting, config, MBLsheet) {
     if (data.length <= needRm + 1) {
       throw new Error("至少保留一条数据");
     }
+    //
     MBLsheetdeletetable("row", cur, length);
   };
+
   MBLsheet.addRow = (cur, length) => MBLsheetextendtable("row", cur, length);
 
   MBLsheet.verify = verify;

@@ -6,6 +6,7 @@ import { MBLsheetMoveHighlightCell } from "./sheetMove";
 import Store from "../store";
 import sheetmanage from "./sheetmanage";
 import { event } from "jquery";
+import { exitEditMode } from "../global/api";
 
 const nonexistentCell = [undefined, -1];
 
@@ -29,6 +30,8 @@ $(document).ready(function () {
       if (isEdit) {
         updateBlur(event);
         isEdit = false;
+      } else {
+        exitEditMode();
       }
     }
 
@@ -152,7 +155,6 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
 }
 
 export function updateBlur(event) {
-  console.log("%c Line:18 kcode observer 🥔", "color:#ffdd4d");
   let mouse = mouseposition(event.pageX, event.pageY);
 
   let x = mouse[0] + $("#MBLsheet-cell-main").scrollLeft();
