@@ -143,7 +143,6 @@ export function setRowData(obj, r, keyNumMap = {}, falg, dependence = []) {
 }
 
 export function setDisabled(obj, r, keyNumMap = {}, falg) {
-  console.log("%c Line:146 🍅 obj", "color:#6ec1c2", obj);
   if (!falg || !Store) {
     return;
   }
@@ -152,7 +151,6 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
     const c = keyNumMap[key];
     if (r !== undefined && c !== undefined && falg) {
       if (curData[c]?.hasOwnProperty("disabled")) {
-        console.log("%c Line:156 🍕", "color:#b03734", obj[key]);
         curData[c].disabled = obj[key];
       } else {
         curData[c] = {
@@ -176,47 +174,44 @@ export function updateBlur(event) {
     col_index = col_location[2];
 
   const [r, c] = Store.MBLsheetCellUpdate;
-  if (
-    nonexistentCell.includes(row_index) ||
-    nonexistentCell.includes(col_index)
-  ) {
-    formula.updatecell(r, c);
-    const curEle = Store?.flowdata?.[r]?.[c];
-    if (curEle && curEle?.onblur && typeof curEle?.onblur === "function") {
-      const keyNumMap = {};
-      let newVal = curEle.v;
+  console.log("%c Line:182 ", "color:#93c0a4", row_index, col_index, r, c);
+  formula.updatecell(r, c);
+  const sheet = sheetmanage.getSheetByIndex();
+  const curEle = Store?.flowdata?.[r]?.[c];
+  const onblur = sheet?.columns?.[c]?.onblur;
+  if (onblur && typeof onblur === "function") {
+    const keyNumMap = {};
+    let newVal = curEle.v;
 
-      const rowData = getRowData(r, c, newVal, keyNumMap);
+    const rowData = getRowData(r, c, newVal, keyNumMap);
 
-      const sheet = sheetmanage.getSheetByIndex();
+    if (typeof sheet.dataVerification[`${r}_${c}`]?.verifyFn === "function") {
+      const curVerifyInfo = sheet.dataVerification[`${r}_${c}`]?.verifyFn(
+        newVal,
+        r
+      );
 
-      if (typeof sheet.dataVerification[`${r}_${c}`]?.verifyFn === "function") {
-        const curVerifyInfo = sheet.dataVerification[`${r}_${c}`]?.verifyFn(
-          newVal,
-          r
-        );
-
-        if (curVerifyInfo.status !== true) {
-          sheet.dataVerification[`${r}_${c}`] = {
-            ...sheet.dataVerification[`${r}_${c}`],
-            hintShow: curVerifyInfo.status,
-            hintText: curVerifyInfo.message,
-          };
-        }
+      if (curVerifyInfo.status !== true) {
+        sheet.dataVerification[`${r}_${c}`] = {
+          ...sheet.dataVerification[`${r}_${c}`],
+          hintShow: curVerifyInfo.status,
+          hintText: curVerifyInfo.message,
+        };
       }
-
-      const curSetDisabled = (disabledMap) =>
-        setDisabled(disabledMap, r, keyNumMap, true);
-
-      const curSetRowData = (obj, dependence = []) =>
-        setRowData(obj, r, keyNumMap, true, dependence);
-
-      Store?.flowdata?.[r]?.[c].onblur(newVal, rowData, r, {
-        setRowData: curSetRowData,
-        setDisabled: curSetDisabled,
-      });
     }
 
-    MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
+    const curSetDisabled = (disabledMap) =>
+      setDisabled(disabledMap, r, keyNumMap, true);
+
+    const curSetRowData = (obj, dependence = []) =>
+      setRowData(obj, r, keyNumMap, true, dependence);
+
+    Store?.flowdata?.[0]?.[c].onblur(newVal, rowData, r, {
+      setRowData: curSetRowData,
+      setDisabled: curSetDisabled,
+    });
   }
+
+  MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
+  // }
 }
