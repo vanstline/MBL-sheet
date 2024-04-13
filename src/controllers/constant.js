@@ -1574,7 +1574,7 @@ const icons = {
   SearchOutlined: "SearchOutlined",
   DeleteOutlined: "DeleteOutlined",
   QuestionCircleOutlined: "QuestionCircleOutlined",
-  ArrowDown: "ArrowDown",
+  ArrowCircleDownOutlined: "ArrowCircleDownOutlined",
   CloseCircleOutlined: "CloseCircleOutlined",
   DownOutlined: "DownOutlined",
   UpDownCircleOutlined: "UpDownCircleOutlined",

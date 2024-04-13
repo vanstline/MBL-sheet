@@ -3,6 +3,7 @@ import { scroll } from "./api";
 import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
 import { getData, initDataSource, setData } from "./sg/data";
 import { changeValue } from "../controllers/observer";
+import { iconPath } from "./sg/icons";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -71,6 +72,10 @@ function sgInit(setting, config, MBLsheet) {
       },
     ],
     data: [sheet],
+    hook: {
+      cellRenderAfter: renderIcon,
+      nuuCellRenderAfter: renderIcon,
+    },
   });
 
   MBLsheet.setLength = (len) => setLength(len, MBLsheet);
@@ -190,6 +195,36 @@ function changeSomeValue(obj, config) {
       changeValue(r, c, v);
     }
   });
+}
+
+function renderIcon(curColumns, coord, curSheet, ctx) {
+  // console.log("%c Line:78 🍩 coord", "color:#ea7e5c", curColumns, coord);
+  const extra = curColumns?.extra;
+  if (extra?.icons) {
+    const [iconWidth = 20, iconHeigth = 20] = extra?.iconSize
+      ? typeof extra.iconSize === "number"
+        ? [extra.iconSize, extra.iconSize]
+        : extra.iconSize
+      : [];
+    const style = extra?.style ?? {};
+    const { start_r, end_c } = coord;
+    const { width = 0, left = 0, top = 0 } = style;
+    const drawStartR = start_r + 0;
+    const drawStartC = end_c - width + 0 - 1;
+    const curIcon = `${iconPath}${extra?.icons}.png`;
+    const curImg = new Image();
+
+    curImg.src = curIcon;
+    curImg.onload = function (e) {
+      ctx.drawImage(
+        curImg,
+        drawStartC + left,
+        drawStartR + top,
+        iconWidth,
+        iconHeigth
+      );
+    };
+  }
 }
 
 export { sgInit };

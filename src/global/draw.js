@@ -1392,7 +1392,6 @@ function MBLsheetDrawMain(
   }
 
   const curSheet = sheetmanage.getSheetByIndex();
-  console.log("%c Line:1395 🥖 curSheet", "color:#42b983", curSheet);
 
   for (let r = dataset_row_st; r <= dataset_row_ed; r++) {
     let start_r;
@@ -1755,7 +1754,7 @@ let nullCellRender = function (
       start_r + offsetTop - bodrder05
     );
 
-    MBLsheetTableContent.fillStyle = style.background || "rgba(0, 0, 0, .1)";
+    MBLsheetTableContent.fillStyle = style.background || "#fff";
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
   }
@@ -2083,7 +2082,7 @@ let cellRender = function (
       start_r + offsetTop - bodrder05
     );
 
-    MBLsheetTableContent.fillStyle = style.background || "rgba(0, 0, 0, .1)";
+    MBLsheetTableContent.fillStyle = style.background || "#fff";
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
 
@@ -2578,7 +2577,7 @@ let cellRender = function (
       textInfo.values[0] = {
         ...curValues,
         left: style.left != null ? style.left : curValues.left,
-        top: style.top != null ? style.top : curValues.top,
+        top: curValues.top,
       };
     }
     //若单元格格式为自定义数字格式（[red]） 文本颜色为红色
