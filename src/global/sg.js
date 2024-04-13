@@ -197,15 +197,17 @@ function changeSomeValue(obj, config) {
   });
 }
 
-export function renderIcon(icon, ctx, posi) {
+export function renderIcon(icon, ctx, posi, obj) {
   const curIcon = `${iconPath}${icon}.png`;
   const curImg = new Image();
 
   curImg.src = curIcon;
   curImg.onload = function (e) {
-    ctx.drawImage(curImg, posi.x, posi.y, posi.w, posi.h);
+    ctx.drawImage(curImg, posi.x * Store.devicePixelRatio, posi.y * Store.devicePixelRatio, posi.w, posi.h);
   };
 }
+
+
 
 function renderExtraIcon(curColumns, coord, curSheet, ctx) {
   //
@@ -239,7 +241,7 @@ function renderExtraIcon(curColumns, coord, curSheet, ctx) {
       y: drawStartR + top,
       w: iconWidth,
       h: iconHeigth,
-    });
+    }, extra);
   }
 }
 

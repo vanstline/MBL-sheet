@@ -356,6 +356,7 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
       //列标题栏序列号
       MBLsheetTableContent.save(); //save scale before draw text
       MBLsheetTableContent.scale(Store.zoomRatio, Store.zoomRatio);
+      // MBLsheetTableContent.scale(Store.devicePixelRatio, Store.devicePixelRatio);
 
       function renderTitle(columnTitle, length = 1, line = 0) {
         console.log("%c Line:368 🍋 line", "color:#42b983", line);
@@ -368,68 +369,85 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
         let finallyVer = Math.round(verticalAlignPos) * (line + 1);
 
         let title;
+        
 
         if (typeof columnTitle === "object") {
-          const { marginLeft = 0, icon, iconSize = [20, 20] } = columnTitle;
-          const curIconSize = Array.isArray(iconSize)
-            ? iconSize
-            : [iconSize ?? 20, iconSize ?? 20];
+          if (Array.isArray(columnTitle)) {
+            const firstMarginLeft = columnTitle[0]?.marginLeft ?? 0
+            const contentWidth = columnTitle.reduce((prev, next) => {
+                const { marginLeft = 0, iconSize = [20, 20] } = next
+                const curIconSize = Array.isArray(iconSize)
+                ? iconSize
+                : [iconSize ?? 20, iconSize ?? 20];
+                const curMarginLeft = 
+                 prev += marginLeft + curIconSize[0]
+                 return prev
+            }, 0)
 
-          console.log(
-            "%c Line:370 🥐",
-            "color:#3f7cff",
-            curIconSize,
-            icon,
-            marginLeft
-          );
-          let textMetrics = getMeasureText(
-            columnTitle.columnTitle,
-            MBLsheetTableContent
-          );
+            let prevWidth = 0 - firstMarginLeft / 2
+            columnTitle?.forEach(item => {
+              const { marginLeft = 0, icon, iconSize = [20, 20], marginTop = 0 } = item
+              const curIconSize = Array.isArray(iconSize)
+                ? iconSize
+                : [iconSize ?? 20, iconSize ?? 20];
 
-          // 水平居中宽度
-          horizonAlignPos = Math.round(
-            start_c + (end_c - start_c) / 2 + offsetLeft - textMetrics.width / 2
-          );
-          console.log(
-            "%c Line:388 🥪 horizonAlignPos",
-            "color:#4fff4B",
-            start_c,
-            offsetLeft,
-            textMetrics
-          );
-          horizonAlignPos -= curIconSize[0] + marginLeft;
-          // if (icon) {
-          // }
-          console.log(
-            "%c Line:395 🍤",
-            "color:#ffdd4d",
-            horizonAlignPos,
-            finallyVer
-          );
-          // console.log(
-          //   "%c Line:388 🥤 horizonAlignPos",
-          //   "color:#7f2b82",
-          //   horizonAlignPos
-          // );
-          title = columnTitle.title;
+               // 水平居中宽度
+              horizonAlignPos = Math.round(
+                start_c + (end_c - start_c) / 2 + offsetLeft - contentWidth / 2
+                );
+              
+              if (icon) {
+                renderIcon(icon, MBLsheetTableContent, {
+                  // x: 0 / Store.zoomRatio,
+                  x: Math.round(horizonAlignPos + prevWidth + marginLeft),
+                  // x: horizonAlignPos,
+                  // y: Math.round(finallyVer - curIconSize[1] / 2 + marginTop),
+                  y: finallyVer - (curIconSize[1] / 2 ) + marginTop,
+                  // y: 0,
+                  w: curIconSize[0],
+                  h: curIconSize[1],
+                }, item);
+              }
 
-          if (icon) {
-            renderIcon(icon, MBLsheetTableContent, {
-              x:
-                start_c +
-                horizonAlignPos +
-                textMetrics.width +
-                curIconSize[0] +
-                marginLeft +
-                marginLeft +
-                marginLeft,
-              y: finallyVer - curIconSize[1] / 2,
-              w: curIconSize[0],
-              h: curIconSize[1],
-            });
+              prevWidth += marginLeft + curIconSize[0]
+    
+            })
+
+          } else {
+            const { marginLeft = 0, icon, iconSize = [20, 20], marginTop = 0 } = columnTitle;
+            const curIconSize = Array.isArray(iconSize)
+              ? iconSize
+              : [iconSize ?? 20, iconSize ?? 20];
+
+            let textMetrics = getMeasureText(
+              columnTitle.title,
+              MBLsheetTableContent
+            );
+
+            const contentWidth = textMetrics.width + curIconSize[0] + marginLeft
+
+            // 水平居中宽度
+            horizonAlignPos = Math.round(
+              start_c + (end_c - start_c) / 2 + offsetLeft - contentWidth / 2
+            );
+    
+            title = columnTitle.title;
+
+            if (icon) {
+              renderIcon(icon, MBLsheetTableContent, {
+                // x: 0 / Store.zoomRatio,
+                x: Math.round(horizonAlignPos + contentWidth - marginLeft * 2),
+                // x: horizonAlignPos,
+                // y: Math.round(finallyVer - curIconSize[1] / 2 + marginTop),
+                y: finallyVer - (curIconSize[1] / 2 ) + marginTop,
+                // y: 0,
+                w: curIconSize[0],
+                h: curIconSize[1],
+              }, columnTitle);
+            }
           }
-        } else {
+         
+        }  else {
           let textMetrics = getMeasureText(columnTitle, MBLsheetTableContent);
 
           // 水平居中宽度
@@ -438,19 +456,21 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
           );
           title = columnTitle;
         }
-        console.log("%c Line:397 🍌 title", "color:#ffdd4d", title);
+        // console.log("%c Line:397 🍌 title", "color:#ffdd4d", title);
 
         console.log(
           "%c Line:414 🥖 horizonAlignPos",
           "color:#42b983",
-          horizonAlignPos
+          horizonAlignPos, finallyVer, Store.zoomRatio
         );
-        MBLsheetTableContent.fillText(
-          title,
-
-          horizonAlignPos / Store.zoomRatio,
-          finallyVer / Store.zoomRatio
-        );
+        if (title != null) {
+          MBLsheetTableContent.fillText(
+            title,
+            horizonAlignPos / Store.zoomRatio,
+            finallyVer / Store.zoomRatio
+          );
+        }
+        
       }
 
       if (Array.isArray(titleInfo)) {

@@ -262,7 +262,6 @@ function chatatABC(n) {
       n = Math.floor(n / len) - 1;
     }
 
-    console.log("%c Line:266 🌰 s", "color:#fca650", s);
     return s;
   }
 

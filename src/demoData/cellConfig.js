@@ -179,10 +179,31 @@ var columns = [
         title: "样本类型",
         icon: "QuestionCircleOutlined",
         marginLeft: 12,
-        iconSize: 20,
+        marginTop: 4,
+        iconSize: 24,
       },
+      [
+          {
+            icon: "ArrowCircleDownOutlined",
+            marginLeft: 0,
+            marginTop: 4,
+            iconSize: 24,
+          },
+          {
+            icon: "UpDownCircleOutlined",
+            marginLeft: 12,
+            marginTop: 4,
+            iconSize: 24,
+          },
+          {
+            icon: "CloseCircleOutlined",
+            marginLeft: 12,
+            marginTop: 4,
+            iconSize: 24,
+          },
+      ]
       // "样本类型22",
-      "样本类型444",
+      // "样本类型444",
     ],
     // title: "样本类型",
     width: 200,
@@ -218,6 +239,53 @@ var columns = [
       );
     },
   },
+  // {
+  //   dataIndex: "sampleTypeId2",
+  //   title: [
+  //     // "样本类型",
+  //     {
+  //       title: "样本类型2222",
+  //       icon: "QuestionCircleOutlined",
+  //       marginLeft: 12,
+  //       iconSize: 20,
+  //     },
+  //     // "样本类型22",
+  //     // "样本类型444",
+  //   ],
+  //   // title: "样本类型",
+  //   width: 200,
+  //   fieldsProps: {
+  //     // defaultValue: '菌株',
+  //     // type: "select",
+  //     // // type2: "multi",
+  //     // options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
+  //     // options: [
+  //     //   { label: "菌株", value: "4" },
+  //     //   { label: "PCR产物(已纯化)", value: 1 },
+  //     // ],
+  //     verifyFn(text, row) {
+  //       const d = {
+  //         status: !!text,
+  //         // status: !text,
+  //         message: `当前值为${text}，不符合规则`,
+  //       };
+
+  //       return d;
+  //     },
+  //   },
+  //   // render: (text, record, index) => {
+  //   //   return record?.cxSampleCartInfo?.sampleTypeId;
+  //   // },
+  //   onchange: (text, record, i, config) => {
+  //     config.setRowData(
+  //       {
+  //         sampleName: text,
+  //         sampleTypeId: text,
+  //       },
+  //       ["sampleName"]
+  //     );
+  //   },
+  // },
   // {
   //   dataIndex: "sampleTypeNamed",
   //   title: "样本类型",
