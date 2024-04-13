@@ -295,9 +295,18 @@ export default function MBLsheetHandler() {
     menuButton.inputMenuButtonFocus(e.target);
   });
 
+
+  $('#MBLsheet-cols-h-c').mousedown(function (event) {
+    let mainSheetMouse = mouseposition(event.pageX, event.pageY)
+    let container_offset = $("#" + Store.container).offset();
+    let mouse = [mainSheetMouse[0] + Store.rowHeaderWidth, mainSheetMouse[1] + container_offset.top]
+    console.log("%c Line:301 🥛 mouse", "color:#e41a6a", mouse);
+  })
+
   //表格mousedown
   $("#MBLsheet-cell-main, #MBLsheetTableContent")
     .mousedown(function (event) {
+      
       if ($(event.target).hasClass("MBLsheet-mousedown-cancel")) {
         return;
       }

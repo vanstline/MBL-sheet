@@ -179,27 +179,27 @@ var columns = [
         title: "样本类型",
         icon: "QuestionCircleOutlined",
         marginLeft: 12,
-        marginTop: 4,
-        iconSize: 24,
+        marginTop: 0,
+        iconSize: 16,
       },
       [
           {
             icon: "ArrowCircleDownOutlined",
             marginLeft: 0,
             marginTop: 4,
-            iconSize: 24,
+            iconSize: 16,
           },
           {
             icon: "UpDownCircleOutlined",
             marginLeft: 12,
             marginTop: 4,
-            iconSize: 24,
+            iconSize: 16,
           },
           {
             icon: "CloseCircleOutlined",
             marginLeft: 12,
             marginTop: 4,
-            iconSize: 24,
+            iconSize: 16,
           },
       ]
       // "样本类型22",

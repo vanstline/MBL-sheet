@@ -196,14 +196,24 @@ function changeSomeValue(obj, config) {
     }
   });
 }
+/**
+ * 注册事件
+ * @param {*} coord 
+ * @param {*} eventObj 
+ */
+function registerEvent(coord, eventObj) {
+  console.log("%c Line:201 🍣 eventObj", "color:#7f2b82",coord, eventObj);
+
+}
 
 export function renderIcon(icon, ctx, posi, obj) {
+  registerEvent(posi, obj)
   const curIcon = `${iconPath}${icon}.png`;
   const curImg = new Image();
 
   curImg.src = curIcon;
   curImg.onload = function (e) {
-    ctx.drawImage(curImg, posi.x * Store.devicePixelRatio, posi.y * Store.devicePixelRatio, posi.w, posi.h);
+    ctx.drawImage(curImg, posi.x * Store.devicePixelRatio, posi.y * Store.devicePixelRatio, posi.w * Store.devicePixelRatio, posi.h * Store.devicePixelRatio);
   };
 }
 
