@@ -25,6 +25,10 @@ export function MBLsheetupdateCell(
   cover,
   isnotfocus
 ) {
+  const wrapRect = document
+    .getElementById(Store.container)
+    ?.getBoundingClientRect();
+
   if (!checkProtectionLocked(row_index1, col_index1, Store.currentSheetIndex)) {
     $("#MBLsheet-functionbox-cell").blur();
     return;
@@ -134,8 +138,8 @@ export function MBLsheetupdateCell(
       Store.calculatebarHeight -
       Store.sheetBarHeight -
       Store.statisticBarHeight,
-    left: left,
-    top: top,
+    left: left - wrapRect.left,
+    top: top - wrapRect.top,
   };
 
   let inputContentScale = {
@@ -355,6 +359,7 @@ export function MBLsheetupdateCell(
     input_postition["left"] = newLeft - 2;
   }
 
+  console.log("%c Line:358 🍔", "color:#33a5ff");
   $("#MBLsheet-input-box").css(input_postition);
   $("#MBLsheet-rich-text-editor").css(inputContentScale);
 

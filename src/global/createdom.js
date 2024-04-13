@@ -157,7 +157,7 @@ export default function MBLsheetcreatedom(
   $("body").append(maskHTML);
   $("body").append(colsmenuHTML);
   $("body").append(rightclickHTML());
-  $("body").append(inputHTML);
+  $("#" + Store.container).append(inputHTML);
   $("body").append(replaceHtml(filtermenuHTML(), { menuid: "filter" }));
   $("body").append(replaceHtml(filtersubmenuHTML(), { menuid: "filter" }));
   $("body").append(sheetconfigHTML());

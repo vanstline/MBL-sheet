@@ -238,7 +238,7 @@ var columns = [
       icons: "DeleteOutlined",
       style: {
         width: 60,
-        top: 5,
+        top: 4,
         left: 20,
       },
       onclick: (text, data, index) => {
