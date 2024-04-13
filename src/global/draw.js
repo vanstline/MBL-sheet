@@ -25,6 +25,7 @@ import locale from "../locale/locale";
 import sheetmanage from "../controllers/sheetmanage";
 import { setVerifyByKey, clearVerify, hasVerifyByKey } from "./verify";
 import { getRowData } from "../controllers/observer";
+import { renderIcon } from "./sg";
 
 const iconsPath = "../assets/icons/";
 
@@ -320,12 +321,12 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
     // abc = `${abc}
     // 123
     // ${abc}`;
-    let title = Store.columnHeaderArr[c];
+    let titleInfo = Store.columnHeaderArr[c];
     //列标题单元格渲染前触发，return false 则不渲染该单元格
     if (
       !method.createHookFunction(
         "columnTitleCellRenderBefore",
-        title,
+        titleInfo,
         {
           c: c,
           left: start_c + offsetLeft - 1,
@@ -356,56 +357,108 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
       MBLsheetTableContent.save(); //save scale before draw text
       MBLsheetTableContent.scale(Store.zoomRatio, Store.zoomRatio);
 
-      function renderTitle(title, length = 1, line = 0) {
+      function renderTitle(columnTitle, length = 1, line = 0) {
         console.log("%c Line:368 🍋 line", "color:#42b983", line);
+
+        let horizonAlignPos;
+        // 垂直居中高度
         let verticalAlignPos = Math.round(
           Store.columnHeaderHeight / (1 + length)
         );
         let finallyVer = Math.round(verticalAlignPos) * (line + 1);
 
-        let textMetrics = getMeasureText(title, MBLsheetTableContent);
-        console.log("%c Line:359 🍷 textMetrics", "color:#b03734", textMetrics);
-        //MBLsheetTableContent.measureText(title);
+        let title;
 
-        let horizonAlignPos = Math.round(
-          start_c + (end_c - start_c) / 2 + offsetLeft - textMetrics.width / 2
-        );
-        if (length === 2) {
+        if (typeof columnTitle === "object") {
+          const { marginLeft = 0, icon, iconSize = [20, 20] } = columnTitle;
+          const curIconSize = Array.isArray(iconSize)
+            ? iconSize
+            : [iconSize ?? 20, iconSize ?? 20];
+
           console.log(
-            "%c Line:370 🥪 finallyVer",
+            "%c Line:370 🥐",
             "color:#3f7cff",
-            verticalAlignPos,
+            curIconSize,
+            icon,
+            marginLeft
+          );
+          let textMetrics = getMeasureText(
+            columnTitle.columnTitle,
+            MBLsheetTableContent
+          );
+
+          // 水平居中宽度
+          horizonAlignPos = Math.round(
+            start_c + (end_c - start_c) / 2 + offsetLeft - textMetrics.width / 2
+          );
+          console.log(
+            "%c Line:388 🥪 horizonAlignPos",
+            "color:#4fff4B",
+            start_c,
+            offsetLeft,
+            textMetrics
+          );
+          horizonAlignPos -= curIconSize[0] + marginLeft;
+          // if (icon) {
+          // }
+          console.log(
+            "%c Line:395 🍤",
+            "color:#ffdd4d",
+            horizonAlignPos,
             finallyVer
           );
-        }
+          // console.log(
+          //   "%c Line:388 🥤 horizonAlignPos",
+          //   "color:#7f2b82",
+          //   horizonAlignPos
+          // );
+          title = columnTitle.title;
 
+          if (icon) {
+            renderIcon(icon, MBLsheetTableContent, {
+              x:
+                start_c +
+                horizonAlignPos +
+                textMetrics.width +
+                curIconSize[0] +
+                marginLeft +
+                marginLeft +
+                marginLeft,
+              y: finallyVer - curIconSize[1] / 2,
+              w: curIconSize[0],
+              h: curIconSize[1],
+            });
+          }
+        } else {
+          let textMetrics = getMeasureText(columnTitle, MBLsheetTableContent);
+
+          // 水平居中宽度
+          horizonAlignPos = Math.round(
+            start_c + (end_c - start_c) / 2 + offsetLeft - textMetrics.width / 2
+          );
+          title = columnTitle;
+        }
+        console.log("%c Line:397 🍌 title", "color:#ffdd4d", title);
+
+        console.log(
+          "%c Line:414 🥖 horizonAlignPos",
+          "color:#42b983",
+          horizonAlignPos
+        );
         MBLsheetTableContent.fillText(
           title,
+
           horizonAlignPos / Store.zoomRatio,
           finallyVer / Store.zoomRatio
         );
       }
-      if (Array.isArray(title)) {
-        // let verticalAlignPos = Math.round(Store.columnHeaderHeight / 2);
 
-        // MBLsheetTableContent.fillText(
-        //   title,
-        //   horizonAlignPos / Store.zoomRatio,
-        //   verticalAlignPos / Store.zoomRatio
-        // );
-        // console.log(
-        //   "%c Line:365 🍑 title",
-        //   "color:#3f7cff",
-        //   title,
-        //   Store.zoomRatio,
-        //   horizonAlignPos,
-        //   verticalAlignPos
-        // );
-        for (let i = 0; i < title.length; i++) {
-          renderTitle(title[i], title.length, i);
+      if (Array.isArray(titleInfo)) {
+        for (let i = 0; i < titleInfo.length; i++) {
+          renderTitle(titleInfo[i], titleInfo.length, i);
         }
-      } else if (typeof title === "string") {
-        renderTitle(title);
+      } else if (typeof titleInfo === "string") {
+        renderTitle(titleInfo);
       }
       MBLsheetTableContent.restore(); //restore scale after draw text
     }
@@ -480,7 +533,7 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
 
     method.createHookFunction(
       "columnTitleCellRenderAfter",
-      title,
+      titleInfo,
       {
         c: c,
         left: start_c + offsetLeft - 1,

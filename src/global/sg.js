@@ -73,8 +73,8 @@ function sgInit(setting, config, MBLsheet) {
     ],
     data: [sheet],
     hook: {
-      cellRenderAfter: renderIcon,
-      nuuCellRenderAfter: renderIcon,
+      cellRenderAfter: renderExtraIcon,
+      nuuCellRenderAfter: renderExtraIcon,
     },
   });
 
@@ -197,8 +197,18 @@ function changeSomeValue(obj, config) {
   });
 }
 
-function renderIcon(curColumns, coord, curSheet, ctx) {
-  // console.log("%c Line:78 🍩 coord", "color:#ea7e5c", curColumns, coord);
+export function renderIcon(icon, ctx, posi) {
+  const curIcon = `${iconPath}${icon}.png`;
+  const curImg = new Image();
+
+  curImg.src = curIcon;
+  curImg.onload = function (e) {
+    ctx.drawImage(curImg, posi.x, posi.y, posi.w, posi.h);
+  };
+}
+
+function renderExtraIcon(curColumns, coord, curSheet, ctx) {
+  //
   const extra = curColumns?.extra;
   if (extra?.icons) {
     const [iconWidth = 20, iconHeigth = 20] = extra?.iconSize
@@ -211,19 +221,25 @@ function renderIcon(curColumns, coord, curSheet, ctx) {
     const { width = 0, left = 0, top = 0 } = style;
     const drawStartR = start_r + 0;
     const drawStartC = end_c - width + 0 - 1;
-    const curIcon = `${iconPath}${extra?.icons}.png`;
-    const curImg = new Image();
+    // const curIcon = `${iconPath}${extra?.icons}.png`;
+    // const curImg = new Image();
 
-    curImg.src = curIcon;
-    curImg.onload = function (e) {
-      ctx.drawImage(
-        curImg,
-        drawStartC + left,
-        drawStartR + top,
-        iconWidth,
-        iconHeigth
-      );
-    };
+    // curImg.src = curIcon;
+    // curImg.onload = function (e) {
+    //   ctx.drawImage(
+    //     curImg,
+    //     drawStartC + left,
+    //     drawStartR + top,
+    //     iconWidth,
+    //     iconHeigth
+    //   );
+    // };
+    renderIcon(extra?.icons, ctx, {
+      x: drawStartC + left,
+      y: drawStartR + top,
+      w: iconWidth,
+      h: iconHeigth,
+    });
   }
 }
 
