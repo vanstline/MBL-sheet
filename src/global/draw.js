@@ -316,12 +316,16 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
     // if(end_c > scrollWidth + drawWidth+1){
     //     break;
     // }
-    let abc = chatatABC(c);
+    // let abc = chatatABC(c);
+    // abc = `${abc}
+    // 123
+    // ${abc}`;
+    let title = Store.columnHeaderArr[c];
     //列标题单元格渲染前触发，return false 则不渲染该单元格
     if (
       !method.createHookFunction(
         "columnTitleCellRenderBefore",
-        abc,
+        title,
         {
           c: c,
           left: start_c + offsetLeft - 1,
@@ -352,19 +356,57 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
       MBLsheetTableContent.save(); //save scale before draw text
       MBLsheetTableContent.scale(Store.zoomRatio, Store.zoomRatio);
 
-      let textMetrics = getMeasureText(abc, MBLsheetTableContent);
-      //MBLsheetTableContent.measureText(abc);
+      function renderTitle(title, length = 1, line = 0) {
+        console.log("%c Line:368 🍋 line", "color:#42b983", line);
+        let verticalAlignPos = Math.round(
+          Store.columnHeaderHeight / (1 + length)
+        );
+        let finallyVer = Math.round(verticalAlignPos) * (line + 1);
 
-      let horizonAlignPos = Math.round(
-        start_c + (end_c - start_c) / 2 + offsetLeft - textMetrics.width / 2
-      );
-      let verticalAlignPos = Math.round(Store.columnHeaderHeight / 2);
+        let textMetrics = getMeasureText(title, MBLsheetTableContent);
+        console.log("%c Line:359 🍷 textMetrics", "color:#b03734", textMetrics);
+        //MBLsheetTableContent.measureText(title);
 
-      MBLsheetTableContent.fillText(
-        abc,
-        horizonAlignPos / Store.zoomRatio,
-        verticalAlignPos / Store.zoomRatio
-      );
+        let horizonAlignPos = Math.round(
+          start_c + (end_c - start_c) / 2 + offsetLeft - textMetrics.width / 2
+        );
+        if (length === 2) {
+          console.log(
+            "%c Line:370 🥪 finallyVer",
+            "color:#3f7cff",
+            verticalAlignPos,
+            finallyVer
+          );
+        }
+
+        MBLsheetTableContent.fillText(
+          title,
+          horizonAlignPos / Store.zoomRatio,
+          finallyVer / Store.zoomRatio
+        );
+      }
+      if (Array.isArray(title)) {
+        // let verticalAlignPos = Math.round(Store.columnHeaderHeight / 2);
+
+        // MBLsheetTableContent.fillText(
+        //   title,
+        //   horizonAlignPos / Store.zoomRatio,
+        //   verticalAlignPos / Store.zoomRatio
+        // );
+        // console.log(
+        //   "%c Line:365 🍑 title",
+        //   "color:#3f7cff",
+        //   title,
+        //   Store.zoomRatio,
+        //   horizonAlignPos,
+        //   verticalAlignPos
+        // );
+        for (let i = 0; i < title.length; i++) {
+          renderTitle(title[i], title.length, i);
+        }
+      } else if (typeof title === "string") {
+        renderTitle(title);
+      }
       MBLsheetTableContent.restore(); //restore scale after draw text
     }
 
@@ -438,7 +480,7 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
 
     method.createHookFunction(
       "columnTitleCellRenderAfter",
-      abc,
+      title,
       {
         c: c,
         left: start_c + offsetLeft - 1,

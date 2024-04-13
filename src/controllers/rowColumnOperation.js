@@ -1045,7 +1045,8 @@ export function rowColumnOperationInitial() {
         width: col - col_pre - 1,
         display: "block",
       });
-      $("#MBLsheet-cols-menu-btn").css({ left: col - 19, display: "block" });
+      // 隐藏头部菜单
+      // $("#MBLsheet-cols-menu-btn").css({ left: col - 19, display: "block" });
 
       $("#MBLsheet-cols-change-size").css({ left: col - 5 });
       if (x < col && x >= col - 5) {

@@ -173,7 +173,8 @@ var columns = [
   },
   {
     dataIndex: "sampleTypeId1",
-    title: "样本类型",
+    title: ["样本类型", "样本类型22", "样本类型444"],
+    // title: "样本类型",
     width: 200,
     fieldsProps: {
       // defaultValue: '菌株',

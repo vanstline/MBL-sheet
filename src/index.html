@@ -87,7 +87,11 @@
       // setTimeout(() => {
         console.log("%c Line:91 🍉 columns", "color:#93c0a4", columns, excelDataSource);
       MBLsheet.init(
-        { container: "mblsheet" },
+        { 
+          container: "mblsheet", 
+          columnHeaderHeight: 100
+      
+      },
         {
           columns: columns,
           dataSource: [],
