@@ -672,7 +672,11 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
       const curCol = d?.[0]?.[c];
       const defaultV = curCol?.fieldsProps?.defaultValue;
       if (defaultV !== undefined) {
-        row.push({ v: defaultV, m: defaultV, ...curCol });
+        row.push({
+          v: defaultV,
+          m: defaultV,
+          ...JSON.parse(JSON.stringify(columns[c] ?? {})),
+        });
       } else {
         if (
           curCol.extra &&
@@ -682,7 +686,7 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
           const curV = curCol.render();
           row.push({ v: curV, m: curV, ...curCol });
         } else {
-          row.push(columns[c] ?? null);
+          row.push({ ...(columns[c] ?? null) });
         }
       }
     }

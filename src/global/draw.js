@@ -357,8 +357,6 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
       // MBLsheetTableContent.scale(Store.devicePixelRatio, Store.devicePixelRatio);
 
       function renderTitle(columnTitle, length = 1, line = 0) {
-        console.log("%c Line:368 🍋 line", "color:#42b983", line);
-
         let horizonAlignPos;
         // 垂直居中高度
         let verticalAlignPos = Math.round(
@@ -472,15 +470,7 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
           );
           title = columnTitle;
         }
-        // console.log("%c Line:397 🍌 title", "color:#ffdd4d", title);
 
-        console.log(
-          "%c Line:414 🥖 horizonAlignPos",
-          "color:#42b983",
-          horizonAlignPos,
-          finallyVer,
-          Store.zoomRatio
-        );
         if (title != null) {
           MBLsheetTableContent.fillText(
             title,
@@ -2777,7 +2767,7 @@ let cellRender = function (
     MBLsheetTableContent.closePath();
   }
 
-  // console.log("%c Line:2611 🥒", "color:#ffdd4d", cell);
+  //
   if (cell?.disabled) {
     MBLsheetTableContent.beginPath();
 

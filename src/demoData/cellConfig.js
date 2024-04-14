@@ -114,7 +114,6 @@ var columns = [
           }
         }
 
-        console.log("%c Line:119 🥃 status", "color:#2eafb0", status);
         return {
           status,
           message,
@@ -183,9 +182,7 @@ var columns = [
         marginTop: 0,
         iconSize: 16,
         tips: "我是样本类型的描述",
-        onclick: () => {
-          console.log("%c Line:186 🍇  样本类型 点击了", "color:#93c0a4");
-        },
+        onclick: () => {},
       },
       [
         {
@@ -232,7 +229,7 @@ var columns = [
     // title: "样本类型",
     width: 200,
     fieldsProps: {
-      // defaultValue: '菌株',
+      defaultValue: "菌株",
       // type: "select",
       // // type2: "multi",
       // options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
@@ -418,7 +415,7 @@ var columns = [
 //       });
 //     },
 //     onblur(val, r, c) {
-//       console.log("%c Line:305 🍇 val, r, c", "color:#4fff4B", val, r, c);
+//
 //     },
 //   },
 
@@ -435,7 +432,7 @@ var columns = [
 //       options: ["PCR未纯化", "PCR已纯化", "菌株", "质粒", "123"],
 //     },
 //     onchange(text, record, i, config) {
-//       console.log("%c Line:319 🥤 text", "color:#2eafb0", text, text === "123");
+//
 //       config.setDisabled({
 //         resistance: text === "123",
 //       });
