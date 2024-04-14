@@ -3,7 +3,7 @@ import { scroll } from "./api";
 import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
 import { getData, initDataSource, setData } from "./sg/data";
 import { changeValue, getRowData } from "../controllers/observer";
-import { iconPath } from "./sg/icons";
+// import { iconPath } from "./sg/icons";
 import { colLocation, mouseposition, rowLocationByIndex } from "./location";
 import { checkProtectionAllSelected } from "../controllers/protection";
 import { selectHelpboxFill, selectHightlightShow } from "../controllers/select";

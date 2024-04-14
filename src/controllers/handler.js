@@ -303,7 +303,6 @@ export default function MBLsheetHandler() {
       mainSheetMouse[0] + Store.rowHeaderWidth,
       mainSheetMouse[1] + container_offset.top,
     ];
-    console.log("%c Line:301 🥛 mouse", "color:#e41a6a", mouse);
   });
 
   //表格mousedown
@@ -2075,8 +2074,6 @@ export default function MBLsheetHandler() {
   $(document).on("mousemove.MBLsheetEvent", function (event) {
     MBLsheetPostil.overshow(event); //有批注显示
     hyperlinkCtrl.overshow(event); //链接提示显示
-    // console.log("%c Line:2076 🥪 event", "color:#42b983", event);
-
     window.cancelAnimationFrame(Store.jfautoscrollTimeout);
 
     if (

@@ -174,8 +174,12 @@ export function updateBlur(event) {
     col_index = col_location[2];
 
   const [r, c] = Store.MBLsheetCellUpdate;
-  console.log("%c Line:182 ", "color:#93c0a4", row_index, col_index, r, c);
   formula.updatecell(r, c);
+  
+  const curColumn = Store?.flowdata?.[0]?.[c]
+  if (['autocomplete','select'].includes(curColumn?.fieldsProps?.type)) {
+    $("#MBLsheet-dataVerification-dropdown-List").hide();
+  }
   const sheet = sheetmanage.getSheetByIndex();
   const curEle = Store?.flowdata?.[r]?.[c];
   const onblur = sheet?.columns?.[c]?.onblur;
@@ -206,7 +210,7 @@ export function updateBlur(event) {
     const curSetRowData = (obj, dependence = []) =>
       setRowData(obj, r, keyNumMap, true, dependence);
 
-    Store?.flowdata?.[0]?.[c].onblur(newVal, rowData, r, {
+    curColumn.onblur(newVal, rowData, r, {
       setRowData: curSetRowData,
       setDisabled: curSetDisabled,
     });

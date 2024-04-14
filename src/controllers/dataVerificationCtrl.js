@@ -15,6 +15,7 @@ import sheetmanage from "./sheetmanage";
 import { getSheetIndex, getRangetxt } from "../methods/get";
 import locale from "../locale/locale";
 import Store from "../store";
+import { updateBlur } from "./observer";
 
 const dataVerificationCtrl = {
   defaultItem: {
@@ -292,6 +293,7 @@ const dataVerificationCtrl = {
               }
             ).join(",");
           } else {
+            updateBlur(e)
             $("#MBLsheet-dataVerification-dropdown-List").hide();
           }
           let last =
@@ -1448,7 +1450,7 @@ const dataVerificationCtrl = {
       _this.dataVerification == null ||
       _this.dataVerification[r + "_" + c] == null
     ) {
-      $("#MBLsheet-dataVerification-dropdown-List").hide();
+
       return;
     }
 
