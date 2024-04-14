@@ -2,13 +2,14 @@ import Store from "../store";
 import { scroll } from "./api";
 import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
 import { getData, initDataSource, setData } from "./sg/data";
-import { changeValue } from "../controllers/observer";
+import { changeValue, getRowData } from "../controllers/observer";
 import { iconPath } from "./sg/icons";
 import { colLocation, mouseposition, rowLocationByIndex } from "./location";
 import { checkProtectionAllSelected } from "../controllers/protection";
 import { selectHelpboxFill, selectHightlightShow } from "../controllers/select";
 import { countfunc } from "./count";
 import { icons } from "../controllers/constant";
+import sheetmanage from "../controllers/sheetmanage";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -98,6 +99,7 @@ function sgInit(setting, config, MBLsheet) {
   MBLsheet.addRow = (cur, length) => MBLsheetextendtable("row", cur, length);
 
   MBLsheet.verify = verify;
+  MBLsheet.verifyRowFn = verifyRowFn;
 
   MBLsheet.getData = (filterVerify) => {
     const data = getData(sheet);
@@ -156,6 +158,22 @@ function verify() {
     return true;
   }
   return false;
+}
+
+function verifyRowFn(rows) {
+  const sheet = sheetmanage.getSheetByIndex();
+  const fristValue = Store.flowdata[rows][0]?.v;
+
+  const keyNumMap = {};
+  const curRowData = getRowData(rows, 0, fristValue, keyNumMap);
+
+  const verifyArr = sheet.columns?.filter(
+    (item) => typeof item.fieldsProps?.verifyFn === "function"
+  );
+  return verifyArr.some((item, i) => {
+    const cur = item.fieldsProps.verifyFn(curRowData[item.dataIndex], rows);
+    return !cur.status;
+  });
 }
 
 // 全局设置disabled状态

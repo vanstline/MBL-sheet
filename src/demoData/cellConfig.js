@@ -91,13 +91,13 @@ var columns = [
       range: [-1, 999999],
       influence: ["sampleTypeId"],
       verifyFn: function (text, r) {
-        const d = {
-          status: text === "123123",
-          message: `当前值为${text}，不符合规则`,
-        };
-        if (!d.status) {
-          return d;
-        }
+        // const d = {
+        //   status: text === "123123",
+        //   message: `当前值为${text}，不符合规则`,
+        // };
+        // if (!d.status) {
+        //   return d;
+        // }
         var status = false;
         var message = "";
         if (text == "1") {
@@ -114,6 +114,7 @@ var columns = [
           }
         }
 
+        console.log("%c Line:119 🥃 status", "color:#2eafb0", status);
         return {
           status,
           message,
@@ -241,7 +242,7 @@ var columns = [
       // ],
       verifyFn(text, row) {
         const d = {
-          status: !!text,
+          status: !text,
           // status: !text,
           message: `当前值为${text}，不符合规则`,
         };
