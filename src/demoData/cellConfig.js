@@ -427,7 +427,7 @@ var columns = [
 //     title: "样本类型",
 
 //     fieldsProps: {
-//       type: "select",
+//       type: "autocomplete",
 
 //       required: true,
 
@@ -441,6 +441,7 @@ var columns = [
 //       config.setRowData(
 //         {
 //           ...record,
+//           sampleTypeName: text?.trim(),
 //           resistance: record.resistance ?? "",
 //         },
 //         ["resistance"]
@@ -792,17 +793,14 @@ var columns = [
 //   },
 
 //   {
-//     dataIndex: "options",
-
 //     title: "操作",
-
+//     width: 60,
 //     extra: {
+//       icons: "DeleteOutlined",
 //       style: {
-//         width: 30,
-
-//         height: 30,
-
-//         background: "pink",
+//         width: 60,
+//         left: 15,
+//         top: 4,
 //       },
 //     },
 //   },

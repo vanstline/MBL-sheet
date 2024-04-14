@@ -8,6 +8,7 @@ import { colLocation, mouseposition, rowLocationByIndex } from "./location";
 import { checkProtectionAllSelected } from "../controllers/protection";
 import { selectHelpboxFill, selectHightlightShow } from "../controllers/select";
 import { countfunc } from "./count";
+import { icons } from "../controllers/constant";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -681,32 +682,49 @@ const debugDrawArea = (ctx, { x, y, w, h }) => {
   ctx.lineTo(x, y);
 
   ctx.strokeStyle = "#1890ff";
-  console.log("%c Line:225 🍣 ctx", "color:#ffdd4d", ctx);
   ctx.stroke();
   ctx.closePath();
 };
 
-export function renderIcon(icon, ctx, posi, obj) {
+export async function renderIcon(icon, ctx, posi, obj) {
   createIconEle(posi, obj);
   registerEvent(posi, obj);
-  const curIcon = `${iconPath}${icon}.png`;
   const curImg = new Image();
 
   const x = transSzieForDPR(posi.x);
   const y = transSzieForDPR(posi.y);
   const w = transSzieForDPR(posi.w);
   const h = transSzieForDPR(posi.h);
-  curImg.src = curIcon;
+  curImg.src = icons[icon];
   curImg.onload = function (e) {
     ctx.drawImage(curImg, x, y, w, h);
   };
 
-  debugDrawArea(ctx, { x, y, w, h });
+  // debugDrawArea(ctx, { x, y, w, h });
 }
+
+const getBase64Image = (src) => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "";
+    img.src = src;
+    img.onload = function () {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx?.drawImage(img, 0, 0, img.width, img.height);
+      const ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase();
+      const dataURL = canvas.toDataURL("image/" + ext);
+      resolve(dataURL);
+    };
+  });
+};
 
 function renderExtraIcon(curColumns, coord, curSheet, ctx) {
   //
   const extra = curColumns?.extra;
+
   if (extra?.icons) {
     const [iconWidth = 20, iconHeigth = 20] = extra?.iconSize
       ? typeof extra.iconSize === "number"

@@ -27,8 +27,6 @@ import { setVerifyByKey, clearVerify, hasVerifyByKey } from "./verify";
 import { getRowData } from "../controllers/observer";
 import { renderIcon } from "./sg";
 
-const iconsPath = "../assets/icons/";
-
 function MBLsheetDrawgridRowTitle(scrollHeight, drawHeight, offsetTop) {
   if (scrollHeight == null) {
     scrollHeight = $("#MBLsheet-cell-main").scrollTop();
@@ -369,52 +367,63 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
         let finallyVer = Math.round(verticalAlignPos) * (line + 1);
 
         let title;
-        
 
         if (typeof columnTitle === "object") {
           if (Array.isArray(columnTitle)) {
-            const firstMarginLeft = columnTitle[0]?.marginLeft ?? 0
+            const firstMarginLeft = columnTitle[0]?.marginLeft ?? 0;
             const contentWidth = columnTitle.reduce((prev, next) => {
-                const { marginLeft = 0, iconSize = [20, 20] } = next
-                const curIconSize = Array.isArray(iconSize)
+              const { marginLeft = 0, iconSize = [20, 20] } = next;
+              const curIconSize = Array.isArray(iconSize)
                 ? iconSize
                 : [iconSize ?? 20, iconSize ?? 20];
-                const curMarginLeft = 
-                 prev += marginLeft + curIconSize[0]
-                 return prev
-            }, 0)
+              const curMarginLeft = (prev += marginLeft + curIconSize[0]);
+              return prev;
+            }, 0);
 
-            let prevWidth = 0 - firstMarginLeft / 2
-            columnTitle?.forEach(item => {
-              const { marginLeft = 0, icon, iconSize = [20, 20], marginTop = 0 } = item
+            let prevWidth = 0 - firstMarginLeft / 2;
+            columnTitle?.forEach((item) => {
+              const {
+                marginLeft = 0,
+                icon,
+                iconSize = [20, 20],
+                marginTop = 0,
+              } = item;
               const curIconSize = Array.isArray(iconSize)
                 ? iconSize
                 : [iconSize ?? 20, iconSize ?? 20];
 
-               // 水平居中宽度
+              // 水平居中宽度
               horizonAlignPos = Math.round(
                 start_c + (end_c - start_c) / 2 + offsetLeft - contentWidth / 2
-                );
-              
+              );
+
               if (icon) {
-                renderIcon(icon, MBLsheetTableContent, {
-                  // x: 0 / Store.zoomRatio,
-                  x: Math.round(horizonAlignPos + prevWidth + marginLeft),
-                  // x: horizonAlignPos,
-                  // y: Math.round(finallyVer - curIconSize[1] / 2 + marginTop),
-                  y: finallyVer - (curIconSize[1] / 2 ) + marginTop,
-                  // y: 0,
-                  w: curIconSize[0],
-                  h: curIconSize[1],
-                }, item);
+                renderIcon(
+                  icon,
+                  MBLsheetTableContent,
+                  {
+                    // x: 0 / Store.zoomRatio,
+                    x: Math.round(horizonAlignPos + prevWidth + marginLeft),
+                    // x: horizonAlignPos,
+                    // y: Math.round(finallyVer - curIconSize[1] / 2 + marginTop),
+                    y: finallyVer - curIconSize[1] / 2 + marginTop,
+                    // y: 0,
+                    w: curIconSize[0],
+                    h: curIconSize[1],
+                  },
+                  item
+                );
               }
 
-              prevWidth += marginLeft + curIconSize[0]
-    
-            })
-
+              prevWidth += marginLeft + curIconSize[0];
+            });
           } else {
-            const { marginLeft = 0, icon, iconSize = [20, 20], marginTop = 0 } = columnTitle;
+            const {
+              marginLeft = 0,
+              icon,
+              iconSize = [20, 20],
+              marginTop = 0,
+            } = columnTitle;
             const curIconSize = Array.isArray(iconSize)
               ? iconSize
               : [iconSize ?? 20, iconSize ?? 20];
@@ -424,30 +433,37 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
               MBLsheetTableContent
             );
 
-            const contentWidth = textMetrics.width + curIconSize[0] + marginLeft
+            const contentWidth =
+              textMetrics.width + curIconSize[0] + marginLeft;
 
             // 水平居中宽度
             horizonAlignPos = Math.round(
               start_c + (end_c - start_c) / 2 + offsetLeft - contentWidth / 2
             );
-    
+
             title = columnTitle.title;
 
             if (icon) {
-              renderIcon(icon, MBLsheetTableContent, {
-                // x: 0 / Store.zoomRatio,
-                x: Math.round(horizonAlignPos + contentWidth - marginLeft * 2),
-                // x: horizonAlignPos,
-                // y: Math.round(finallyVer - curIconSize[1] / 2 + marginTop),
-                y: finallyVer - (curIconSize[1] / 2 ) + marginTop,
-                // y: 0,
-                w: curIconSize[0],
-                h: curIconSize[1],
-              }, columnTitle);
+              renderIcon(
+                icon,
+                MBLsheetTableContent,
+                {
+                  // x: 0 / Store.zoomRatio,
+                  x: Math.round(
+                    horizonAlignPos + contentWidth - marginLeft * 2
+                  ),
+                  // x: horizonAlignPos,
+                  // y: Math.round(finallyVer - curIconSize[1] / 2 + marginTop),
+                  y: finallyVer - curIconSize[1] / 2 + marginTop,
+                  // y: 0,
+                  w: curIconSize[0],
+                  h: curIconSize[1],
+                },
+                columnTitle
+              );
             }
           }
-         
-        }  else {
+        } else {
           let textMetrics = getMeasureText(columnTitle, MBLsheetTableContent);
 
           // 水平居中宽度
@@ -461,7 +477,9 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
         console.log(
           "%c Line:414 🥖 horizonAlignPos",
           "color:#42b983",
-          horizonAlignPos, finallyVer, Store.zoomRatio
+          horizonAlignPos,
+          finallyVer,
+          Store.zoomRatio
         );
         if (title != null) {
           MBLsheetTableContent.fillText(
@@ -470,7 +488,6 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
             finallyVer / Store.zoomRatio
           );
         }
-        
       }
 
       if (Array.isArray(titleInfo)) {

@@ -3,6 +3,15 @@ import Store from "../store";
 import MBLsheetConfigsetting from "./MBLsheetConfigsetting";
 import { getObjType } from "../utils/util";
 import { createToolbarHtml } from "./toolbar";
+import {
+  SearchOutlinedBase,
+  DeleteOutlinedBase,
+  QuestionCircleOutlinedBase,
+  ArrowCircleDownOutlinedBase,
+  CloseCircleOutlinedBase,
+  DownOutlinedBase,
+  UpDownCircleOutlinedBase,
+} from "./iconBase64";
 //dom variable
 const gridHTML = function () {
   const _locale = locale();
@@ -1571,13 +1580,13 @@ function customSheetRightClickConfig() {
 }
 
 const icons = {
-  SearchOutlined: "SearchOutlined",
-  DeleteOutlined: "DeleteOutlined",
-  QuestionCircleOutlined: "QuestionCircleOutlined",
-  ArrowCircleDownOutlined: "ArrowCircleDownOutlined",
-  CloseCircleOutlined: "CloseCircleOutlined",
-  DownOutlined: "DownOutlined",
-  UpDownCircleOutlined: "UpDownCircleOutlined",
+  SearchOutlined: SearchOutlinedBase,
+  DeleteOutlined: DeleteOutlinedBase,
+  QuestionCircleOutlined: QuestionCircleOutlinedBase,
+  ArrowCircleDownOutlined: ArrowCircleDownOutlinedBase,
+  CloseCircleOutlined: CloseCircleOutlinedBase,
+  DownOutlined: DownOutlinedBase,
+  UpDownCircleOutlined: UpDownCircleOutlinedBase,
 };
 
 export {
