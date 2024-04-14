@@ -229,7 +229,7 @@ var columns = [
       // "样本类型444",
     ],
     // title: "样本类型",
-    width: 1200,
+    width: 200,
     fieldsProps: {
       // defaultValue: '菌株',
       // type: "select",

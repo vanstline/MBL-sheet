@@ -82,7 +82,9 @@ export function MBLsheetupdateCell(
 
   let winH = $(window).height(),
     winW = $(window).width();
-  let container_offset = $("#" + Store.container).offset();
+  let container_offset = document
+    .querySelector("#" + Store.container)
+    .getBoundingClientRect();
   let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
   let scrollTop = $("#MBLsheet-cell-main").scrollTop();
 
@@ -404,7 +406,9 @@ export function setCenterInputPosition(row_index, col_index, d) {
 
   let winH = $(window).height(),
     winW = $(window).width();
-  let container_offset = $("#" + Store.container).offset();
+  let container_offset = document
+    .querySelector("#" + Store.container)
+    .getBoundingClientRect();
   let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
   let scrollTop = $("#MBLsheet-cell-main").scrollTop();
 
