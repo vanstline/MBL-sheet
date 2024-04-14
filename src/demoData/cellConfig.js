@@ -181,6 +181,7 @@ var columns = [
         marginLeft: 12,
         marginTop: 0,
         iconSize: 16,
+        tips: "我是样本类型的描述",
         onclick: () => {
           console.log("%c Line:186 🍇  样本类型 点击了", "color:#93c0a4");
         },
@@ -191,6 +192,7 @@ var columns = [
           marginLeft: 0,
           marginTop: 4,
           iconSize: 16,
+
           onclick: () => {
             console.log(
               "%c Line:186 🍇  样本类型 顺序填充 点击了",
@@ -227,7 +229,7 @@ var columns = [
       // "样本类型444",
     ],
     // title: "样本类型",
-    width: 200,
+    width: 1200,
     fieldsProps: {
       // defaultValue: '菌株',
       // type: "select",

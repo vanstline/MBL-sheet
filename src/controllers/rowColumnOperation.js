@@ -57,7 +57,6 @@ import {
 } from "./protection";
 import Store from "../store";
 import MBLsheetConfigsetting from "./MBLsheetConfigsetting";
-import { execCustomEvent } from "../global/sg";
 
 export function rowColumnOperationInitial() {
   //表格行标题 mouse事件
@@ -1068,9 +1067,7 @@ export function rowColumnOperationInitial() {
       $("#MBLsheet-cols-change-size").css("opacity", 0);
     })
     .mouseup(function (event) {
-      if (event.which === 1) {
-        execCustomEvent(event);
-      } else if (event.which == 3) {
+      if (event.which == 3) {
         // *如果禁止前台编辑，则中止下一步操作
         if (!checkIsAllowEdit()) {
           return;

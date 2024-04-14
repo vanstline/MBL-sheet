@@ -4,6 +4,10 @@ import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
 import { getData, initDataSource, setData } from "./sg/data";
 import { changeValue } from "../controllers/observer";
 import { iconPath } from "./sg/icons";
+import { colLocation, mouseposition, rowLocationByIndex } from "./location";
+import { checkProtectionAllSelected } from "../controllers/protection";
+import { selectHelpboxFill, selectHightlightShow } from "../controllers/select";
+import { countfunc } from "./count";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -232,6 +236,434 @@ export function execCustomEvent(event) {
   });
 }
 
+function createIconEle(coord, eventObj) {
+  // MBLsheet-grid-window-1
+  var ele = $("<div class='custom-icon-dom'><div>");
+  ele.css({
+    position: "absolute",
+    top: coord.y,
+    left: coord.x,
+    width: coord.w,
+    height: coord.h,
+    cursor: "pointer",
+    "z-index": 999,
+  });
+  if (eventObj.tips) {
+    // var tipsDom = $('<div><div>')
+    // tipsDom.text(eventObj.tips);
+    ele.attr("title", eventObj.tips);
+  }
+  $("#MBLsheet-grid-window-1").append(ele);
+
+  ele
+    .mousedown(function (event) {
+      if (!checkProtectionAllSelected(Store.currentSheetIndex)) {
+        return;
+      }
+
+      let mouse = mouseposition(event.pageX, event.pageY);
+      let x = mouse[0] + $(this).scrollLeft();
+
+      let row_index = Store.visibledatarow.length - 1,
+        row = Store.visibledatarow[row_index],
+        row_pre = 0;
+      let col_location = colLocation(x),
+        col = col_location[1],
+        col_pre = col_location[0],
+        col_index = col_location[2];
+
+      Store.orderbyindex = col_index; //排序全局函数
+
+      $("#MBLsheet-rightclick-menu").hide();
+      $("#MBLsheet-sheet-list, #MBLsheet-rightclick-sheet-menu").hide();
+      $("#MBLsheet-filter-menu, #MBLsheet-filter-submenu").hide();
+
+      //mousedown是右键
+      if (event.which == "3") {
+        let isright = false;
+
+        for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
+          let obj_s = Store.MBLsheet_select_save[s];
+
+          if (
+            obj_s["column"] != null &&
+            col_index >= obj_s["column"][0] &&
+            col_index <= obj_s["column"][1] &&
+            obj_s["row"][0] == 0 &&
+            obj_s["row"][1] == Store.flowdata.length - 1
+          ) {
+            isright = true;
+            break;
+          }
+        }
+
+        if (isright) {
+          return;
+        }
+      }
+
+      let left = col_pre,
+        width = col - col_pre - 1;
+      let columnseleted = [col_index, col_index];
+
+      Store.MBLsheet_scroll_status = true;
+
+      //公式相关
+      let $input = $("#MBLsheet-input-box");
+      if (parseInt($input.css("top")) > 0) {
+        if (
+          formula.rangestart ||
+          formula.rangedrag_column_start ||
+          formula.rangedrag_row_start ||
+          formula.israngeseleciton() ||
+          $("#MBLsheet-ifFormulaGenerator-multiRange-dialog").is(":visible")
+        ) {
+          //公式选区
+          let changeparam = menuButton.mergeMoveMain(
+            columnseleted,
+            [0, row_index],
+            { row_focus: 0, column_focus: col_index },
+            row_pre,
+            row,
+            left,
+            width
+          );
+          if (changeparam != null) {
+            columnseleted = changeparam[0];
+            //rowseleted= changeparam[1];
+            //top = changeparam[2];
+            //height = changeparam[3];
+            left = changeparam[4];
+            width = changeparam[5];
+          }
+
+          if (event.shiftKey) {
+            let last = formula.func_selectedrange;
+
+            let left = 0,
+              width = 0,
+              columnseleted = [];
+            if (last.left > col_pre) {
+              left = col_pre;
+              width = last.left + last.width - col_pre;
+
+              if (last.column[1] > last.column_focus) {
+                last.column[1] = last.column_focus;
+              }
+
+              columnseleted = [col_index, last.column[1]];
+            } else if (last.left == col_pre) {
+              left = col_pre;
+              width = last.left + last.width - col_pre;
+              columnseleted = [col_index, last.column[0]];
+            } else {
+              left = last.left;
+              width = col - last.left - 1;
+
+              if (last.column[0] < last.column_focus) {
+                last.column[0] = last.column_focus;
+              }
+
+              columnseleted = [last.column[0], col_index];
+            }
+
+            let changeparam = menuButton.mergeMoveMain(
+              columnseleted,
+              [0, row_index],
+              { row_focus: 0, column_focus: col_index },
+              row_pre,
+              row,
+              left,
+              width
+            );
+            if (changeparam != null) {
+              columnseleted = changeparam[0];
+              //rowseleted= changeparam[1];
+              //top = changeparam[2];
+              //height = changeparam[3];
+              left = changeparam[4];
+              width = changeparam[5];
+            }
+
+            last["column"] = columnseleted;
+
+            last["left_move"] = left;
+            last["width_move"] = width;
+
+            formula.func_selectedrange = last;
+          } else if (
+            event.ctrlKey &&
+            $("#MBLsheet-rich-text-editor").find("span").last().text() != ","
+          ) {
+            //按住ctrl 选择选区时  先处理上一个选区
+            let vText = $("#MBLsheet-rich-text-editor").text() + ",";
+            if (vText.length > 0 && vText.substr(0, 1) == "=") {
+              vText = formula.functionHTMLGenerate(vText);
+
+              if (window.getSelection) {
+                // all browsers, except IE before version 9
+                let currSelection = window.getSelection();
+                formula.functionRangeIndex = [
+                  $(currSelection.anchorNode).parent().index(),
+                  currSelection.anchorOffset,
+                ];
+              } else {
+                // Internet Explorer before version 9
+                let textRange = document.selection.createRange();
+                formula.functionRangeIndex = textRange;
+              }
+
+              $("#MBLsheet-rich-text-editor").html(vText);
+
+              formula.canceFunctionrangeSelected();
+              formula.createRangeHightlight();
+            }
+
+            formula.rangestart = false;
+            formula.rangedrag_column_start = false;
+            formula.rangedrag_row_start = false;
+
+            $("#MBLsheet-functionbox-cell").html(vText);
+            formula.rangeHightlightselected($("#MBLsheet-rich-text-editor"));
+
+            //再进行 选区的选择
+            formula.israngeseleciton();
+            formula.func_selectedrange = {
+              left: left,
+              width: width,
+              top: rowLocationByIndex(0)[0],
+              height: rowLocationByIndex(0)[1] - rowLocationByIndex(0)[0] - 1,
+              left_move: left,
+              width_move: width,
+              top_move: row_pre,
+              height_move: row - row_pre - 1,
+              row: [0, row_index],
+              column: columnseleted,
+              row_focus: 0,
+              column_focus: col_index,
+            };
+          } else {
+            formula.func_selectedrange = {
+              left: left,
+              width: width,
+              top: rowLocationByIndex(0)[0],
+              height: rowLocationByIndex(0)[1] - rowLocationByIndex(0)[0] - 1,
+              left_move: left,
+              width_move: width,
+              top_move: row_pre,
+              height_move: row - row_pre - 1,
+              row: [0, row_index],
+              column: columnseleted,
+              row_focus: 0,
+              column_focus: col_index,
+            };
+          }
+
+          if (
+            formula.rangestart ||
+            formula.rangedrag_column_start ||
+            formula.rangedrag_row_start ||
+            formula.israngeseleciton()
+          ) {
+            formula.rangeSetValue({ row: [null, null], column: columnseleted });
+          } else if (
+            $("#MBLsheet-ifFormulaGenerator-multiRange-dialog").is(":visible")
+          ) {
+            //if公式生成器
+            let range = getRangetxt(
+              Store.currentSheetIndex,
+              { row: [0, row_index], column: columnseleted },
+              Store.currentSheetIndex
+            );
+            $("#MBLsheet-ifFormulaGenerator-multiRange-dialog input").val(
+              range
+            );
+          }
+
+          formula.rangedrag_column_start = true;
+          formula.rangestart = false;
+          formula.rangedrag_row_start = false;
+
+          $("#MBLsheet-formula-functionrange-select")
+            .css({
+              left: left,
+              width: width,
+              top: row_pre,
+              height: row - row_pre - 1,
+            })
+            .show();
+          $("#MBLsheet-formula-help-c").hide();
+
+          MBLsheet_count_show(
+            left,
+            row_pre,
+            width,
+            row - row_pre - 1,
+            [0, row_index],
+            columnseleted
+          );
+
+          return;
+        } else {
+          formula.updatecell(
+            Store.MBLsheetCellUpdate[0],
+            Store.MBLsheetCellUpdate[1]
+          );
+          Store.MBLsheet_cols_selected_status = true;
+        }
+      } else {
+        Store.MBLsheet_cols_selected_status = true;
+      }
+
+      if (Store.MBLsheet_cols_selected_status) {
+        if (event.shiftKey) {
+          //按住shift点击列索引选取范围
+          let last = $.extend(
+            true,
+            {},
+            Store.MBLsheet_select_save[Store.MBLsheet_select_save.length - 1]
+          ); //选区最后一个
+
+          let left = 0,
+            width = 0,
+            columnseleted = [];
+          if (last.left > col_pre) {
+            left = col_pre;
+            width = last.left + last.width - col_pre;
+
+            if (last.column[1] > last.column_focus) {
+              last.column[1] = last.column_focus;
+            }
+
+            columnseleted = [col_index, last.column[1]];
+          } else if (last.left == col_pre) {
+            left = col_pre;
+            width = last.left + last.width - col_pre;
+            columnseleted = [col_index, last.column[0]];
+          } else {
+            left = last.left;
+            width = col - last.left - 1;
+
+            if (last.column[0] < last.column_focus) {
+              last.column[0] = last.column_focus;
+            }
+
+            columnseleted = [last.column[0], col_index];
+          }
+
+          last["column"] = columnseleted;
+
+          last["left_move"] = left;
+          last["width_move"] = width;
+
+          Store.MBLsheet_select_save[Store.MBLsheet_select_save.length - 1] =
+            last;
+        } else if (event.ctrlKey) {
+          //选区添加
+          Store.MBLsheet_select_save.push({
+            left: left,
+            width: width,
+            top: rowLocationByIndex(0)[0],
+            height: rowLocationByIndex(0)[1] - rowLocationByIndex(0)[0] - 1,
+            left_move: left,
+            width_move: width,
+            top_move: row_pre,
+            height_move: row - row_pre - 1,
+            row: [0, row_index],
+            column: columnseleted,
+            row_focus: 0,
+            column_focus: col_index,
+            column_select: true,
+          });
+        } else {
+          Store.MBLsheet_select_save.length = 0;
+          Store.MBLsheet_select_save.push({
+            left: left,
+            width: width,
+            top: rowLocationByIndex(0)[0],
+            height: rowLocationByIndex(0)[1] - rowLocationByIndex(0)[0] - 1,
+            left_move: left,
+            width_move: width,
+            top_move: row_pre,
+            height_move: row - row_pre - 1,
+            row: [0, row_index],
+            column: columnseleted,
+            row_focus: 0,
+            column_focus: col_index,
+            column_select: true,
+          });
+        }
+
+        selectHightlightShow();
+      }
+
+      selectHelpboxFill();
+
+      setTimeout(function () {
+        clearTimeout(Store.countfuncTimeout);
+        countfunc();
+      }, 101);
+
+      if (Store.MBLsheet_cols_menu_status) {
+        $("#MBLsheet-rightclick-menu").hide();
+        $("#MBLsheet-cols-h-hover").hide();
+        $("#MBLsheet-cols-menu-btn").hide();
+        Store.MBLsheet_cols_menu_status = false;
+      }
+      event.stopPropagation();
+    })
+    .mousemove(function (event) {
+      if (Store.MBLsheet_cols_selected_status || Store.MBLsheet_select_status) {
+        $("#MBLsheet-cols-h-hover").hide();
+        $("#MBLsheet-cols-menu-btn").hide();
+        return;
+      }
+
+      if (Store.MBLsheet_cols_menu_status || Store.MBLsheet_cols_change_size) {
+        return;
+      }
+
+      let mouse = mouseposition(event.pageX, event.pageY);
+      let x = mouse[0] + $("#MBLsheet-cols-h-c").scrollLeft();
+
+      let col_location = colLocation(x),
+        col = col_location[1],
+        col_pre = col_location[0],
+        col_index = col_location[2];
+
+      $("#MBLsheet-cols-h-hover").css({
+        left: col_pre,
+        width: col - col_pre - 1,
+        display: "block",
+      });
+      // 隐藏头部菜单
+      // $("#MBLsheet-cols-menu-btn").css({ left: col - 19, display: "block" });
+
+      $("#MBLsheet-cols-change-size").css({ left: col - 5 });
+      if (x < col && x >= col - 5) {
+        $("#MBLsheet-cols-change-size").css({ opacity: 0 });
+        $("#MBLsheet-cols-menu-btn").hide();
+      } else {
+        $("#MBLsheet-change-size-line").hide();
+        $("#MBLsheet-cols-change-size").css("opacity", 0);
+      }
+    })
+    .mouseleave(function (event) {
+      if (Store.MBLsheet_cols_menu_status || Store.MBLsheet_cols_change_size) {
+        return;
+      }
+
+      $("#MBLsheet-cols-h-hover").hide();
+      $("#MBLsheet-cols-menu-btn").hide();
+      $("#MBLsheet-cols-change-size").css("opacity", 0);
+    })
+    .mouseup(function (event) {
+      if (event.which === 1 && typeof eventObj.onclick === "function") {
+        eventObj.onclick();
+      }
+    });
+}
+
 const transSzieForDPR = (n) => n * Store.devicePixelRatio;
 
 const debugDrawArea = (ctx, { x, y, w, h }) => {
@@ -255,6 +687,7 @@ const debugDrawArea = (ctx, { x, y, w, h }) => {
 };
 
 export function renderIcon(icon, ctx, posi, obj) {
+  createIconEle(posi, obj);
   registerEvent(posi, obj);
   const curIcon = `${iconPath}${icon}.png`;
   const curImg = new Image();
