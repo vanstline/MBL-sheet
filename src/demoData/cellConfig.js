@@ -81,96 +81,96 @@ var excelDataSource = [
 
 // 本地开发
 var columns = [
-  // {
-  //   dataIndex: "sampleName",
-  //   width: 100,
-  //   title: "样本名称11",
-  //   fieldsProps: {
-  //     required: true,
-  //     type: "text",
-  //     range: [-1, 999999],
-  //     influence: ["sampleTypeId"],
-  //     verifyFn: function (text, r) {
-  //       const d = {
-  //         status: text === "123123",
-  //         message: `当前值为${text}，不符合规则`,
-  //       };
-  //       if (!d.status) {
-  //         return d;
-  //       }
-  //       var status = false;
-  //       var message = "";
-  //       if (text == "1") {
-  //         status = false;
-  //         message = "请输入样品名称";
-  //       } else {
-  //         if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
-  //           status = false;
-  //           message =
-  //             "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
-  //         } else {
-  //           status = true;
-  //           message = "";
-  //         }
-  //       }
+  {
+    dataIndex: "sampleName",
+    width: 100,
+    title: "样本名称11",
+    fieldsProps: {
+      required: true,
+      type: "text",
+      range: [-1, 999999],
+      influence: ["sampleTypeId"],
+      verifyFn: function (text, r) {
+        const d = {
+          status: text === "123123",
+          message: `当前值为${text}，不符合规则`,
+        };
+        if (!d.status) {
+          return d;
+        }
+        var status = false;
+        var message = "";
+        if (text == "1") {
+          status = false;
+          message = "请输入样品名称";
+        } else {
+          if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
+            status = false;
+            message =
+              "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
+          } else {
+            status = true;
+            message = "";
+          }
+        }
 
-  //       return {
-  //         status,
-  //         message,
-  //       };
-  //       //
-  //       // return {
-  //       //   status: text === "123123",
-  //       //   message: `当前值为${text}，不符合规则`,
-  //       // };
-  //     },
-  //   },
-  //   extra: {
-  //     icons: "SearchOutlined",
-  //     style: {
-  //       width: 30,
-  //       left: 5,
-  //       top: 5,
-  //     },
-  //     onclick: (text, data, index) => {
-  //       console.log(
-  //         "%c Line:409 🧀 text, index   jjljl",
-  //         "color:#7f2b82",
-  //         text,
-  //         data,
-  //         index
-  //       );
-  //     },
-  //   },
-  //   render: (text, record, index) => {
-  //     return record.cxSampleCartInfo?.name;
-  //   },
-  //   // onchange: (text, record, i, config) => {
-  //   //   console.log(
-  //   //     "%c Line:282 🍐 text, record",
-  //   //     "color:#465975",
-  //   //     text,
-  //   //     record,
-  //   //     i,
-  //   //     config
-  //   //   );
-  //   //   config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
-  //   //   config.setDisabled({ sampleTypeNamed: text === "123" });
-  //   //   // setRowData({ ...record, sampleTypeId1: "" }, ["sampleTypeId1"]);
-  //   // },
-  //   onblur(text, record, i, config) {
-  //     console.log(
-  //       "%c Line:282 🍐 text, record",
-  //       "color:#465975",
-  //       text,
-  //       record,
-  //       i,
-  //       config
-  //     );
-  //     config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
-  //     config.setDisabled({ sampleTypeNamed: text === "123" });
-  //   },
-  // },
+        return {
+          status,
+          message,
+        };
+        //
+        // return {
+        //   status: text === "123123",
+        //   message: `当前值为${text}，不符合规则`,
+        // };
+      },
+    },
+    extra: {
+      icons: "SearchOutlined",
+      style: {
+        width: 30,
+        left: 5,
+        top: 5,
+      },
+      onclick: (text, data, index) => {
+        console.log(
+          "%c Line:409 🧀 text, index   jjljl",
+          "color:#7f2b82",
+          text,
+          data,
+          index
+        );
+      },
+    },
+    render: (text, record, index) => {
+      return record.cxSampleCartInfo?.name;
+    },
+    // onchange: (text, record, i, config) => {
+    //   console.log(
+    //     "%c Line:282 🍐 text, record",
+    //     "color:#465975",
+    //     text,
+    //     record,
+    //     i,
+    //     config
+    //   );
+    //   config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
+    //   config.setDisabled({ sampleTypeNamed: text === "123" });
+    //   // setRowData({ ...record, sampleTypeId1: "" }, ["sampleTypeId1"]);
+    // },
+    onblur(text, record, i, config) {
+      console.log(
+        "%c Line:282 🍐 text, record",
+        "color:#465975",
+        text,
+        record,
+        i,
+        config
+      );
+      config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
+      config.setDisabled({ sampleTypeNamed: text === "123" });
+    },
+  },
   {
     dataIndex: "sampleTypeId1",
     title: [
@@ -181,27 +181,48 @@ var columns = [
         marginLeft: 12,
         marginTop: 0,
         iconSize: 16,
+        onclick: () => {
+          console.log("%c Line:186 🍇  样本类型 点击了", "color:#93c0a4");
+        },
       },
       [
-          {
-            icon: "ArrowCircleDownOutlined",
-            marginLeft: 0,
-            marginTop: 4,
-            iconSize: 16,
+        {
+          icon: "ArrowCircleDownOutlined",
+          marginLeft: 0,
+          marginTop: 4,
+          iconSize: 16,
+          onclick: () => {
+            console.log(
+              "%c Line:186 🍇  样本类型 顺序填充 点击了",
+              "color:#93c0a4"
+            );
           },
-          {
-            icon: "UpDownCircleOutlined",
-            marginLeft: 12,
-            marginTop: 4,
-            iconSize: 16,
+        },
+        {
+          icon: "UpDownCircleOutlined",
+          marginLeft: 12,
+          marginTop: 4,
+          iconSize: 16,
+          onclick: () => {
+            console.log(
+              "%c Line:205 🥒   样本类型 自动填充 点击了",
+              "color:#93c0a4"
+            );
           },
-          {
-            icon: "CloseCircleOutlined",
-            marginLeft: 12,
-            marginTop: 4,
-            iconSize: 16,
+        },
+        {
+          icon: "CloseCircleOutlined",
+          marginLeft: 12,
+          marginTop: 4,
+          iconSize: 16,
+          onclick: () => {
+            console.log(
+              "%c Line:214 🌮  样本类型 清除 点击了",
+              "color:#93c0a4"
+            );
           },
-      ]
+        },
+      ],
       // "样本类型22",
       // "样本类型444",
     ],

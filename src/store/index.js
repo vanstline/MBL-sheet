@@ -168,6 +168,8 @@ const Store = {
 
   // 验证数据集合
   verifyMap: {},
+  // 自定义注册事件
+  customEvents: {},
 };
 
 export default Store;

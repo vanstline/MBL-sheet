@@ -198,26 +198,78 @@ function changeSomeValue(obj, config) {
 }
 /**
  * 注册事件
- * @param {*} coord 
- * @param {*} eventObj 
+ * @param {*} coord
+ * @param {*} eventObj
  */
 function registerEvent(coord, eventObj) {
-  console.log("%c Line:201 🍣 eventObj", "color:#7f2b82",coord, eventObj);
-
+  const { x = 0, y = 0, w = 0, h = 0 } = coord;
+  const key = `${x}_${x + w}-${y}_${y + h}`;
+  Store.customEvents[key] = eventObj;
 }
 
+/**
+ * 执行自定义事件
+ * @param {*} event
+ */
+export function execCustomEvent(event) {
+  const offset = $("#" + Store.container).offset();
+  const pageX = event.pageX - offset.left;
+  const pageY = event.pageY - offset.top;
+  const eventKeys = Object.keys(Store.customEvents);
+  console.log("%c Line:219 🍐 eventKeys", "color:#2eafb0", eventKeys, event);
+
+  eventKeys.forEach((keys) => {
+    const [xK, yK] = keys.split("-");
+    const [startC, endC] = xK.split("_");
+    const [startR, endR] = yK.split("_");
+
+    if (pageX >= startC && pageX <= endC && pageY >= startR && pageY <= endR) {
+      console.log("%c Line:1089 🥟", "color:#ed9ec7");
+      if (typeof Store.customEvents[keys].onclick === "function") {
+        Store.customEvents[keys].onclick();
+      }
+    }
+  });
+}
+
+const transSzieForDPR = (n) => n * Store.devicePixelRatio;
+
+const debugDrawArea = (ctx, { x, y, w, h }) => {
+  ctx.beginPath();
+
+  // 左上起点
+  ctx.moveTo(x, y);
+  // 右上 向右移动
+  ctx.lineTo(x + w, y);
+  // 右下 向下移动
+  ctx.lineTo(x + w, y + h);
+  // 左下 向左移动
+  ctx.lineTo(x, y + h);
+  // 左上 回到起点
+  ctx.lineTo(x, y);
+
+  ctx.strokeStyle = "#1890ff";
+  console.log("%c Line:225 🍣 ctx", "color:#ffdd4d", ctx);
+  ctx.stroke();
+  ctx.closePath();
+};
+
 export function renderIcon(icon, ctx, posi, obj) {
-  registerEvent(posi, obj)
+  registerEvent(posi, obj);
   const curIcon = `${iconPath}${icon}.png`;
   const curImg = new Image();
 
+  const x = transSzieForDPR(posi.x);
+  const y = transSzieForDPR(posi.y);
+  const w = transSzieForDPR(posi.w);
+  const h = transSzieForDPR(posi.h);
   curImg.src = curIcon;
   curImg.onload = function (e) {
-    ctx.drawImage(curImg, posi.x * Store.devicePixelRatio, posi.y * Store.devicePixelRatio, posi.w * Store.devicePixelRatio, posi.h * Store.devicePixelRatio);
+    ctx.drawImage(curImg, x, y, w, h);
   };
+
+  debugDrawArea(ctx, { x, y, w, h });
 }
-
-
 
 function renderExtraIcon(curColumns, coord, curSheet, ctx) {
   //
@@ -246,13 +298,22 @@ function renderExtraIcon(curColumns, coord, curSheet, ctx) {
     //     iconHeigth
     //   );
     // };
-    renderIcon(extra?.icons, ctx, {
-      x: drawStartC + left,
-      y: drawStartR + top,
-      w: iconWidth,
-      h: iconHeigth,
-    }, extra);
+    renderIcon(
+      extra?.icons,
+      ctx,
+      {
+        x: drawStartC + left,
+        y: drawStartR + top,
+        w: iconWidth,
+        h: iconHeigth,
+      },
+      extra
+    );
   }
+}
+
+function cellMousedown() {
+  console.log("%c Line:292 🍕", "color:#465975", arguments);
 }
 
 export { sgInit };
