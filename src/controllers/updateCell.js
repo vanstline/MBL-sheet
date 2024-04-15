@@ -125,21 +125,22 @@ export function MBLsheetupdateCell(
   }
 
   let input_postition = {
-    "min-width": col - col_pre + 1 - 8,
-    "min-height": row - row_pre + 1 - 4,
+    width: col - col_pre + 1 - 8,
+    height: row - row_pre + 1 - 4,
 
-    "max-width": winW + scrollLeft - col_pre - 20 - Store.rowHeaderWidth,
-    "max-height":
-      winH +
-      scrollTop -
-      row_pre -
-      20 -
-      15 -
-      Store.toolbarHeight -
-      Store.infobarHeight -
-      Store.calculatebarHeight -
-      Store.sheetBarHeight -
-      Store.statisticBarHeight,
+    // "max-width": winW + scrollLeft - col_pre - 20 - Store.rowHeaderWidth,
+    // "max-width": winW + scrollLeft - col_pre - 20 - Store.rowHeaderWidth,
+    // "max-height":
+    //   winH +
+    //   scrollTop -
+    //   row_pre -
+    //   20 -
+    //   15 -
+    //   Store.toolbarHeight -
+    //   Store.infobarHeight -
+    //   Store.calculatebarHeight -
+    //   Store.sheetBarHeight -
+    //   Store.statisticBarHeight,
     left: left - wrapRect.left,
     top: top - wrapRect.top,
   };
@@ -361,7 +362,6 @@ export function MBLsheetupdateCell(
     input_postition["left"] = newLeft - 2;
   }
 
-  console.log("%c Line:358 🍔", "color:#33a5ff");
   $("#MBLsheet-input-box").css(input_postition);
   $("#MBLsheet-rich-text-editor").css(inputContentScale);
 

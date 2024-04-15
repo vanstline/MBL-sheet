@@ -3104,7 +3104,7 @@ fieldset[disabled] .btn-danger.focus {
   margin: 0;
   z-index: 15;
   resize: none;
-  overflow: auto;
+  /* overflow: auto; */
   overflow: initial;
   white-space: pre-wrap;
   outline: none;
@@ -3112,6 +3112,7 @@ fieldset[disabled] .btn-danger.focus {
   -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   word-wrap: break-word;
+  overflow: hidden !important;
 }
 
 .MBLsheet-cell-input {
