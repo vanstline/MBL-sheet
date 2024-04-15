@@ -230,9 +230,10 @@ var columns = [
     width: 200,
     fieldsProps: {
       defaultValue: "菌株",
+      type: "autocomplete",
       // type: "select",
       // // type2: "multi",
-      // options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
+      options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
       // options: [
       //   { label: "菌株", value: "4" },
       //   { label: "PCR产物(已纯化)", value: 1 },
@@ -251,6 +252,7 @@ var columns = [
     //   return record?.cxSampleCartInfo?.sampleTypeId;
     // },
     onchange: (text, record, i, config) => {
+      console.log("%c Line:255 🍩 text", "color:#fca650", text);
       config.setRowData(
         {
           sampleName: text,
@@ -258,6 +260,9 @@ var columns = [
         },
         ["sampleName"]
       );
+    },
+    onblur: (val, record, i) => {
+      console.log("%c Line:264 🍯", "color:#fca650", val, record, i);
     },
   },
   // {

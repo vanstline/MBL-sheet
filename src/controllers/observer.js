@@ -27,11 +27,13 @@ $(document).ready(function () {
     }
 
     function processBlur(event) {
+      // console.log("%c Line:30 🍆 event", "color:#ffdd4d", event);
       if (isEdit) {
         updateBlur(event);
         isEdit = false;
       } else {
-        exitEditMode();
+        // console.log("%c Line:35 🍎", "color:#b03734");
+        // exitEditMode();
       }
     }
 
@@ -163,6 +165,7 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
 }
 
 export function updateBlur(event) {
+  console.log("%c Line:166 🍬 event", "color:#ed9ec7", event);
   let mouse = mouseposition(event.pageX, event.pageY);
 
   let x = mouse[0] + $("#MBLsheet-cell-main").scrollLeft();
@@ -185,7 +188,9 @@ export function updateBlur(event) {
   const onblur = sheet?.columns?.[c]?.onblur;
   if (onblur && typeof onblur === "function") {
     const keyNumMap = {};
-    let newVal = curEle.v;
+    let newVal = event.target.classList.contains("dropdown-List-item")
+      ? event.target.innerText
+      : curEle.v;
 
     const rowData = getRowData(r, c, newVal, keyNumMap);
 
