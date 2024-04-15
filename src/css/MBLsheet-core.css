@@ -7362,6 +7362,7 @@ fieldset[disabled] .btn-danger.focus {
 }
 #MBLsheet-dataVerification-dropdown-List .dropdown-List-item {
   padding: 5px 10px;
+  min-height: 25px;
   box-sizing: border-box;
   cursor: pointer;
 }
