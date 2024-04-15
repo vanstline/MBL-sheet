@@ -640,6 +640,7 @@ export function exitEditMode(options = {}) {
       $("#MBLsheet-search-formula-parm-select").hide();
     }
   }
+  $("#MBLsheet-dataVerification-dropdown-List").hide();
 
   if (options.success && typeof options.success === "function") {
     options.success();

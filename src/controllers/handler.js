@@ -1857,6 +1857,12 @@ export default function MBLsheetHandler() {
       if (Store.flowdata[row_index][col_index].disabled) {
         return;
       }
+      // 单元格禁用
+      if (
+        Store.flowdata[row_index][col_index]?.fieldsProps?.type === "select"
+      ) {
+        return;
+      }
 
       if (curSheet.columns?.[0]?.[col_index]?.dataIndex == null) {
         const curKey = curSheet.columns?.[0]?.dataIndex;

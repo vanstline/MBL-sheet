@@ -175,9 +175,9 @@ export function updateBlur(event) {
 
   const [r, c] = Store.MBLsheetCellUpdate;
   formula.updatecell(r, c);
-  
-  const curColumn = Store?.flowdata?.[0]?.[c]
-  if (['autocomplete','select'].includes(curColumn?.fieldsProps?.type)) {
+
+  const curColumn = Store?.flowdata?.[0]?.[c];
+  if (["autocomplete", "select"].includes(curColumn?.fieldsProps?.type)) {
     $("#MBLsheet-dataVerification-dropdown-List").hide();
   }
   const sheet = sheetmanage.getSheetByIndex();

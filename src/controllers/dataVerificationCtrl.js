@@ -293,7 +293,7 @@ const dataVerificationCtrl = {
               }
             ).join(",");
           } else {
-            updateBlur(e)
+            updateBlur(e);
             $("#MBLsheet-dataVerification-dropdown-List").hide();
           }
           let last =
@@ -1450,7 +1450,6 @@ const dataVerificationCtrl = {
       _this.dataVerification == null ||
       _this.dataVerification[r + "_" + c] == null
     ) {
-
       return;
     }
 
@@ -2023,6 +2022,50 @@ const dataVerificationCtrl = {
       list.forEach((i) => {
         optionHtml += `<div class="dropdown-List-item MBLsheet-mousedown-cancel">${i}</div>`;
       });
+    }
+
+    if (
+      Store.flowdata[rowIndex][colIndex]?.fieldsProps?.type === "autocomplete"
+    ) {
+      const wrapRect = document
+        .getElementById(Store.container)
+        ?.getBoundingClientRect();
+      let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
+      let scrollTop = $("#MBLsheet-cell-main").scrollTop();
+      let left =
+        col_pre + wrapRect.left + Store.rowHeaderWidth - scrollLeft - 2;
+      let top =
+        row_pre +
+        wrapRect.top +
+        Store.infobarHeight +
+        Store.toolbarHeight +
+        Store.calculatebarHeight +
+        Store.columnHeaderHeight -
+        scrollTop -
+        2;
+      let input_postition = {
+        width: col - col_pre + 1 - 8,
+        height: row - row_pre + 1 - 4,
+        left: left - wrapRect.left,
+        top: top - wrapRect.top,
+      };
+      $("#MBLsheet-input-box")
+        .removeAttr("style")
+        .css({
+          "background-color": "rgb(255, 255, 255)",
+          padding: "0px 2px",
+          "font-size": `${Store.defaultFontSize}pt`,
+          right: "auto",
+          "overflow-y": "auto",
+          "box-sizing": "initial",
+          display: "flex",
+        });
+
+      Store.MBLsheetCellUpdate = [rowIndex, colIndex];
+      $("#MBLsheet-input-box").css(input_postition);
+      $("#MBLsheet-rich-text-editor").html(
+        Store.flowdata[rowIndex][colIndex].v
+      );
     }
 
     // const paneswrapper = document.querySelectorAll(".MBLsheet-paneswrapper");
