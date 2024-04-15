@@ -1,3 +1,4 @@
+import { getRowData } from "../../controllers/observer";
 import Store from "../../store";
 import { transToCellData, transToCellDataV2 } from "../api";
 import {
@@ -45,7 +46,10 @@ function initVerification(data, sheet, MBLsheet) {
 
         if (type === "select" || type === AUTOCOMPLETE) {
           // if ()
-          curVerifyInfo.value1 = options
+          const curOptions =
+            typeof options === "function" ? options(i) : options;
+
+          curVerifyInfo.value1 = curOptions
             .map((item) => item.label || item)
             .join(",");
           curVerifyInfo.type2 = type === AUTOCOMPLETE ? AUTOCOMPLETE : type2;
@@ -79,7 +83,12 @@ function getData(sheet) {
     sheet.columns.forEach((col, index) => {
       const fieldsProps = item?.[index]?.fieldsProps;
 
-      if (fieldsProps?.type === "select" && fieldsProps.options) {
+      const curOption =
+        typeof fieldsProps.options === "function"
+          ? fieldsProps.options()
+          : fieldsProps.options;
+
+      if (fieldsProps?.type === "select" && curOption) {
         let curVal = item?.[index]?.v;
         const valueArr =
           typeof curVal === "string" ? curVal?.split(",") : curVal;
@@ -87,7 +96,7 @@ function getData(sheet) {
           curVal = valueArr
             ?.map((sub) => {
               return (
-                fieldsProps.options.find((min) => {
+                curOption.find((min) => {
                   return min.label === sub;
                 })?.value || sub
               );
@@ -95,8 +104,7 @@ function getData(sheet) {
             .join(",");
         } else {
           curVal =
-            fieldsProps.options.find((min) => min.label === curVal)?.value ||
-            curVal;
+            curOption.find((min) => min.label === curVal)?.value || curVal;
         }
         obj[col.dataIndex] = curVal;
       } else {
@@ -144,15 +152,17 @@ function processData(dataSource, sheet, MBLsheet) {
       var m = v;
 
       if (fieldsProps?.type === "select") {
+        const curOptions =
+          typeof fieldsProps?.options === "function"
+            ? fieldsProps.options()
+            : fieldsProps.options;
         if (typeof v === "number") {
-          m = fieldsProps?.options?.find((min) => min.value === v)?.label || v;
+          m = curOptions?.find((min) => min.value === v)?.label || v;
         } else {
           m = v
             ?.split(",")
             .map((min) => {
-              return (
-                fieldsProps?.options?.find((min) => min.value === m)?.label || v
-              );
+              return curOptions?.find((min) => min.value === m)?.label || v;
             })
             .join(",");
         }
@@ -160,7 +170,7 @@ function processData(dataSource, sheet, MBLsheet) {
         //   ?.split(",")
         //   .map((min) => {
         //     return (
-        //       fieldsProps?.options?.find((min) => min.value === m)?.label || v
+        //       curOptions?.find((min) => min.value === m)?.label || v
         //     );
         //   })
         //   .join(",");

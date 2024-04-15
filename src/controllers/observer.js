@@ -68,13 +68,16 @@ export function getRowData(r, c, newVal, keyNumMap = {}) {
       const v = curRowData?.find((sub) => sub?.dataIndex === item.dataIndex)?.v;
 
       if (item.dataIndex === curKey) {
-        if (typeof item?.fieldsProps?.options === "object") {
+        const optionsConfig = item?.fieldsProps?.options;
+        const curOptions =
+          typeof optionsConfig === "function"
+            ? optionsConfig(r)
+            : typeof optionsConfig;
+        if (typeof curOptions === "object") {
           const valueStr = newVal
             ?.split(",")
             .map((sub) => {
-              const curOption = item.fieldsProps.options.find(
-                (min) => min.label === sub
-              );
+              const curOption = curOptions.find((min) => min.label === sub);
               return curOption?.value || sub;
             })
             .join(",");
@@ -175,9 +178,9 @@ export function updateBlur(event) {
 
   const [r, c] = Store.MBLsheetCellUpdate;
   formula.updatecell(r, c);
-  
-  const curColumn = Store?.flowdata?.[0]?.[c]
-  if (['autocomplete','select'].includes(curColumn?.fieldsProps?.type)) {
+
+  const curColumn = Store?.flowdata?.[0]?.[c];
+  if (["autocomplete", "select"].includes(curColumn?.fieldsProps?.type)) {
     $("#MBLsheet-dataVerification-dropdown-List").hide();
   }
   const sheet = sheetmanage.getSheetByIndex();

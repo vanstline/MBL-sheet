@@ -230,13 +230,42 @@ var columns = [
     width: 200,
     fieldsProps: {
       defaultValue: "菌株",
-      // type: "select",
+      type: "select",
       // // type2: "multi",
       // options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
-      // options: [
-      //   { label: "菌株", value: "4" },
-      //   { label: "PCR产物(已纯化)", value: 1 },
-      // ],
+      options: (r) => {
+        console.log("%c Line:237 🍖 r", "color:#93c0a4", r);
+        return [
+          {
+            value: 0,
+            label: " " + r + " ",
+          },
+          // {
+          //   value: 1,
+          //   label: "qPCR引物探针",
+          // },
+          // {
+          //   value: 2,
+          //   label: "STR/SSR引物",
+          // },
+          // {
+          //   value: 3,
+          //   label: "NGS接头",
+          // },
+          // {
+          //   value: 4,
+          //   label: "NGS捕获探针",
+          // },
+          // {
+          //   value: 5,
+          //   label: "基因芯片探针",
+          // },
+          // {
+          //   value: 6,
+          //   label: "其他",
+          // },
+        ];
+      },
       verifyFn(text, row) {
         const d = {
           status: !text,
@@ -245,6 +274,9 @@ var columns = [
         };
 
         return d;
+      },
+      onblur: (er) => {
+        console.log("%c Line:277 🍋", "color:#fca650", er);
       },
     },
     // render: (text, record, index) => {
