@@ -251,19 +251,15 @@ var columns = [
     // render: (text, record, index) => {
     //   return record?.cxSampleCartInfo?.sampleTypeId;
     // },
-    onchange: (text, record, i, config) => {
-      console.log("%c Line:255 🍩 text", "color:#fca650", text);
-      config.setRowData(
-        {
-          sampleName: text,
-          sampleTypeId: text,
-        },
-        ["sampleName"]
-      );
+    onblur: (val, record, i, config) => {
+      config.setDisabled({
+        testIndex: !!val,
+      });
     },
-    onblur: (val, record, i) => {
-      console.log("%c Line:264 🍯", "color:#fca650", val, record, i);
-    },
+  },
+  {
+    dataIndex: "testIndex",
+    title: "测试使用",
   },
   // {
   //   dataIndex: "sampleTypeId2",

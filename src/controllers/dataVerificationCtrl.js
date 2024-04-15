@@ -293,7 +293,6 @@ const dataVerificationCtrl = {
               }
             ).join(",");
           } else {
-            updateBlur(e);
             $("#MBLsheet-dataVerification-dropdown-List").hide();
           }
           let last =
@@ -303,7 +302,7 @@ const dataVerificationCtrl = {
 
           $("#MBLsheet-rich-text-editor").text(value);
           formula.updatecell(rowIndex, colIndex);
-
+          updateBlur(e);
           e.stopPropagation();
         }
       );
@@ -2024,9 +2023,14 @@ const dataVerificationCtrl = {
       });
     }
 
-    if (
-      Store.flowdata[rowIndex][colIndex]?.fieldsProps?.type === "autocomplete"
-    ) {
+    const curColumnType =
+      Store.flowdata?.[rowIndex]?.[colIndex]?.fieldsProps?.type;
+
+    if (["select", "autocomplete"].includes(curColumnType)) {
+      Store.MBLsheetCellUpdate = [rowIndex, colIndex];
+    }
+
+    if (curColumnType === "autocomplete") {
       const wrapRect = document
         .getElementById(Store.container)
         ?.getBoundingClientRect();
@@ -2061,7 +2065,6 @@ const dataVerificationCtrl = {
           display: "flex",
         });
 
-      Store.MBLsheetCellUpdate = [rowIndex, colIndex];
       $("#MBLsheet-input-box").css(input_postition);
       $("#MBLsheet-rich-text-editor").html(
         Store.flowdata[rowIndex][colIndex].v

@@ -1,11 +1,9 @@
 import { MBLsheet } from "../core";
 import { getcellvalue } from "../global/getdata";
 import formula from "../global/formula";
-import { rowLocation, colLocation, mouseposition } from "../global/location";
 import { MBLsheetMoveHighlightCell } from "./sheetMove";
 import Store from "../store";
 import sheetmanage from "./sheetmanage";
-import { event } from "jquery";
 import { exitEditMode } from "../global/api";
 
 const nonexistentCell = [undefined, -1];
@@ -165,17 +163,6 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
 }
 
 export function updateBlur(event) {
-  console.log("%c Line:166 🍬 event", "color:#ed9ec7", event);
-  let mouse = mouseposition(event.pageX, event.pageY);
-
-  let x = mouse[0] + $("#MBLsheet-cell-main").scrollLeft();
-  let y = mouse[1] + $("#MBLsheet-cell-main").scrollTop();
-  let row_location = rowLocation(y),
-    row_index = row_location[2];
-
-  let col_location = colLocation(x),
-    col_index = col_location[2];
-
   const [r, c] = Store.MBLsheetCellUpdate;
   formula.updatecell(r, c);
 
