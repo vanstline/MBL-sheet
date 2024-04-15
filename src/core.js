@@ -71,6 +71,8 @@ MBLsheet.create = function (setting) {
   Store.MBLsheetfile = extendsetting.data;
   Store.defaultcolumnNum = extendsetting.column;
   Store.defaultrowNum = extendsetting.row;
+  Store.columnHeaderBackgroundColor =
+    extendsetting?.columnHeaderBackgroundColor;
   Store.columnHeaderArr = extendsetting.data[0]?.columnHeaderArr;
   Store.defaultFontSize = extendsetting.defaultFontSize;
   Store.fullscreenmode = extendsetting.fullscreenmode;
@@ -137,6 +139,9 @@ MBLsheet.create = function (setting) {
 
   MBLsheetConfigsetting.rowHeaderWidth = extendsetting.rowHeaderWidth;
   MBLsheetConfigsetting.columnHeaderHeight = extendsetting.columnHeaderHeight;
+  MBLsheetConfigsetting.columnHeaderBackgroundColor =
+    extendsetting.columnHeaderBackgroundColor;
+  console.log("%c Line:142 🍬 extendsetting", "color:#2eafb0", extendsetting);
 
   MBLsheetConfigsetting.defaultColWidth = extendsetting.defaultColWidth;
   MBLsheetConfigsetting.defaultRowHeight = extendsetting.defaultRowHeight;

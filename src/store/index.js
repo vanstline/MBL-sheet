@@ -26,6 +26,7 @@ const Store = {
   calculatebarHeight: 0,
   rowHeaderWidth: 46,
   columnHeaderHeight: 20,
+  columnHeaderBackgroundColor: "#fff",
   cellMainSrollBarSize: 12,
   sheetBarHeight: 31,
   statisticBarHeight: 23,

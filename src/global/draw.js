@@ -342,7 +342,7 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
       Store.config["colhidden"][c] != null
     ) {
     } else {
-      MBLsheetTableContent.fillStyle = "#ffffff";
+      MBLsheetTableContent.fillStyle = Store.columnHeaderBackgroundColor;
       MBLsheetTableContent.fillRect(
         start_c + offsetLeft - 1,
         0,
