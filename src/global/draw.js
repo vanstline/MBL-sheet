@@ -118,7 +118,8 @@ function MBLsheetDrawgridRowTitle(scrollHeight, drawHeight, offsetTop) {
       Store.config["rowhidden"][r] != null
     ) {
     } else {
-      MBLsheetTableContent.fillStyle = "#ffffff";
+      MBLsheetTableContent.fillStyle =
+        Store.columnHeaderBackgroundColor ?? "#fff";
       MBLsheetTableContent.fillRect(
         0,
         start_r + offsetTop + firstOffset,
@@ -342,7 +343,8 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
       Store.config["colhidden"][c] != null
     ) {
     } else {
-      MBLsheetTableContent.fillStyle = Store.columnHeaderBackgroundColor;
+      MBLsheetTableContent.fillStyle =
+        Store.columnHeaderBackgroundColor ?? "#fff";
       MBLsheetTableContent.fillRect(
         start_c + offsetLeft - 1,
         0,
@@ -1933,9 +1935,12 @@ let nullCellRender = function (
         start_c + offsetLeft - 1 - bodrder05 + dissLeft,
         start_r + offsetTop - bodrder05 + dissTop
       );
-      MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
-      MBLsheetTableContent.lineWidth = 1;
-      MBLsheetTableContent.stroke();
+      // MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
+      // MBLsheetTableContent.lineWidth = 1;
+      // MBLsheetTableContent.stroke();
+      MBLsheetTableContent.fillStyle = "#FFEAEA";
+      MBLsheetTableContent.fill();
+      MBLsheetTableContent.closePath();
       MBLsheetTableContent.closePath();
       setVerifyByKey(r + "_" + c, null);
     }
@@ -2207,34 +2212,6 @@ let cellRender = function (
     MBLsheetTableContent.fillStyle = style.background || "#fff";
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
-
-    // if (extra.icons) {
-    //   console.log(
-    //     "%c Line:2091 🍢",
-    //     "color:#6ec1c2",
-    //     extra.icons,
-    //     MBLsheetTableContent
-    //   );
-    //   const curIcon = `${iconsPath}${extra.icons}.png`;
-    //   const curImg = new Image();
-    //   console.log(
-    //     "%c Line:2094 🍤 curImg",
-    //     "color:#b03734",
-    //     curImg,
-    //     drawStartR + (style.top ?? 0),
-    //     drawStartC + (style.left ?? 0)
-    //   );
-    //   curImg.src = curIcon;
-    //   MBLsheetTableContent.beginPath();
-    //   MBLsheetTableContent.drawImage(
-    //     curImg,
-    //     drawStartC + style.left ?? 0,
-    //     drawStartR + style.top ?? 0,
-    //     20,
-    //     20
-    //   );
-    //   MBLsheetTableContent.closePath();
-    // }
   }
 
   let dataVerification = dataVerificationCtrl.dataVerification;
@@ -2253,26 +2230,12 @@ let cellRender = function (
     const curSheetTable = document.querySelector("#MBLsheet-cell-main");
     const curSheetTableRect = curSheetTable?.getBoundingClientRect();
 
-    const curMax =
-      // 绘制异常红色边框
-      MBLsheetTableContent.beginPath();
+    // 绘制异常红色边框
+    MBLsheetTableContent.beginPath();
     const dissLeft = c === 0 ? 1 : 0;
     const dissTop = r === 0 ? 1 : 0;
 
-    const endRight = end_c + offsetLeft - 1 - bodrder05;
-    const endBottom = end_r + offsetTop - 1 - bodrder05;
-    let dissRight = 0;
-    let dissBottom = 0;
-
     if (c === maxColLen - 1 && end_c >= curSheetTableRect.width) {
-      // console.log(
-      //   "%c Line:1862 🍅 c === maxColLen",
-      //   "color:#f5ce50",
-      //   maxColLen,
-      //   end_c,
-      //   (c + 1) * end_c,
-      //   curSheetTableRect.width
-      // );
       dissRight = 10;
     }
 
@@ -2305,9 +2268,11 @@ let cellRender = function (
       start_c + offsetLeft - 1 - bodrder05 + dissLeft,
       start_r + offsetTop - bodrder05 + dissTop
     );
-    MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
-    MBLsheetTableContent.lineWidth = 1;
-    MBLsheetTableContent.stroke();
+    // MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
+    // MBLsheetTableContent.lineWidth = 1;
+    // MBLsheetTableContent.stroke();
+    MBLsheetTableContent.fillStyle = "#FFEAEA";
+    MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
     setVerifyByKey(r + "_" + c, value);
   } else {
@@ -2525,9 +2490,12 @@ let cellRender = function (
         MBLsheetTableContent.lineTo(x + w * minusLen, y + h);
         MBLsheetTableContent.lineTo(x + w * minusLen, y);
         MBLsheetTableContent.lineTo(x + w * minusLen * (1 - valueLen), y);
-        MBLsheetTableContent.lineWidth = 1;
-        MBLsheetTableContent.strokeStyle = "#ff0000";
-        MBLsheetTableContent.stroke();
+        // MBLsheetTableContent.lineWidth = 1;
+        // MBLsheetTableContent.strokeStyle = "#ff0000";
+        // MBLsheetTableContent.stroke();
+        MBLsheetTableContent.fillStyle = "#FFEAEA";
+        MBLsheetTableContent.fill();
+        MBLsheetTableContent.closePath();
         MBLsheetTableContent.closePath();
       } else if (valueType == "plus") {
         //正数
@@ -2834,6 +2802,30 @@ let cellRender = function (
     MBLsheetTableContent.fillStyle = "rgba(0, 0, 0, .1)";
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
+  }
+
+  // ploaceholder
+  if (columns[c]["placeholder"] && !cell?.v && cell?.v !== 0) {
+    const curTextInfo = {
+      type: "plain",
+      values: [
+        {
+          content: columns[c]["placeholder"],
+          height: 12,
+          left: 2,
+          top: 18,
+        },
+      ],
+    };
+
+    let pos_x = start_c + offsetLeft;
+    let pos_y = start_r + offsetTop + 1;
+
+    MBLsheetTableContent.fillStyle = "#bfbfbf";
+    cellTextRender(curTextInfo, MBLsheetTableContent, {
+      pos_x: pos_x,
+      pos_y: pos_y,
+    });
   }
 
   // 单元格渲染后

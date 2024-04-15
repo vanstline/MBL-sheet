@@ -85,6 +85,7 @@ var columns = [
     dataIndex: "sampleName",
     width: 100,
     title: "样本名称11",
+    placeholder: " 12312",
     fieldsProps: {
       required: true,
       type: "text",
@@ -159,14 +160,6 @@ var columns = [
     //   // setRowData({ ...record, sampleTypeId1: "" }, ["sampleTypeId1"]);
     // },
     onblur(text, record, i, config) {
-      console.log(
-        "%c Line:282 🍐 text, record",
-        "color:#465975",
-        text,
-        record,
-        i,
-        config
-      );
       config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
       config.setDisabled({ sampleTypeNamed: text === "123" });
     },
@@ -230,8 +223,8 @@ var columns = [
     width: 200,
     fieldsProps: {
       defaultValue: "菌株",
-      type: "autocomplete",
-      // type: "select",
+      // type: "autocomplete",
+      type: "select",
       // // type2: "multi",
       options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
       // options: [
@@ -248,12 +241,11 @@ var columns = [
         return d;
       },
     },
-    // render: (text, record, index) => {
-    //   return record?.cxSampleCartInfo?.sampleTypeId;
-    // },
     onblur: (val, record, i, config) => {
+      console.log("%c Line:255 🌮 val", "color:#2eafb0", val);
       config.setDisabled({
-        testIndex: !!val,
+        // testIndex: !!val,
+        testIndex: val === "菌株",
       });
     },
   },

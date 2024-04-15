@@ -141,7 +141,6 @@ MBLsheet.create = function (setting) {
   MBLsheetConfigsetting.columnHeaderHeight = extendsetting.columnHeaderHeight;
   MBLsheetConfigsetting.columnHeaderBackgroundColor =
     extendsetting.columnHeaderBackgroundColor;
-  console.log("%c Line:142 🍬 extendsetting", "color:#2eafb0", extendsetting);
 
   MBLsheetConfigsetting.defaultColWidth = extendsetting.defaultColWidth;
   MBLsheetConfigsetting.defaultRowHeight = extendsetting.defaultRowHeight;
