@@ -704,9 +704,12 @@ const debugDrawArea = (ctx, { x, y, w, h }) => {
   ctx.closePath();
 };
 
-export async function renderIcon(icon, ctx, posi, obj) {
-  createIconEle(posi, obj);
-  registerEvent(posi, obj);
+export async function renderIcon(icon, ctx, posi, obj, isHeader = true) {
+  if (isHeader) {
+    createIconEle(posi, obj);
+    registerEvent(posi, obj);
+  }
+
   const curImg = new Image();
 
   const x = transSzieForDPR(posi.x);
@@ -740,7 +743,6 @@ const getBase64Image = (src) => {
 };
 
 function renderExtraIcon(curColumns, coord, curSheet, ctx) {
-  //
   const extra = curColumns?.extra;
 
   if (extra?.icons) {
@@ -754,19 +756,7 @@ function renderExtraIcon(curColumns, coord, curSheet, ctx) {
     const { width = 0, left = 0, top = 0 } = style;
     const drawStartR = start_r + 0;
     const drawStartC = end_c - width + 0 - 1;
-    // const curIcon = `${iconPath}${extra?.icons}.png`;
-    // const curImg = new Image();
 
-    // curImg.src = curIcon;
-    // curImg.onload = function (e) {
-    //   ctx.drawImage(
-    //     curImg,
-    //     drawStartC + left,
-    //     drawStartR + top,
-    //     iconWidth,
-    //     iconHeigth
-    //   );
-    // };
     renderIcon(
       extra?.icons,
       ctx,
@@ -776,7 +766,8 @@ function renderExtraIcon(curColumns, coord, curSheet, ctx) {
         w: iconWidth,
         h: iconHeigth,
       },
-      extra
+      extra,
+      false
     );
   }
 }
