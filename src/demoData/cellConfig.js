@@ -84,7 +84,6 @@ var columns = [
   {
     dataIndex: "sampleName",
     width: 100,
-    disabled: true,
     title: "样本名称11",
     placeholder: " 12312",
     fieldsProps: {
@@ -133,7 +132,7 @@ var columns = [
         width: 30,
         left: 5,
         top: 5,
-        background: "#000",
+        background: "transparent",
       },
 
       onclick: (text, data, index) => {

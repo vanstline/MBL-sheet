@@ -1099,10 +1099,12 @@ function MBLsheetextendData(rowlen, newData) {
 
 //删除行列
 function MBLsheetdeletetable(type, st, ed, sheetIndex) {
-  if (type === "row" && ed - st === 0) {
+  if (type === "row") {
+    if (st === 0 && ed === 0 && Store.flowdata?.length === 1) {
+      MBLsheet.clearTable();
+      throw new Error("至少保留一条数据");
+    }
     eventBus.publish("deleteRow", { startR: st });
-    MBLsheet.clearTable();
-    throw new Error("至少保留一条数据");
   }
   sheetIndex = sheetIndex || Store.currentSheetIndex;
 

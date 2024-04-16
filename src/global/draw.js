@@ -1907,7 +1907,38 @@ let nullCellRender = function (
       MBLsheetTableContent.fillStyle = "#FFEAEA";
       MBLsheetTableContent.fill();
       MBLsheetTableContent.closePath();
+
+      MBLsheetTableContent.beginPath();
+      // 左上起点
+      MBLsheetTableContent.moveTo(
+        start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+        start_r + offsetTop - bodrder05 + dissTop
+      );
+      // 右上 向右移动
+      MBLsheetTableContent.lineTo(
+        end_c + offsetLeft - 1 - bodrder05,
+        start_r + offsetTop - bodrder05 + dissTop
+      );
+      // 右下 向下移动
+      MBLsheetTableContent.lineTo(
+        end_c + offsetLeft - 1 - bodrder05,
+        end_r + offsetTop - 1 - bodrder05
+      );
+      // 左下 向左移动
+      MBLsheetTableContent.lineTo(
+        start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+        end_r + offsetTop - 1 - bodrder05
+      );
+      // 左上 回到起点
+      MBLsheetTableContent.lineTo(
+        start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+        start_r + offsetTop - bodrder05 + dissTop
+      );
+      MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
+      MBLsheetTableContent.lineWidth = 1;
+      MBLsheetTableContent.stroke();
       MBLsheetTableContent.closePath();
+
       setVerifyByKey(r + "_" + c, null);
     }
   } else {
@@ -2014,12 +2045,12 @@ let nullCellRender = function (
     // 左上起点
     MBLsheetTableContent.moveTo(
       end_c - style.width + offsetLeft - 1 - bodrder05,
-      start_r + offsetTop - bodrder05
+      start_r + offsetTop
     );
     // 右上 向右移动
     MBLsheetTableContent.lineTo(
       end_c + offsetLeft - 1 - bodrder05,
-      start_r + offsetTop - bodrder05
+      start_r + offsetTop
     );
     // 右下 向下移动
     MBLsheetTableContent.lineTo(
@@ -2240,6 +2271,37 @@ let cellRender = function (
     // MBLsheetTableContent.stroke();
     MBLsheetTableContent.fillStyle = "#FFEAEA";
     MBLsheetTableContent.fill();
+    MBLsheetTableContent.closePath();
+
+    MBLsheetTableContent.beginPath();
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+      start_r + offsetTop - bodrder05 + dissTop
+    );
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05 + dissTop
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+      start_r + offsetTop - bodrder05 + dissTop
+    );
+    MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
+    MBLsheetTableContent.lineWidth = 1;
+    MBLsheetTableContent.stroke();
     MBLsheetTableContent.closePath();
     setVerifyByKey(r + "_" + c, value);
   } else {
