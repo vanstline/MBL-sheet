@@ -20,6 +20,7 @@ import { replaceHtml, getObjType, MBLsheetfontformat } from "../utils/util";
 import Store from "../store";
 import locale from "../locale/locale";
 import imageCtrl from "./imageCtrl";
+import { eventBus } from "../global/sg/event";
 
 const selection = {
   clearcopy: function (e) {
@@ -717,17 +718,6 @@ const selection = {
     }, 10);
   },
   pasteHandler: function (data, borderInfo) {
-    data = Store.flowdata.map((item, i) => {
-      return item?.map((sub, j) => {
-        sub = {
-          ...sub,
-          v: data?.[i]?.[j]?.v || sub.v,
-          m: data?.[i]?.[j]?.m || sub.m,
-        };
-        return sub;
-      });
-    });
-
     if (
       !checkProtectionLockedRangeList(
         Store.MBLsheet_select_save,
@@ -774,8 +764,10 @@ const selection = {
 
       let minh = Store.MBLsheet_select_save[0].row[0], //应用范围首尾行
         maxh = minh + copyh - 1;
+      maxh = Math.min(maxh, Store.flowdata.length - 1);
       let minc = Store.MBLsheet_select_save[0].column[0], //应用范围首尾列
         maxc = minc + copyc - 1;
+      maxc = Math.min(maxc, Store.flowdata[0]?.length - 1);
 
       //应用范围包含部分合并单元格，则return提示
       let has_PartMC = false;
@@ -796,7 +788,8 @@ const selection = {
         return;
       }
 
-      let d = editor.deepCopyFlowData(Store.flowdata); //取数据
+      // let d = editor.deepCopyFlowData(Store.flowdata); //取数据
+      let d = _.cloneDeep(Store.flowdata);
       let rowMaxLength = d.length;
       let cellMaxLength = d[0].length;
 
@@ -893,6 +886,29 @@ const selection = {
         { row: [minh, maxh], column: [minc, maxc] },
       ];
 
+      const publishArr = [];
+      for (let r = minh, i = 0; r <= maxh; r++, i++) {
+        publishArr.push([]);
+        for (let c = minc, j = 0; c <= maxc; c++, j++) {
+          if (Store.flowdata[0][c]?.dataIndex) {
+            d[r][c] = {
+              ...Store.flowdata[0][c],
+              m: data[i][j].m,
+              v: data[i][j].v,
+            };
+          } else {
+            d[r][c] = Store.flowdata?.[r]?.[c];
+          }
+          publishArr[i].push(d[r][c]?.v);
+        }
+      }
+
+      eventBus.publish("paste", publishArr, {
+        startR: minh,
+        startC: minc,
+        endR: maxh,
+        endC: maxc,
+      });
       if (addr > 0 || addc > 0 || RowlChange) {
         let allParam = {
           cfg: cfg,
@@ -1003,6 +1019,8 @@ const selection = {
 
       last["row"] = [curR, curR + rlen - 1];
       last["column"] = [curC, curC + clen - 1];
+
+      console.log("%c Line:1007 🌰", "color:#465975", data, addr, addc, last);
 
       if (addr > 0 || addc > 0) {
         let allParam = {

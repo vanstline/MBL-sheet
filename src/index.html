@@ -109,6 +109,10 @@
           MBLsheet.setData(excelDataSource);
         }, 3000);
 
+
+        MBLsheet.addEventListener('paste', function(arr, obj) {
+          console.log("%c Line:114 🥓 arr, obj", "color:#7f2b82", arr, obj);
+        })
         // setTimeout(() => {
         //   MBLsheet.destroy();
         //   MBLsheet.init(

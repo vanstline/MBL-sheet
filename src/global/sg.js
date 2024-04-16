@@ -10,6 +10,7 @@ import { selectHelpboxFill, selectHightlightShow } from "../controllers/select";
 import { countfunc } from "./count";
 import { icons } from "../controllers/constant";
 import sheetmanage from "../controllers/sheetmanage";
+import { eventBus } from "./sg/event";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -133,6 +134,9 @@ function sgInit(setting, config, MBLsheet) {
   MBLsheet.getDisabledMap = () => getDisabledMap(config);
 
   MBLsheet.changeSomeValue = (obj = {}) => changeSomeValue(obj, config);
+
+  MBLsheet.addEventListener = (eventName, cb) =>
+    eventBus.subscribe(eventName, cb);
 }
 
 function setLength(len, MBLsheet) {
@@ -771,10 +775,6 @@ function renderExtraIcon(curColumns, coord, curSheet, ctx) {
       false
     );
   }
-}
-
-function cellMousedown() {
-  console.log("%c Line:292 🍕", "color:#465975", arguments);
 }
 
 export { sgInit };
