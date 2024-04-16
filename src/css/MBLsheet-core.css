@@ -1335,7 +1335,8 @@ div.MBLsheet-sheets-m:hover {
   outline-style: none;
   position: relative;
   -webkit-user-select: none;
-  background: #f3f3f2;
+  /* background: #f3f3f2; */
+  background-color: #fff;
 }
 
 .MBLsheet-rows-h {
@@ -1635,7 +1636,7 @@ body:not(.ewa-ipad) .MBLsheet-rows-h-cell-sel:hover {
   background-color: white;
   width: 15px;
   height: 15px;
-  background-color: #f3f3f2;
+  /* background-color: #f3f3f2; */
   /*#E7E7E7;*/
   border-collapse: collapse;
   position: relative;

@@ -1571,7 +1571,7 @@ function MBLsheetDrawMain(
           start_c + offsetLeft - 1 - bodrder05,
           start_r + offsetTop - bodrder05
         );
-        MBLsheetTableContent.fillStyle = "#ccc";
+        MBLsheetTableContent.fillStyle = "transparent";
         MBLsheetTableContent.fill();
         MBLsheetTableContent.closePath();
       }
@@ -2033,7 +2033,7 @@ let nullCellRender = function (
       start_r + offsetTop - bodrder05
     );
 
-    MBLsheetTableContent.fillStyle = "rgba(0, 0, 0, .1)";
+    MBLsheetTableContent.fillStyle = "transparent";
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
   }
@@ -2710,6 +2710,11 @@ let cellRender = function (
       MBLsheetTableContent.fillStyle = "#ff0000";
     }
 
+    if (cell.disabled) {
+      MBLsheetTableContent.fillStyle = "#bfbfbf";
+    } else if (cell.fontColor) {
+      MBLsheetTableContent.fillStyle = cell.fontColor;
+    }
     cellTextRender(textInfo, MBLsheetTableContent, {
       pos_x: pos_x,
       pos_y: pos_y,
@@ -2794,7 +2799,7 @@ let cellRender = function (
       start_r + offsetTop - bodrder05
     );
 
-    MBLsheetTableContent.fillStyle = "rgba(0, 0, 0, .1)";
+    MBLsheetTableContent.fillStyle = "transparent";
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
   }
@@ -3312,6 +3317,7 @@ function cellOverflow_colIn(map, r, c, col_st, col_ed) {
 }
 
 function cellTextRender(textInfo, ctx, option) {
+  console.log("%c Line:3315 🍕 textInfo", "color:#b03734", textInfo);
   if (textInfo == null) {
     return;
   }

@@ -161,6 +161,14 @@ MBLsheet.create = function (setting) {
 
   if (Store.lang === "zh") flatpickr.localize(Mandarin.zh);
 
+  if (extendsetting.columnHeaderBackgroundColor) {
+    setTimeout(() => {
+      $(".MBLsheet-paneswrapper")
+        .eq(0)
+        .css({ background: extendsetting.columnHeaderBackgroundColor });
+    });
+  }
+
   // Store the currently used plugins for monitoring asynchronous loading
   Store.asyncLoad.push(...MBLsheetConfigsetting.plugins);
 

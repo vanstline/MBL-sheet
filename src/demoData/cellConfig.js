@@ -126,6 +126,7 @@ var columns = [
       //   // };
       // },
     },
+    disabled: true,
     extra: {
       icons: "SearchOutlined",
       style: {
@@ -254,6 +255,7 @@ var columns = [
   {
     dataIndex: "testIndex",
     title: "测试使用",
+    fontColor: "red",
   },
   // {
   //   dataIndex: "sampleTypeId2",
@@ -357,22 +359,22 @@ var columns = [
   //     },
   //   },
   // },
-  {
-    title: "操作",
-    width: 60,
-    extra: {
-      icons: "DeleteOutlined",
-      style: {
-        width: 60,
-        left: 15,
-        top: 4,
-      },
-      onclick: (text, data, index) => {
-        console.log("%c Line:372 🥔 index", "color:#fca650", index);
-        MBLsheet.delRow(index);
-      },
-    },
-  },
+  // {
+  //   title: "操作",
+  //   width: 60,
+  //   extra: {
+  //     icons: "DeleteOutlined",
+  //     style: {
+  //       width: 60,
+  //       left: 15,
+  //       top: 4,
+  //     },
+  //     onclick: (text, data, index) => {
+  //       console.log("%c Line:372 🥔 index", "color:#fca650", index);
+  //       MBLsheet.delRow(index);
+  //     },
+  //   },
+  // },
 ];
 
 // 调试使用
