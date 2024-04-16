@@ -111,7 +111,13 @@
 
 
         MBLsheet.addEventListener('paste', function(arr, obj) {
-          console.log("%c Line:114 🥓 arr, obj", "color:#7f2b82", arr, obj);
+          console.log("%c Line:114 🥓 粘贴事件", "color:#7f2b82", arr, obj);
+        })
+        MBLsheet.addEventListener('deleteRow', function(obj) {
+          console.log("%c Line:114 🥓 删除行事件", "color:#7f2b82",obj);
+        })
+        MBLsheet.addEventListener('deleteCell', function(arr) {
+          console.log("%c Line:114 🥓 删除单元格事件", "color:#7f2b82", arr);
         })
         // setTimeout(() => {
         //   MBLsheet.destroy();

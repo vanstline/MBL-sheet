@@ -57,6 +57,7 @@ import {
 } from "./protection";
 import Store from "../store";
 import MBLsheetConfigsetting from "./MBLsheetConfigsetting";
+import { eventBus } from "../global/sg/event";
 
 export function rowColumnOperationInitial() {
   //表格行标题 mouse事件
@@ -2458,8 +2459,11 @@ export function rowColumnOperationInitial() {
       }
 
       const file = Store.MBLsheetfile[getSheetIndex(Store.currentSheetIndex)];
+      console.log("%c Line:2462 🍖 file", "color:#fca650", file);
       const hyperlink = file.hyperlink && $.extend(true, {}, file.hyperlink);
       let hyperlinkUpdated;
+
+      const delPosiArr = [];
 
       for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
         let r1 = Store.MBLsheet_select_save[s].row[0],
@@ -2474,19 +2478,27 @@ export function rowColumnOperationInitial() {
             }
 
             if (getObjType(d[r][c]) == "object") {
-              delete d[r][c]["m"];
-              delete d[r][c]["v"];
+              console.log("%c Line:2481 🍪 d[r][c]", "color:#fca650", d[r][c]);
+              // delete d[r][c]["m"];
+              // delete d[r][c]["v"];
+              d[r][c] = {
+                ...file.columns[c],
+                m: file.columns[c]?.fieldsProps?.defaultValue,
+                v: file.columns[c]?.fieldsProps?.defaultValue,
+              };
 
-              if (d[r][c]["f"] != null) {
-                delete d[r][c]["f"];
-                formula.delFunctionGroup(r, c, Store.currentSheetIndex);
+              // if (d[r][c]["f"] != null) {
+              //   delete d[r][c]["f"];
+              //   formula.delFunctionGroup(r, c, Store.currentSheetIndex);
 
-                delete d[r][c]["spl"];
-              }
+              //   delete d[r][c]["spl"];
+              // }
 
-              if (d[r][c]["ct"] != null && d[r][c]["ct"].t == "inlineStr") {
-                delete d[r][c]["ct"];
-              }
+              // if (d[r][c]["ct"] != null && d[r][c]["ct"].t == "inlineStr") {
+              //   delete d[r][c]["ct"];
+              // }
+
+              delPosiArr.push({ r, c });
             } else {
               d[r][c] = null;
             }
@@ -2499,6 +2511,9 @@ export function rowColumnOperationInitial() {
         }
       }
 
+      if (delPosiArr?.length) {
+        eventBus.publish("deleteCell", delPosiArr);
+      }
       jfrefreshgrid(
         d,
         Store.MBLsheet_select_save,

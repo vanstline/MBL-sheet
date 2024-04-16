@@ -1,6 +1,6 @@
 class EventBus {
   constructor() {
-    this.eventTypeList = ["paste", "delete"];
+    this.eventTypeList = ["paste", "deleteCell", "deleteRow"];
     this.eventObject = {};
   }
 
@@ -9,7 +9,7 @@ class EventBus {
 
     if (!callbackList) return;
     for (let callback of callbackList) {
-      callback(args);
+      callback(...args);
     }
   }
 

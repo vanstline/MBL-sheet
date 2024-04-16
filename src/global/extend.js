@@ -18,6 +18,7 @@ import {
 import { getSheetIndex } from "../methods/get";
 import Store from "../store";
 import sheetmanage from "../controllers/sheetmanage";
+import { eventBus } from "./sg/event";
 
 /**
  * 增加行列
@@ -1098,6 +1099,11 @@ function MBLsheetextendData(rowlen, newData) {
 
 //删除行列
 function MBLsheetdeletetable(type, st, ed, sheetIndex) {
+  if (type === "row" && ed - st === 0) {
+    eventBus.publish("deleteRow", { startR: st });
+    MBLsheet.clearTable();
+    throw new Error("至少保留一条数据");
+  }
   sheetIndex = sheetIndex || Store.currentSheetIndex;
 
   if (
