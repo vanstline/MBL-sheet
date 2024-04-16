@@ -84,12 +84,21 @@ function sgInit(setting, config, MBLsheet) {
     },
   });
 
+  MBLsheet.clearTable = () => {
+    const data = getData(sheet);
+    const newData = data.map(() => {
+      return config.columns;
+    });
+    setData(newData, sheet, MBLsheet);
+  };
+
   MBLsheet.setLength = (len) => setLength(len, MBLsheet);
 
   MBLsheet.delRow = (cur, length = cur) => {
     const data = getData(sheet);
     const needRm = length - cur;
     if (data.length <= needRm + 1) {
+      MBLsheet.clearTable();
       throw new Error("至少保留一条数据");
     }
     //
@@ -119,14 +128,6 @@ function sgInit(setting, config, MBLsheet) {
   };
 
   MBLsheet.setData = (data) => setData(data, sheet, MBLsheet);
-
-  MBLsheet.clearTable = () => {
-    const data = getData(sheet);
-    const newData = data.map(() => {
-      return config.columns;
-    });
-    setData(newData, sheet, MBLsheet);
-  };
 
   MBLsheet.setDisabledMap = (obj = {}) => setDisabledMap(obj, config, MBLsheet);
   MBLsheet.getDisabledMap = () => getDisabledMap(config);

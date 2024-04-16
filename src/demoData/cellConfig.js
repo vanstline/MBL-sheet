@@ -369,7 +369,8 @@ var columns = [
         top: 4,
       },
       onclick: (text, data, index) => {
-        MBLsheet.delRow(index, 1);
+        console.log("%c Line:372 🥔 index", "color:#fca650", index);
+        MBLsheet.delRow(index);
       },
     },
   },

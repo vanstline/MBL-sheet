@@ -2024,12 +2024,12 @@ let nullCellRender = function (
     // 右下 向下移动
     MBLsheetTableContent.lineTo(
       end_c + offsetLeft - 1 - bodrder05,
-      end_r + offsetTop - 1 - bodrder05
+      end_r + offsetTop - 1 - bodrder05 - bodrder05
     );
     // 左下 向左移动
     MBLsheetTableContent.lineTo(
       end_c - style.width + offsetLeft - 1 - bodrder05,
-      end_r + offsetTop - 1 - bodrder05
+      end_r + offsetTop - 1 - bodrder05 - bodrder05
     );
     // 左上 回到起点
     MBLsheetTableContent.lineTo(
@@ -2754,12 +2754,12 @@ let cellRender = function (
     // 右下 向下移动
     MBLsheetTableContent.lineTo(
       end_c + offsetLeft - 1 - bodrder05,
-      end_r + offsetTop - 1 - bodrder05
+      end_r + offsetTop - 1 - bodrder05 - bodrder05
     );
     // 左下 向左移动
     MBLsheetTableContent.lineTo(
       end_c - style.width + offsetLeft - 1 - bodrder05,
-      end_r + offsetTop - 1 - bodrder05
+      end_r + offsetTop - 1 - bodrder05 - bodrder05
     );
     // 左上 回到起点
     MBLsheetTableContent.lineTo(
