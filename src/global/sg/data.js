@@ -68,6 +68,7 @@ function initVerification(data, sheet, MBLsheet) {
 
 function setData(data, sheet, MBLsheet) {
   const curData = processData(data, sheet, MBLsheet);
+
   curData.forEach((item) => {
     MBLsheet.setCellValue(item.r, item.c, item.v);
   });
@@ -110,6 +111,9 @@ function getData(sheet) {
 }
 
 function processData(dataSource, sheet, MBLsheet) {
+  dataSource = dataSource.splice(0, Store.flowdata.length);
+  sheet.row = Store.flowdata.length || sheet.row;
+
   const { columns } = sheet;
   const cMap = {};
   columns.forEach(({ dataIndex }, i) => {
@@ -117,7 +121,7 @@ function processData(dataSource, sheet, MBLsheet) {
   });
 
   const fillArr = Array.from({
-    length: Math.max(dataSource.length, sheet.row),
+    length: Math.max(dataSource.length, Store.flowdata.length || sheet.row),
   })?.map((_, i) => {
     return dataSource[i] || {};
   });
@@ -132,7 +136,7 @@ function processData(dataSource, sheet, MBLsheet) {
 
       const dom = sub.render && sub.render(item[sub.dataIndex], item, r);
       // TODO: 未来可能会有更多的渲染方式
-      // console.log(dom);
+      //
       if (sub.render && typeof sub.render === "function") {
         v = sub.render(item[sub.dataIndex], item, r);
       }

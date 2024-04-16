@@ -1848,40 +1848,6 @@ let nullCellRender = function (
 
   // 自定义额外渲染区
   const columns = sheetmanage.getSheetByIndex().columns;
-  if (typeof columns[c]?.extra === "object") {
-    const { style = {} } = columns[c]?.extra;
-    MBLsheetTableContent.beginPath();
-
-    // 左上起点
-    MBLsheetTableContent.moveTo(
-      end_c - style.width + offsetLeft - 1 - bodrder05,
-      start_r + offsetTop - bodrder05
-    );
-    // 右上 向右移动
-    MBLsheetTableContent.lineTo(
-      end_c + offsetLeft - 1 - bodrder05,
-      start_r + offsetTop - bodrder05
-    );
-    // 右下 向下移动
-    MBLsheetTableContent.lineTo(
-      end_c + offsetLeft - 1 - bodrder05,
-      end_r + offsetTop - 1 - bodrder05
-    );
-    // 左下 向左移动
-    MBLsheetTableContent.lineTo(
-      end_c - style.width + offsetLeft - 1 - bodrder05,
-      end_r + offsetTop - 1 - bodrder05
-    );
-    // 左上 回到起点
-    MBLsheetTableContent.lineTo(
-      end_c - style.width + offsetLeft - 1 - bodrder05,
-      start_r + offsetTop - bodrder05
-    );
-
-    MBLsheetTableContent.fillStyle = style.background || "#fff";
-    MBLsheetTableContent.fill();
-    MBLsheetTableContent.closePath();
-  }
 
   let dataVerification = dataVerificationCtrl.dataVerification;
 
@@ -1966,7 +1932,7 @@ let nullCellRender = function (
     });
 
     const fillStyle = menuButton.checkstatus(Store.flowdata, r, c, "fc");
-    const style = columns[c]?.extra?.style;
+    const style = columns?.[c]?.extra?.style;
 
     //单元格 文本颜色
     MBLsheetTableContent.fillStyle = style?.color ?? fillStyle;
@@ -2037,6 +2003,41 @@ let nullCellRender = function (
     );
 
     MBLsheetTableContent.fillStyle = "rgba(0, 0, 0, .1)";
+    MBLsheetTableContent.fill();
+    MBLsheetTableContent.closePath();
+  }
+
+  if (typeof columns[c]?.extra === "object") {
+    const { style = {} } = columns[c]?.extra;
+    MBLsheetTableContent.beginPath();
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+
+    MBLsheetTableContent.fillStyle = style.background || "#fff";
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
   }
@@ -2179,40 +2180,6 @@ let cellRender = function (
   // 自定义额外渲染区
   const columns = sheetmanage.getSheetByIndex().columns;
   const extra = columns[c]?.extra;
-  if (typeof extra === "object") {
-    const { style = {} } = extra;
-    MBLsheetTableContent.beginPath();
-
-    const drawStartR = start_r + offsetTop - bodrder05;
-    const drawStartC = end_c - style.width + offsetLeft - 1 - bodrder05;
-
-    // 左上起点
-    MBLsheetTableContent.moveTo(drawStartC, drawStartR);
-    // 右上 向右移动
-    MBLsheetTableContent.lineTo(
-      end_c + offsetLeft - 1 - bodrder05,
-      start_r + offsetTop - bodrder05
-    );
-    // 右下 向下移动
-    MBLsheetTableContent.lineTo(
-      end_c + offsetLeft - 1 - bodrder05,
-      end_r + offsetTop - 1 - bodrder05
-    );
-    // 左下 向左移动
-    MBLsheetTableContent.lineTo(
-      end_c - style.width + offsetLeft - 1 - bodrder05,
-      end_r + offsetTop - 1 - bodrder05
-    );
-    // 左上 回到起点
-    MBLsheetTableContent.lineTo(
-      end_c - style.width + offsetLeft - 1 - bodrder05,
-      start_r + offsetTop - bodrder05
-    );
-
-    MBLsheetTableContent.fillStyle = style.background || "#fff";
-    MBLsheetTableContent.fill();
-    MBLsheetTableContent.closePath();
-  }
 
   let dataVerification = dataVerificationCtrl.dataVerification;
 
@@ -2648,7 +2615,7 @@ let cellRender = function (
       }
     }
     const fillStyle = menuButton.checkstatus(Store.flowdata, r, c, "fc");
-    const style = columns[c]?.extra?.style;
+    const style = columns?.[c]?.extra?.style;
 
     //单元格 文本颜色
     MBLsheetTableContent.fillStyle = style?.color ?? fillStyle;
@@ -2766,6 +2733,41 @@ let cellRender = function (
     );
 
     MBLsheetTableContent.fillStyle = "rgba(0, 0, 0, .1)";
+    MBLsheetTableContent.fill();
+    MBLsheetTableContent.closePath();
+  }
+
+  if (typeof extra === "object") {
+    const { style = {} } = extra;
+    MBLsheetTableContent.beginPath();
+
+    const drawStartR = start_r + offsetTop - bodrder05;
+    const drawStartC = end_c - style.width + offsetLeft - 1 - bodrder05;
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(drawStartC, drawStartR);
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+
+    MBLsheetTableContent.fillStyle = style.background || "#fff";
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
   }
