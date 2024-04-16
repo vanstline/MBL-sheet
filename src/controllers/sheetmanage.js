@@ -1134,16 +1134,15 @@ const sheetmanage = {
         });
       } catch (e) {
         ini();
-        
       }
     }, 1);
   },
   storeSheetParam: function () {
     let index = this.getSheetIndex(Store.currentSheetIndex);
     let file = Store.MBLsheetfile[index];
-    
+
     file["config"] = Store.config;
-    
+
     file["visibledatarow"] = Store.visibledatarow;
     file["cloumnLenSum"] = Store.cloumnLenSum;
     file["ch_width"] = Store.ch_width;

@@ -358,22 +358,21 @@ var columns = [
   //     },
   //   },
   // },
-  // {
-  //   title: "操作",
-  //   width: 100,
-  //   render: () => "删除",
-  //   extra: {
-  //     style: {
-  //       width: 100,
-  //       left: 32,
-  //       background: "#fff",
-  //       color: "#4096ff",
-  //     },
-  //     onclick: (text, data, index) => {
-  //       MBLsheet.delRow(index, 1);
-  //     },
-  //   },
-  // },
+  {
+    title: "操作",
+    width: 60,
+    extra: {
+      icons: "DeleteOutlined",
+      style: {
+        width: 60,
+        left: 15,
+        top: 4,
+      },
+      onclick: (text, data, index) => {
+        MBLsheet.delRow(index, 1);
+      },
+    },
+  },
 ];
 
 // 调试使用

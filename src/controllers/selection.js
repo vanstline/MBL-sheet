@@ -717,6 +717,17 @@ const selection = {
     }, 10);
   },
   pasteHandler: function (data, borderInfo) {
+    data = Store.flowdata.map((item, i) => {
+      return item?.map((sub, j) => {
+        sub = {
+          ...sub,
+          v: data?.[i]?.[j]?.v || sub.v,
+          m: data?.[i]?.[j]?.m || sub.m,
+        };
+        return sub;
+      });
+    });
+
     if (
       !checkProtectionLockedRangeList(
         Store.MBLsheet_select_save,
