@@ -81,6 +81,21 @@ var excelDataSource = [
 
 // 本地开发
 var columns = [
+  // {
+  //   dataIndex: "aaa",
+  //   title: "31231",
+  //   disabled: true,
+  //   // onclick() {
+  //   //   console.log("%c Line:90 🍎", "color:#465975", arguments);
+  //   // },
+  //   render: "我去阿达啊水电费地方",
+  //   // fontColor: "red",
+  //   onblur(text, record, i, config) {
+  //     config.setRowData({ ...record, sampleName: text });
+  //     config.setDisabled({ sampleTypeNamed: text === "123" });
+  //   },
+  //   width: 100,
+  // },
   {
     dataIndex: "sampleName",
     width: 100,
@@ -90,43 +105,47 @@ var columns = [
       required: true,
       type: "text",
       range: [-1, 999999],
-      influence: ["sampleTypeId"],
-      // verifyFn: function (text, r) {
-      //   // const d = {
-      //   //   status: text === "123123",
-      //   //   message: `当前值为${text}，不符合规则`,
-      //   // };
-      //   // if (!d.status) {
-      //   //   return d;
-      //   // }
-      //   var status = false;
-      //   var message = "";
-      //   if (text == "1") {
-      //     status = false;
-      //     message = "请输入样品名称";
-      //   } else {
-      //     if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
-      //       status = false;
-      //       message =
-      //         "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
-      //     } else {
-      //       status = true;
-      //       message = "";
-      //     }
-      //   }
+      verifyFn: function (text, r) {
+        // const d = {
+        //   status: text === "123123",
+        //   message: `当前值为${text}，不符合规则`,
+        // };
+        // if (!d.status) {
+        //   return d;
+        // }
+        return {
+          status: false,
+          message:
+            "sdasdaassfddddddddddddddddddddddddddd/ndddddddddddddddddddddd/ndddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        };
+        var status = false;
+        var message = "";
+        if (text == "1") {
+          status = false;
+          message = "请输入样品名称";
+        } else {
+          if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
+            status = false;
+            message =
+              "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
+          } else {
+            status = true;
+            message = "";
+          }
+        }
 
-      //   return {
-      //     status,
-      //     message,
-      //   };
-      //   //
-      //   // return {
-      //   //   status: text === "123123",
-      //   //   message: `当前值为${text}，不符合规则`,
-      //   // };
-      // },
+        return {
+          status,
+          message,
+        };
+        //
+        // return {
+        //   status: text === "123123",
+        //   message: `当前值为${text}，不符合规则`,
+        // };
+      },
     },
-    disabled: true,
+    // disabled: true,
     extra: {
       icons: "SearchOutlined",
       style: {
@@ -146,9 +165,10 @@ var columns = [
         );
       },
     },
-    render: (text, record, index) => {
-      return record.cxSampleCartInfo?.name;
+    render: (text, index) => {
+      return (text ?? "").repeat(index || 1);
     },
+    // render: "样本名称",
     // onchange: (text, record, i, config) => {
     //   console.log(
     //     "%c Line:282 🍐 text, record",
@@ -229,14 +249,24 @@ var columns = [
       // type: "autocomplete",
       type: "select",
       // // type2: "multi",
-      options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
+      // width: 300,
+      options: [
+        "PCR已纯化",
+        "PCR未纯化",
+        "菌株",
+        "质粒",
+        "asdfa",
+        "asfdasdfsadf",
+        "adsfadfadf",
+        "afasdadsfa",
+      ],
       // options: [
       //   { label: "菌株", value: "4" },
       //   { label: "PCR产物(已纯化)", value: 1 },
       // ],
       verifyFn(text, row) {
         const d = {
-          status: !text,
+          status: text === "菌株",
           // status: !text,
           message: `当前值为${text}，不符合规则`,
         };
@@ -256,6 +286,23 @@ var columns = [
     dataIndex: "testIndex",
     title: "测试使用",
     fontColor: "red",
+    fieldsProps: {
+      defaultValue: "菌株",
+      // type: "autocomplete",
+      type: "select",
+      // // type2: "multi",
+      // width: 300,
+      options: [
+        "PCR已纯化",
+        "PCR未纯化",
+        "菌株",
+        "质粒",
+        "asdfa",
+        "asfdasdfsadf",
+        "adsfadfadf",
+        "afasdadsfa",
+      ],
+    },
   },
   // {
   //   dataIndex: "sampleTypeId2",
@@ -359,22 +406,22 @@ var columns = [
   //     },
   //   },
   // },
-  // {
-  //   title: "操作",
-  //   width: 60,
-  //   extra: {
-  //     icons: "DeleteOutlined",
-  //     style: {
-  //       width: 60,
-  //       left: 15,
-  //       top: 4,
-  //     },
-  //     onclick: (text, data, index) => {
-  //       console.log("%c Line:372 🥔 index", "color:#fca650", index);
-  //       MBLsheet.delRow(index);
-  //     },
-  //   },
-  // },
+  {
+    title: "操作",
+    width: 60,
+    extra: {
+      icons: "DeleteOutlined",
+      style: {
+        width: 60,
+        left: 15,
+        top: 4,
+      },
+      onclick: (text, data, index) => {
+        console.log("%c Line:372 🥔 index", "color:#fca650", index);
+        MBLsheet.delRow(index);
+      },
+    },
+  },
 ];
 
 // 调试使用

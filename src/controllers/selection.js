@@ -1975,6 +1975,7 @@ const selection = {
     }
   },
   pasteHandlerOfPaintModel: function (copyRange) {
+    console.log("%c Line:1979 🥓", "color:#3f7cff");
     if (
       !checkProtectionLockedRangeList(
         Store.MBLsheet_select_save,
@@ -2323,6 +2324,7 @@ const selection = {
     }
   },
   matchcopy: function (data1, data2) {
+    console.log("%c Line:2328 🍰", "color:#42b983", data1, data2);
     let data1cache = [],
       data2cache = [],
       data1len,

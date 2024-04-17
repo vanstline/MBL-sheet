@@ -2079,7 +2079,7 @@ const dataVerificationCtrl = {
       .prop("data-index", rowIndex + "_" + colIndex)
       .show()
       .css({
-        width: col - col_pre - 1,
+        width: item.width ?? col - col_pre - 1,
         // left: col_pre + width,
         left: col_pre,
         // top: row + height,
