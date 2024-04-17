@@ -6,6 +6,7 @@ import { checkWordByteLength, hasChinaword, isRealNull } from "./validate";
 import { isInlineStringCell } from "../controllers/inlineString";
 
 import Store from "../store";
+import sheetmanage from "../controllers/sheetmanage";
 
 /**
  * 计算范围行高
@@ -538,6 +539,17 @@ function getCellTextInfo(cell, ctx, option) {
       value = cell.m;
       if (value == null) {
         value = cell.v;
+      }
+
+      const curColumn = sheetmanage
+        .getSheetByIndex()
+        ?.columns?.find((item) => item.dataIndex === cell.dataIndex);
+
+      if (curColumn.render) {
+        value =
+          typeof curColumn.render === "function"
+            ? curColumn.render(cell.v, option.r)
+            : curColumn.render;
       }
     } else {
       value = cell;

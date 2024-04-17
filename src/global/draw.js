@@ -1996,6 +1996,14 @@ let nullCellRender = function (
       MBLsheetTableContent.fillStyle = "#ff0000";
     }
 
+    const maxWidth = cell.width - extra.style?.width ?? 0;
+    if (textInfo.textWidthAll + textInfo.textLeftAll >= maxWidth) {
+      const contentStr = textInfo.values[0].content;
+      const singleWidth = textInfo.textWidthAll / contentStr?.length;
+      const sliceLen = Math.floor(maxWidth / singleWidth);
+      textInfo.values[0].content = contentStr.slice(0, sliceLen - 2) + "...";
+    }
+
     cellTextRender(textInfo, MBLsheetTableContent, {
       pos_x: pos_x,
       pos_y: pos_y,
@@ -2715,6 +2723,14 @@ let cellRender = function (
     } else if (cell.fontColor) {
       MBLsheetTableContent.fillStyle = cell.fontColor;
     }
+    const maxWidth = cell.width - extra.style?.width ?? 0;
+    if (textInfo.textWidthAll + textInfo.textLeftAll >= maxWidth) {
+      const contentStr = textInfo.values[0].content;
+      const singleWidth = textInfo.textWidthAll / contentStr?.length;
+      const sliceLen = Math.floor(maxWidth / singleWidth);
+      textInfo.values[0].content = contentStr.slice(0, sliceLen - 2) + "...";
+      console.log("%c Line:2722 🌽", "color:#3f7cff", textInfo);
+    }
     cellTextRender(textInfo, MBLsheetTableContent, {
       pos_x: pos_x,
       pos_y: pos_y,
@@ -2874,7 +2890,12 @@ let cellRender = function (
   }
 
   // ploaceholder
-  if (columns[c]["placeholder"] && !cell?.v && cell?.v !== 0) {
+  if (
+    columns[c]["placeholder"] &&
+    !cell?.v &&
+    cell?.v !== 0 &&
+    !columns[c].hasOwnProperty("render")
+  ) {
     const curTextInfo = {
       type: "plain",
       values: [
@@ -2995,6 +3016,15 @@ let cellOverflowRender = function (
   //若单元格有条件格式 文本颜色
   if (checksCF != null && checksCF["textColor"] != null) {
     MBLsheetTableContent.fillStyle = checksCF["textColor"];
+  }
+
+  const maxWidth = cell.width - extra.style?.width ?? 0;
+  if (textInfo.textWidthAll + textInfo.textLeftAll >= maxWidth) {
+    const contentStr = textInfo.values[0].content;
+    const singleWidth = textInfo.textWidthAll / contentStr?.length;
+    const sliceLen = Math.floor(maxWidth / singleWidth);
+    textInfo.values[0].content = contentStr.slice(0, sliceLen - 2) + "...";
+    console.log("%c Line:2722 🌽", "color:#3f7cff", textInfo);
   }
 
   cellTextRender(textInfo, MBLsheetTableContent, {
@@ -3317,7 +3347,7 @@ function cellOverflow_colIn(map, r, c, col_st, col_ed) {
 }
 
 function cellTextRender(textInfo, ctx, option) {
-  console.log("%c Line:3315 🍕 textInfo", "color:#b03734", textInfo);
+  // console.log("%c Line:3315 🍕 textInfo", "color:#b03734", textInfo);
   if (textInfo == null) {
     return;
   }
