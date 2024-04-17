@@ -105,45 +105,45 @@ var columns = [
       required: true,
       type: "text",
       range: [-1, 999999],
-      verifyFn: function (text, r) {
-        // const d = {
-        //   status: text === "123123",
-        //   message: `当前值为${text}，不符合规则`,
-        // };
-        // if (!d.status) {
-        //   return d;
-        // }
-        return {
-          status: false,
-          message:
-            "sdasdaassfddddddddddddddddddddddddddd/ndddddddddddddddddddddd/ndddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-        };
-        var status = false;
-        var message = "";
-        if (text == "1") {
-          status = false;
-          message = "请输入样品名称";
-        } else {
-          if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
-            status = false;
-            message =
-              "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
-          } else {
-            status = true;
-            message = "";
-          }
-        }
+      // verifyFn: function (text, r) {
+      //   // const d = {
+      //   //   status: text === "123123",
+      //   //   message: `当前值为${text}，不符合规则`,
+      //   // };
+      //   // if (!d.status) {
+      //   //   return d;
+      //   // }
+      //   return {
+      //     status: false,
+      //     message:
+      //       "sdasdaassfddddddddddddddddddddddddddd/ndddddddddddddddddddddd/ndddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      //   };
+      //   var status = false;
+      //   var message = "";
+      //   if (text == "1") {
+      //     status = false;
+      //     message = "请输入样品名称";
+      //   } else {
+      //     if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
+      //       status = false;
+      //       message =
+      //         "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
+      //     } else {
+      //       status = true;
+      //       message = "";
+      //     }
+      //   }
 
-        return {
-          status,
-          message,
-        };
-        //
-        // return {
-        //   status: text === "123123",
-        //   message: `当前值为${text}，不符合规则`,
-        // };
-      },
+      //   return {
+      //     status,
+      //     message,
+      //   };
+      //   //
+      //   // return {
+      //   //   status: text === "123123",
+      //   //   message: `当前值为${text}，不符合规则`,
+      //   // };
+      // },
     },
     // disabled: true,
     extra: {
@@ -165,9 +165,9 @@ var columns = [
         );
       },
     },
-    render: (text, index) => {
-      return (text ?? "").repeat(index || 1);
-    },
+    // render: (text, index) => {
+    //   return (text ?? "").repeat(index || 1);
+    // },
     // render: "样本名称",
     // onchange: (text, record, i, config) => {
     //   console.log(
@@ -260,19 +260,19 @@ var columns = [
         "adsfadfadf",
         "afasdadsfa",
       ],
-      // options: [
-      //   { label: "菌株", value: "4" },
-      //   { label: "PCR产物(已纯化)", value: 1 },
-      // ],
-      verifyFn(text, row) {
-        const d = {
-          status: text === "菌株",
-          // status: !text,
-          message: `当前值为${text}，不符合规则`,
-        };
+      // // options: [
+      // //   { label: "菌株", value: "4" },
+      // //   { label: "PCR产物(已纯化)", value: 1 },
+      // // ],
+      // verifyFn(text, row) {
+      //   const d = {
+      //     status: text === "菌株",
+      //     // status: !text,
+      //     message: `当前值为${text}，不符合规则`,
+      //   };
 
-        return d;
-      },
+      //   return d;
+      // },
     },
     onblur: (val, record, i, config) => {
       console.log("%c Line:255 🌮 val", "color:#2eafb0", val);
