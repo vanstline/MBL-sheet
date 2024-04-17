@@ -7400,7 +7400,9 @@ fieldset[disabled] .btn-danger.focus {
   z-index: 1000;
   user-select: none;
   cursor: default;
-  white-space: nowrap;
+  max-width: 160px;
+  word-break: break-all;
+  /* white-space: nowrap; */
 }
 
 #MBLsheet-icon-undo.disabled,
