@@ -82,7 +82,9 @@ function initVerification(data, sheet, MBLsheet) {
 }
 
 function setData(data, sheet, MBLsheet) {
+  console.log("%c Line:85 🥐 data", "color:#7f2b82", data);
   const curData = processData(data, sheet, MBLsheet);
+  console.log("%c Line:86 🌶 curData", "color:#ea7e5c", curData);
 
   curData.forEach((item) => {
     MBLsheet.setCellValue(item.r, item.c, item.v);
@@ -101,6 +103,22 @@ export function transOptionOriValue(options = [], val) {
     typeof item === "object" ? item.label == val : item == val
   );
   return vObj == null ? val : vObj?.value ?? vObj;
+}
+
+/**
+ * 获取optionsLabel
+ *
+ * @export
+ * @param {*} [options=[]]
+ * @param {*} val
+ * @return {*}
+ */
+export function transOptionOriLabel(options = [], val) {
+  console.log("%c Line:118 🥑 vObj", "color:#ea7e5c", options, val);
+  const vObj = options?.find((item) =>
+    typeof item === "object" ? item.value == val : item == val
+  );
+  return vObj == null ? val : vObj?.label ?? vObj;
 }
 
 function getData(sheet) {

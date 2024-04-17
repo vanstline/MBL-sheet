@@ -4,7 +4,7 @@ import { MBLsheetMoveHighlightCell } from "./sheetMove";
 import Store from "../store";
 import sheetmanage from "./sheetmanage";
 import { exitEditMode } from "../global/api";
-import { transOptionOriValue } from "../global/sg/data";
+import { transOptionOriLabel, transOptionOriValue } from "../global/sg/data";
 
 const nonexistentCell = [undefined, -1];
 
@@ -90,19 +90,34 @@ export function getRowData(r, c, newVal, keyNumMap = {}) {
 
 export function changeValue(r, c, value, falg = true) {
   const keyNumMap = {};
-  let newVal = value;
+  let newVal = value,
+    labelValue = value;
   const sheet = sheetmanage.getSheetByIndex();
   const curColumn = sheet?.columns?.[c];
 
   if (["select", "autocomplete"].includes(curColumn?.fieldsProps?.type)) {
     newVal = transOptionOriValue(curColumn?.fieldsProps?.options, newVal);
   }
+  if (labelValue === newVal) {
+    labelValue = transOptionOriLabel(
+      curColumn?.fieldsProps?.options,
+      labelValue
+    );
+  }
+  console.log(
+    "%c Line:92 🥟 r, c, value",
+    "color:#f5ce50",
+    r,
+    c,
+    curColumn?.fieldsProps,
+    newVal
+  );
 
   const rowData = getRowData(r, c, newVal);
 
   if (typeof sheet.dataVerification[`${r}_${c}`]?.verifyFn === "function") {
     const curVerifyInfo = sheet.dataVerification[`${r}_${c}`]?.verifyFn(
-      value,
+      labelValue,
       r
     );
 
@@ -119,6 +134,7 @@ export function changeValue(r, c, value, falg = true) {
 
   const onchange = curColumn?.onchange;
 
+  MBLsheet.setCellValue(r, c, newVal ?? null, false);
   if (onchange && typeof onchange === "function") {
     const curSetDisabled = (disabledMap) =>
       setDisabled(disabledMap, r, keyNumMap, falg);

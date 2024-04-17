@@ -217,9 +217,13 @@ function changeSomeValue(obj, config) {
     ?.filter((item) => item);
 
   Object.entries(obj).forEach(([k, v]) => {
+    console.log("%c Line:220 🥐 v", "color:#42b983", v);
     const [r, dataIndex] = k?.split("_") ?? [];
+    console.log("%c Line:222 🍬 r, dataIndex", "color:#3f7cff", r, dataIndex);
+    console.log("%c Line:223 🍒 keyNums", "color:#2eafb0", keyNums);
     const c = keyNums.findIndex((item) => item === dataIndex);
     if (r > -1 && c >= -1) {
+      console.log("%c Line:227 🥐 r, c, v", "color:#7f2b82", r, c, v);
       changeValue(r, c, v);
     }
   });

@@ -106,10 +106,10 @@
       // }, 2000);
 
       $(function () {
-        // setTimeout(() => {
-        //   MBLsheet.setLength(excelDataSource.length)
-        //   MBLsheet.setData(excelDataSource);
-        // }, 100);
+        setTimeout(() => {
+          MBLsheet.setLength(excelDataSource.length)
+          MBLsheet.setData(excelDataSource);
+        }, 1000);
 
 
         MBLsheet.addEventListener('paste', function(arr, obj) {
