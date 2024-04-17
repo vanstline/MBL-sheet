@@ -81,92 +81,114 @@ var excelDataSource = [
 
 // 本地开发
 var columns = [
-  {
-    dataIndex: "sampleName",
-    width: 100,
-    title: "样本名称11",
-    placeholder: " 12312",
-    fieldsProps: {
-      required: true,
-      type: "text",
-      range: [-1, 999999],
-      influence: ["sampleTypeId"],
-      // verifyFn: function (text, r) {
-      //   // const d = {
-      //   //   status: text === "123123",
-      //   //   message: `当前值为${text}，不符合规则`,
-      //   // };
-      //   // if (!d.status) {
-      //   //   return d;
-      //   // }
-      //   var status = false;
-      //   var message = "";
-      //   if (text == "1") {
-      //     status = false;
-      //     message = "请输入样品名称";
-      //   } else {
-      //     if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
-      //       status = false;
-      //       message =
-      //         "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
-      //     } else {
-      //       status = true;
-      //       message = "";
-      //     }
-      //   }
+  // {
+  //   dataIndex: "sampleName",
+  //   width: 100,
+  //   title: "样本名称11",
+  //   // placeholder: " 12312",
+  //   // fieldsProps: {
+  //   //   required: true,
+  //   //   type: "number",
+  //   //   range: [0, 999999],
+  //   //   influence: ["sampleTypeId"],
+  //   //   // verifyFn: function (text, r) {
+  //   //   //   // const d = {
+  //   //   //   //   status: text === "123123",
+  //   //   //   //   message: `当前值为${text}，不符合规则`,
+  //   //   //   // };
+  //   //   //   // if (!d.status) {
+  //   //   //   //   return d;
+  //   //   //   // }
+  //   //   //   var status = false;
+  //   //   //   var message = "";
+  //   //   //   if (text == "1") {
+  //   //   //     status = false;
+  //   //   //     message = "请输入样品名称";
+  //   //   //   } else {
+  //   //   //     if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
+  //   //   //       status = false;
+  //   //   //       message =
+  //   //   //         "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
+  //   //   //     } else {
+  //   //   //       status = true;
+  //   //   //       message = "";
+  //   //   //     }
+  //   //   //   }
 
-      //   return {
-      //     status,
-      //     message,
-      //   };
-      //   //
-      //   // return {
-      //   //   status: text === "123123",
-      //   //   message: `当前值为${text}，不符合规则`,
-      //   // };
-      // },
-    },
-    disabled: true,
-    extra: {
-      icons: "SearchOutlined",
-      style: {
-        width: 30,
-        left: 5,
-        top: 5,
-        background: "transparent",
-      },
+  //   //   //   return {
+  //   //   //     status,
+  //   //   //     message,
+  //   //   //   };
+  //   //   //   //
+  //   //   //   // return {
+  //   //   //   //   status: text === "123123",
+  //   //   //   //   message: `当前值为${text}，不符合规则`,
+  //   //   //   // };
+  //   //   // },
+  //   // },
 
-      onclick: (text, data, index) => {
-        console.log(
-          "%c Line:409 🧀 text, index   jjljl",
-          "color:#7f2b82",
-          text,
-          data,
-          index
-        );
-      },
-    },
-    render: (text, record, index) => {
-      return record.cxSampleCartInfo?.name;
-    },
-    // onchange: (text, record, i, config) => {
-    //   console.log(
-    //     "%c Line:282 🍐 text, record",
-    //     "color:#465975",
-    //     text,
-    //     record,
-    //     i,
-    //     config
-    //   );
-    //   config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
-    //   config.setDisabled({ sampleTypeNamed: text === "123" });
-    //   // setRowData({ ...record, sampleTypeId1: "" }, ["sampleTypeId1"]);
-    // },
-    onblur(text, record, i, config) {
-      config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
-      config.setDisabled({ sampleTypeNamed: text === "123" });
-    },
-  },
+  //   fieldsProps: {
+  //     type: "number",
+  //     compareInfo: {
+  //       sign: "in", // 比较符
+  //       range: [0, 999999],
+  //     },
+  //     verifyFn: function (text, index) {
+  //       return {
+  //         status: true,
+  //         message: "",
+  //       };
+  //     },
+  //   },
+  //   extra: {
+  //     icons: "SearchOutlined",
+  //     style: {
+  //       width: 30,
+  //       left: 5,
+  //       top: 5,
+  //       background: "transparent",
+  //     },
+
+  //     onclick: (text, data, index) => {
+  //       console.log(
+  //         "%c Line:409 🧀 text, index   jjljl",
+  //         "color:#7f2b82",
+  //         text,
+  //         data,
+  //         index
+  //       );
+  //     },
+  //   },
+  //   // render: (text, record, index) => {
+  //   //   return record.cxSampleCartInfo?.name;
+  //   // },
+  //   onblur: (value, record, index, config) => {
+  //     const newRecord = {
+  //       ...record,
+  //       sampleName: value ? parseInt(value) : "",
+  //       sampleTypeId1: +!!value,
+  //     };
+  //     console.log("%c Line:171 🥟 newRecord", "color:#b03734", newRecord);
+  //     config.setRowData(newRecord, ["sampleTypeId1"]);
+  //   },
+  //   // onchange: (text, record, i, config) => {
+  //   //   console.log(
+  //   //     "%c Line:282 🍐 text, record",
+  //   //     "color:#465975",
+  //   //     text,
+  //   //     record,
+  //   //     i,
+  //   //     config
+  //   //   );
+  //   //   config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
+  //   //   config.setDisabled({ sampleTypeNamed: text === "123" });
+  //   //   // setRowData({ ...record, sampleTypeId1: "" }, ["sampleTypeId1"]);
+  //   // },
+  //   // onblur(text, record, i, config) {
+  //   //   config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
+  //   //   config.setDisabled({ sampleTypeNamed: text === "123" });
+  //   // },
+  // },
   {
     dataIndex: "sampleTypeId1",
     title: [
@@ -226,25 +248,27 @@ var columns = [
     width: 200,
     fieldsProps: {
       defaultValue: "菌株",
-      // type: "autocomplete",
-      type: "select",
-      // // type2: "multi",
-      options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
-      // options: [
-      //   { label: "菌株", value: "4" },
-      //   { label: "PCR产物(已纯化)", value: 1 },
-      // ],
-      verifyFn(text, row) {
-        const d = {
-          status: !text,
-          // status: !text,
-          message: `当前值为${text}，不符合规则`,
-        };
+      type: "autocomplete",
+      // type: "select",
+      // type2: "multi",
+      // options: ["PCR已纯化", "PCR未纯化", "菌株", "质粒"],
+      options: [
+        { label: "PCR已纯化", value: 0 },
+        { label: "菌株", value: "4" },
+        { label: "PCR产物(已纯化)", value: 1 },
+      ],
+      // verifyFn(text, row) {
+      //   console.log("%c Line:261 🥒 text", "color:#ffdd4d", text);
+      //   const d = {
+      //     status: !text,
+      //     // status: !text,
+      //     message: `当前值为${text}，不符合规则`,
+      //   };
 
-        return d;
-      },
+      //   return d;
+      // },
     },
-    onblur: (val, record, i, config) => {
+    onchange: (val, record, i, config) => {
       console.log("%c Line:255 🌮 val", "color:#2eafb0", val);
       config.setDisabled({
         // testIndex: !!val,
@@ -252,11 +276,11 @@ var columns = [
       });
     },
   },
-  {
-    dataIndex: "testIndex",
-    title: "测试使用",
-    fontColor: "red",
-  },
+  // {
+  //   dataIndex: "testIndex",
+  //   title: "测试使用",
+  //   fontColor: "red",
+  // },
   // {
   //   dataIndex: "sampleTypeId2",
   //   title: [

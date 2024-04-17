@@ -1766,6 +1766,7 @@ const dataVerificationCtrl = {
     return failureText;
   },
   validateCellDataCustom: function (cellValue, item, r) {
+    console.log("%c Line:1770 🍬 cellValue", "color:#ffdd4d", cellValue);
     if (item.required && (isRealNull(cellValue) || cellValue === "")) {
       return {
         status: false,
@@ -2005,21 +2006,22 @@ const dataVerificationCtrl = {
 
     let item = _this.dataVerification[rowIndex + "_" + colIndex];
     let list = _this.getDropdownList(item.value1);
+    let valueList = item?.value2?.split(",");
 
     let optionHtml = "";
     if (item.type === "dropdown" && item.type2 && item.type2 === "multi") {
       // 下拉多选的情况下 将已经选择的标出来
       let cellValue = getcellvalue(rowIndex, colIndex, null);
       let valueArr = isRealNull(cellValue) ? [] : cellValue.split(",");
-      list.forEach((i) => {
+      list.forEach((i, curIndex) => {
         let checked = valueArr.indexOf(i) !== -1;
         optionHtml += `<div class="dropdown-List-item  MBLsheet-mousedown-cancel multi${
           checked ? " checked" : ""
-        }">${i}</div>`;
+        }" data-value="${valueList[curIndex]}">${i}</div>`;
       });
     } else {
-      list.forEach((i) => {
-        optionHtml += `<div class="dropdown-List-item MBLsheet-mousedown-cancel">${i}</div>`;
+      list.forEach((i, curIndex) => {
+        optionHtml += `<div class="dropdown-List-item MBLsheet-mousedown-cancel" data-value="${valueList[curIndex]}">${i}</div>`;
       });
     }
 
@@ -2074,6 +2076,7 @@ const dataVerificationCtrl = {
     // const paneswrapper = document.querySelectorAll(".MBLsheet-paneswrapper");
     // const { width = 0, height = 0 } = paneswrapper?.[0].getBoundingClientRect();
 
+    console.log("%c Line:2080 🍰 optionHtml", "color:#fca650", optionHtml);
     $("#MBLsheet-dataVerification-dropdown-List")
       .html(optionHtml)
       .prop("data-index", rowIndex + "_" + colIndex)

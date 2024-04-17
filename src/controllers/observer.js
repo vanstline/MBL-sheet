@@ -1,10 +1,10 @@
 import { MBLsheet } from "../core";
-import { getcellvalue } from "../global/getdata";
 import formula from "../global/formula";
 import { MBLsheetMoveHighlightCell } from "./sheetMove";
 import Store from "../store";
 import sheetmanage from "./sheetmanage";
 import { exitEditMode } from "../global/api";
+import { transOptionOriValue } from "../global/sg/data";
 
 const nonexistentCell = [undefined, -1];
 
@@ -36,15 +36,8 @@ $(document).ready(function () {
     }
 
     if (editableElement) {
-      // 添加input事件监听器
       editableElement?.addEventListener("input", processChange);
       editableElement?.addEventListener("blur", processBlur);
-      // editableElement?.addEventListener("keydown", function (event) {
-      //   if (event.key === "Enter") {
-      //     processBlur(event);
-      //     // 这里可以执行你的其他操作
-      //   }
-      // });
 
       // 如果需要兼容旧版IE浏览器（IE9及更低版本不支持input事件）
       if ("oninput" in document.createElement("div")) {
@@ -68,12 +61,16 @@ export function getRowData(r, c, newVal, keyNumMap = {}) {
       const v = curRowData?.find((sub) => sub?.dataIndex === item.dataIndex)?.v;
 
       if (item.dataIndex === curKey) {
-        if (typeof item?.fieldsProps?.options === "object") {
-          const valueStr = newVal
+        if (
+          typeof item?.fieldsProps?.options === "object" &&
+          item?.fieldsProps.type2 === "multi"
+        ) {
+          const curNewVal = newVal != null ? newVal.toString() : "";
+          const valueStr = curNewVal
             ?.split(",")
             .map((sub) => {
               const curOption = item.fieldsProps.options.find(
-                (min) => min.label === sub
+                (min) => min.value === sub
               );
               return curOption?.value || sub;
             })
@@ -94,10 +91,14 @@ export function getRowData(r, c, newVal, keyNumMap = {}) {
 export function changeValue(r, c, value, falg = true) {
   const keyNumMap = {};
   let newVal = value;
+  const sheet = sheetmanage.getSheetByIndex();
+  const curColumn = sheet?.columns?.[c];
+
+  if (["select", "autocomplete"].includes(curColumn?.fieldsProps?.type)) {
+    newVal = transOptionOriValue(curColumn?.fieldsProps?.options, newVal);
+  }
 
   const rowData = getRowData(r, c, newVal);
-
-  const sheet = sheetmanage.getSheetByIndex();
 
   if (typeof sheet.dataVerification[`${r}_${c}`]?.verifyFn === "function") {
     const curVerifyInfo = sheet.dataVerification[`${r}_${c}`]?.verifyFn(
@@ -115,7 +116,8 @@ export function changeValue(r, c, value, falg = true) {
   }
 
   // 在这里处理内容变更后的逻辑
-  const onchange = sheet?.columns?.[c]?.onchange;
+
+  const onchange = curColumn?.onchange;
 
   if (onchange && typeof onchange === "function") {
     const curSetDisabled = (disabledMap) =>
@@ -176,7 +178,10 @@ export function updateBlur(event) {
   if (onblur && typeof onblur === "function") {
     const keyNumMap = {};
     let newVal = event.target.classList.contains("dropdown-List-item")
-      ? event.target.innerText
+      ? transOptionOriValue(
+          curColumn.fieldsProps?.options,
+          event.target.innerText
+        )
       : curEle.v;
 
     const rowData = getRowData(r, c, newVal, keyNumMap);
@@ -209,5 +214,4 @@ export function updateBlur(event) {
   }
 
   MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
-  // }
 }

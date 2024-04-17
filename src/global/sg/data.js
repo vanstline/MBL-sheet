@@ -44,10 +44,25 @@ function initVerification(data, sheet, MBLsheet) {
         };
 
         if (type === "select" || type === AUTOCOMPLETE) {
-          // if ()
-          curVerifyInfo.value1 = options
-            .map((item) => item.label || item)
-            .join(",");
+          let value1Arr = [];
+          let value2Arr = [];
+          options.forEach((item) => {
+            if (typeof options[0] === "object") {
+              value1Arr.push(item.label);
+              value2Arr.push(item.value);
+            } else {
+              value1Arr.push(item);
+              value2Arr.push(item);
+            }
+          });
+
+          curVerifyInfo.value1 = value1Arr.join(",");
+          curVerifyInfo.value2 = value2Arr.join(",");
+          console.log(
+            "%c Line:49 🍖 curVerifyInfo",
+            "color:#fca650",
+            curVerifyInfo
+          );
           curVerifyInfo.type2 = type === AUTOCOMPLETE ? AUTOCOMPLETE : type2;
         } else if (lengthVerArr.includes(type) && range != null) {
           const [v1, v2] = range || [];
@@ -74,31 +89,30 @@ function setData(data, sheet, MBLsheet) {
   });
 }
 
+/**
+ * 获取options原值
+ *
+ * @param {Array} options
+ * @param {*} val
+ * @return {*}
+ */
+export function transOptionOriValue(options = [], val) {
+  const vObj = options?.find((item) =>
+    typeof item === "object" ? item.label == val : item == val
+  );
+  return vObj == null ? val : vObj?.value ?? vObj;
+}
+
 function getData(sheet) {
   const data = MBLsheet.getSheetData()?.map((item) => {
     const obj = {};
     sheet.columns.forEach((col, index) => {
       const fieldsProps = item?.[index]?.fieldsProps;
-
-      if (fieldsProps?.type === "select" && fieldsProps.options) {
-        let curVal = item?.[index]?.v;
-        const valueArr =
-          typeof curVal === "string" ? curVal?.split(",") : curVal;
-        if (valueArr?.length > 1) {
-          curVal = valueArr
-            ?.map((sub) => {
-              return (
-                fieldsProps.options.find((min) => {
-                  return min.label === sub;
-                })?.value || sub
-              );
-            })
-            .join(",");
-        } else {
-          curVal =
-            fieldsProps.options.find((min) => min.label === curVal)?.value ||
-            curVal;
-        }
+      if (["select", "autocomplete"].includes(fieldsProps?.type)) {
+        let curVal = transOptionOriValue(
+          fieldsProps?.options,
+          item?.[index]?.v
+        );
         obj[col.dataIndex] = curVal;
       } else {
         obj[col.dataIndex] = item?.[index]?.v;
