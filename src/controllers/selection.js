@@ -1034,6 +1034,7 @@ const selection = {
     }
   },
   pasteHandlerOfCutPaste: function (copyRange) {
+    return;
     if (
       !checkProtectionLockedRangeList(
         Store.MBLsheet_select_save,
@@ -1567,6 +1568,33 @@ const selection = {
     }
   },
   pasteHandlerOfCopyPaste: function (copyRange) {
+    const curCopyData = [];
+    copyRange.copyRange?.forEach((item) => {
+      const { row, column } = item;
+      for (let i = row[0]; i <= row[1]; i++) {
+        for (let j = column[0]; j <= column[1]; j++) {
+          if (!curCopyData[i]) {
+            curCopyData[i] = [
+              {
+                m: Store.flowdata[i][j].m,
+                v: Store.flowdata[i][j].v,
+              },
+            ];
+          } else {
+            curCopyData[i].push({
+              m: Store.flowdata[i][j].m,
+              v: Store.flowdata[i][j].v,
+            });
+          }
+        }
+      }
+    });
+
+    this.pasteHandler(
+      curCopyData?.filter((item) => !!item?.length),
+      "{}"
+    );
+    return;
     if (
       !checkProtectionLockedRangeList(
         Store.MBLsheet_select_save,

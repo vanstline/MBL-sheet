@@ -481,6 +481,7 @@ export function rowColumnOperationInitial() {
     })
     .mouseup(function (event) {
       if (event.which == 3) {
+        console.log("%c Line:486 🥛", "color:#f5ce50");
         // *如果禁止前台编辑，则中止下一步操作
         if (!checkIsAllowEdit()) {
           return;
@@ -683,6 +684,7 @@ export function rowColumnOperationInitial() {
 
       //mousedown是右键
       if (event.which == "3") {
+        console.log("%c Line:689 🥖", "color:#465975");
         let isright = false;
 
         for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
@@ -1069,6 +1071,8 @@ export function rowColumnOperationInitial() {
     })
     .mouseup(function (event) {
       if (event.which == 3) {
+        return;
+        console.log("%c Line:1076 🍺", "color:#42b983");
         // *如果禁止前台编辑，则中止下一步操作
         if (!checkIsAllowEdit()) {
           return;
