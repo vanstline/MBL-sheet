@@ -67,6 +67,8 @@ function formulaHistoryHanddler(ctr, type = "redo") {
 
 const controlHistory = {
   redo: function (e) {
+    // 禁用撤销功能
+    return;
     if (Store.jfredo.length == 0) {
       return;
     }
