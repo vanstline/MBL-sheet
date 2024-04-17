@@ -2009,6 +2009,9 @@ let nullCellRender = function (
       const sliceLen = Math.floor(maxWidth / singleWidth);
       textInfo.values[0].content = contentStr.slice(0, sliceLen - 2) + "...";
     }
+    if (cell.fontColor) {
+      MBLsheetTableContent.fillStyle = cell.fontColor;
+    }
 
     cellTextRender(textInfo, MBLsheetTableContent, {
       pos_x: pos_x,
@@ -2104,7 +2107,7 @@ let nullCellRender = function (
       ],
     };
 
-    MBLsheetTableContent.fillStyle = "#bfbfbf";
+    MBLsheetTableContent.fillStyle = cell.fontColor || "#bfbfbf";
     cellTextRender(curTextInfo, MBLsheetTableContent, {
       pos_x: pos_x,
       pos_y: pos_y,
@@ -2741,6 +2744,10 @@ let cellRender = function (
       const sliceLen = Math.floor(maxWidth / singleWidth);
       textInfo.values[0].content = contentStr.slice(0, sliceLen - 2) + "...";
     }
+
+    if (cell.fontColor) {
+      MBLsheetTableContent.fillStyle = cell.fontColor;
+    }
     cellTextRender(textInfo, MBLsheetTableContent, {
       pos_x: pos_x,
       pos_y: pos_y,
@@ -2921,7 +2928,8 @@ let cellRender = function (
     let pos_x = start_c + offsetLeft;
     let pos_y = start_r + offsetTop + 1;
 
-    MBLsheetTableContent.fillStyle = "#bfbfbf";
+    MBLsheetTableContent.fillStyle = cell.fontColor || "#bfbfbf";
+
     cellTextRender(curTextInfo, MBLsheetTableContent, {
       pos_x: pos_x,
       pos_y: pos_y,
@@ -3041,6 +3049,9 @@ let cellOverflowRender = function (
     textInfo.values[0].content = contentStr.slice(0, sliceLen - 2) + "...";
   }
 
+  if (cell.fontColor) {
+    MBLsheetTableContent.fillStyle = cell.fontColor;
+  }
   cellTextRender(textInfo, MBLsheetTableContent, {
     pos_x: pos_x,
     pos_y: pos_y,
