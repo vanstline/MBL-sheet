@@ -376,6 +376,20 @@ export default function MBLsheetHandler() {
         }
       }
 
+      if (Store.flowdata[0][col_index].disabled) {
+        if (
+          Store.flowdata[0][col_index].onclick &&
+          typeof Store.flowdata[0][col_index].onclick === "function"
+        ) {
+          const rowData = update();
+          Store.flowdata[0][col_index].onclick(
+            rowData[curColumn.dataIndex],
+            rowData,
+            row_index_ed
+          );
+        }
+      }
+
       // 协同编辑其他用户不在操作的时候，用户名框隐藏
       hideUsername();
 

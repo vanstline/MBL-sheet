@@ -1996,10 +1996,16 @@ let nullCellRender = function (
       MBLsheetTableContent.fillStyle = "#ff0000";
     }
 
-    const maxWidth = cell.width - extra.style?.width ?? 0;
-    if (textInfo.textWidthAll + textInfo.textLeftAll >= maxWidth) {
-      const contentStr = textInfo.values[0].content;
-      const singleWidth = textInfo.textWidthAll / contentStr?.length;
+    const extra = columns?.[c]?.extra;
+    const maxWidth = cell.width - extra?.style?.width ?? 0;
+    const textWidthAll = textInfo?.textWidthAll || 0;
+    const textLeftAll = textInfo?.textLeftAll || 0;
+    if (
+      textWidthAll + textLeftAll >= maxWidth &&
+      textInfo?.values?.[0]?.content
+    ) {
+      const contentStr = (textInfo?.values?.[0]?.content ?? "").toString();
+      const singleWidth = textWidthAll / contentStr?.length;
       const sliceLen = Math.floor(maxWidth / singleWidth);
       textInfo.values[0].content = contentStr.slice(0, sliceLen - 2) + "...";
     }
@@ -2723,13 +2729,17 @@ let cellRender = function (
     } else if (cell.fontColor) {
       MBLsheetTableContent.fillStyle = cell.fontColor;
     }
-    const maxWidth = cell.width - extra.style?.width ?? 0;
-    if (textInfo.textWidthAll + textInfo.textLeftAll >= maxWidth) {
-      const contentStr = textInfo.values[0].content;
-      const singleWidth = textInfo.textWidthAll / contentStr?.length;
+    const maxWidth = cell.width - extra?.style?.width ?? 0;
+    const textWidthAll = textInfo?.textWidthAll || 0;
+    const textLeftAll = textInfo?.textLeftAll || 0;
+    if (
+      textWidthAll + textLeftAll >= maxWidth &&
+      textInfo?.values?.[0]?.content
+    ) {
+      const contentStr = (textInfo?.values?.[0]?.content ?? "").toString();
+      const singleWidth = textWidthAll / contentStr?.length;
       const sliceLen = Math.floor(maxWidth / singleWidth);
       textInfo.values[0].content = contentStr.slice(0, sliceLen - 2) + "...";
-      console.log("%c Line:2722 🌽", "color:#3f7cff", textInfo);
     }
     cellTextRender(textInfo, MBLsheetTableContent, {
       pos_x: pos_x,
@@ -3018,13 +3028,17 @@ let cellOverflowRender = function (
     MBLsheetTableContent.fillStyle = checksCF["textColor"];
   }
 
-  const maxWidth = cell.width - extra.style?.width ?? 0;
-  if (textInfo.textWidthAll + textInfo.textLeftAll >= maxWidth) {
-    const contentStr = textInfo.values[0].content;
-    const singleWidth = textInfo.textWidthAll / contentStr?.length;
+  const maxWidth = cell.width - extra?.style?.width ?? 0;
+  const textWidthAll = textInfo?.textWidthAll || 0;
+  const textLeftAll = textInfo?.textLeftAll || 0;
+  if (
+    textWidthAll + textLeftAll >= maxWidth &&
+    textInfo?.values?.[0]?.content
+  ) {
+    const contentStr = (textInfo?.values?.[0]?.content ?? "").toString();
+    const singleWidth = textWidthAll / contentStr?.length;
     const sliceLen = Math.floor(maxWidth / singleWidth);
     textInfo.values[0].content = contentStr.slice(0, sliceLen - 2) + "...";
-    console.log("%c Line:2722 🌽", "color:#3f7cff", textInfo);
   }
 
   cellTextRender(textInfo, MBLsheetTableContent, {
