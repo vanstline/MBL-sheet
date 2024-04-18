@@ -11,6 +11,7 @@ import {
 function initDataSource(dataSource, sheet, MBLsheet) {
   const newCellData = processData(dataSource, sheet, MBLsheet);
   sheet.celldata = newCellData;
+  // MBLsheet.setData(newCellData);
 }
 
 function initVerification(data, sheet, MBLsheet) {
@@ -136,10 +137,12 @@ function processData(dataSource, sheet, MBLsheet) {
 
       const fieldsProps = sub.fieldsProps || {};
 
-      // // TODO: 未来可能会有更多的渲染方式
-      // if (sub.render && typeof sub.render === "function") {
-      //   v = sub.render(item[sub.dataIndex], r);
-      // }
+      // const dom = sub.render && sub.render(item[sub.dataIndex], item, r);
+      // TODO: 未来可能会有更多的渲染方式
+      //
+      if (sub.render && typeof sub.render === "function") {
+        v = sub.render(item[sub.dataIndex], item, r);
+      }
 
       if (v === undefined && fieldsProps?.defaultValue) {
         v = fieldsProps?.defaultValue;
