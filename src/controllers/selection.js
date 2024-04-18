@@ -916,13 +916,14 @@ const selection = {
           publishArr[i].push(d[r][c]?.v);
         }
       }
-
-      eventBus.publish("paste", publishArr, {
-        startR: minh,
-        startC: minc,
-        endR: maxh,
-        endC: maxc,
-      });
+      setTimeout(() => {
+        eventBus.publish("paste", publishArr, {
+          startR: minh,
+          startC: minc,
+          endR: maxh,
+          endC: maxc,
+        });
+      }, 200);
     } else {
       data = data.replace(/\r/g, "");
       let dataChe = [];
@@ -1034,12 +1035,14 @@ const selection = {
       const startR = last.row_focus;
       const startC = last.column_focus;
 
-      eventBus.publish("paste", [[data]], {
-        startR,
-        startC,
-        endR: startR,
-        endC: startC,
-      });
+      setTimeout(() => {
+        eventBus.publish("paste", [[data]], {
+          startR,
+          startC,
+          endR: startR,
+          endC: startC,
+        });
+      }, 200);
     }
   },
   pasteHandlerOfCutPaste: function (copyRange) {

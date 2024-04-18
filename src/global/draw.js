@@ -1939,7 +1939,7 @@ let nullCellRender = function (
       MBLsheetTableContent.stroke();
       MBLsheetTableContent.closePath();
 
-      setVerifyByKey(r + "_" + c, null);
+      setVerifyByKey(r + "_" + c, true);
     }
   } else {
     clearVerify(r + "_" + c);
