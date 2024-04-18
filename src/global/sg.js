@@ -221,6 +221,7 @@ function changeSomeValue(obj, config) {
     const c = keyNums.findIndex((item) => item === dataIndex);
     if (r > -1 && c >= -1) {
       changeValue(r, c, v);
+      MBLsheet.setCellValue(r, c, v ?? null, true);
     }
   });
 }
@@ -762,6 +763,11 @@ function renderExtraIcon(curColumns, coord, curSheet, ctx) {
     const drawStartR = start_r + 0;
     const drawStartC = end_c - width + 0 - 1;
 
+    // _.debounce(function () {
+    //   console.log("%c Line:767 🥥", "color:#ea7e5c");
+    // }, 200);
+
+    // _.throttle(function () {
     renderIcon(
       extra?.icons,
       ctx,
@@ -774,6 +780,7 @@ function renderExtraIcon(curColumns, coord, curSheet, ctx) {
       extra,
       false
     );
+    // }, 0);
   }
 }
 
