@@ -545,7 +545,7 @@ function getCellTextInfo(cell, ctx, option) {
         .getSheetByIndex()
         ?.columns?.find((item) => item.dataIndex === cell.dataIndex);
 
-      if (curColumn.render) {
+      if (curColumn?.render) {
         value =
           typeof curColumn.render === "function"
             ? curColumn.render(cell.v, option.r)
