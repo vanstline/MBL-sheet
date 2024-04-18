@@ -1101,10 +1101,10 @@ function MBLsheetextendData(rowlen, newData) {
 function MBLsheetdeletetable(type, st, ed, sheetIndex) {
   if (type === "row") {
     if (st === 0 && ed === 0 && Store.flowdata?.length === 1) {
-      MBLsheet.clearTable();
+      const cb = () => eventBus.publish("deleteRow", { startR: st, endR: ed });
+      MBLsheet.clearTable(cb);
       throw new Error("至少保留一条数据");
     }
-    eventBus.publish("deleteRow", { startR: st, endR: ed });
   }
   sheetIndex = sheetIndex || Store.currentSheetIndex;
 
@@ -1946,6 +1946,10 @@ function MBLsheetdeletetable(type, st, ed, sheetIndex) {
     file.MBLsheet_alternateformat_save = newAFarr;
     file.dataVerification = newDataVerification;
     file.hyperlink = newHyperlink;
+  }
+
+  if (type === "row") {
+    eventBus.publish("deleteRow", { startR: st, endR: ed });
   }
 }
 

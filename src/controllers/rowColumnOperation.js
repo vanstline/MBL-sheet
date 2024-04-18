@@ -2515,14 +2515,15 @@ export function rowColumnOperationInitial() {
         }
       }
 
-      if (delPosiArr?.length) {
-        eventBus.publish("deleteCell", delPosiArr);
-      }
       jfrefreshgrid(
         d,
         Store.MBLsheet_select_save,
         hyperlinkUpdated && { hyperlink }
       );
+
+      if (delPosiArr?.length) {
+        eventBus.publish("deleteCell", delPosiArr);
+      }
 
       // 清空编辑框的内容
       // 备注：在functionInputHanddler方法中会把该标签的内容拷贝到 #MBLsheet-functionbox-cell

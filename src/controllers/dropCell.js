@@ -1026,13 +1026,6 @@ const MBLsheetDropCell = {
       }
     }
 
-    eventBus.publish("paste", publishArr, {
-      startR: apply_str_r,
-      startC: apply_str_c,
-      endR: apply_end_r,
-      endC: apply_end_c,
-    });
-
     // // //条件格式
     // let cdformat = $.extend(true, [], file["MBLsheet_conditionformat_save"]);
     // if (cdformat != null && cdformat.length > 0) {
@@ -1068,6 +1061,12 @@ const MBLsheetDropCell = {
     jfrefreshgrid(d, Store.MBLsheet_select_save, allParam);
 
     selectHightlightShow();
+    eventBus.publish("paste", publishArr, {
+      startR: apply_str_r,
+      startC: apply_str_c,
+      endR: apply_end_r,
+      endC: apply_end_c,
+    });
   },
   getCopyData: function (d, r1, r2, c1, c2, direction) {
     let _this = this;

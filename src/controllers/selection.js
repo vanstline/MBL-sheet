@@ -886,6 +886,20 @@ const selection = {
         { row: [minh, maxh], column: [minc, maxc] },
       ];
 
+      if (addr > 0 || addc > 0 || RowlChange) {
+        let allParam = {
+          cfg: cfg,
+          RowlChange: true,
+        };
+        jfrefreshgrid(d, Store.MBLsheet_select_save, allParam);
+      } else {
+        let allParam = {
+          cfg: cfg,
+        };
+        jfrefreshgrid(d, Store.MBLsheet_select_save, allParam);
+        selectHightlightShow();
+      }
+
       const publishArr = [];
       for (let r = minh, i = 0; r <= maxh; r++, i++) {
         publishArr.push([]);
@@ -909,19 +923,6 @@ const selection = {
         endR: maxh,
         endC: maxc,
       });
-      if (addr > 0 || addc > 0 || RowlChange) {
-        let allParam = {
-          cfg: cfg,
-          RowlChange: true,
-        };
-        jfrefreshgrid(d, Store.MBLsheet_select_save, allParam);
-      } else {
-        let allParam = {
-          cfg: cfg,
-        };
-        jfrefreshgrid(d, Store.MBLsheet_select_save, allParam);
-        selectHightlightShow();
-      }
     } else {
       data = data.replace(/\r/g, "");
       let dataChe = [];
@@ -1020,8 +1021,6 @@ const selection = {
       last["row"] = [curR, curR + rlen - 1];
       last["column"] = [curC, curC + clen - 1];
 
-      console.log("%c Line:1007 🌰", "color:#465975", data, addr, addc, last);
-
       if (addr > 0 || addc > 0) {
         let allParam = {
           RowlChange: true,
@@ -1031,6 +1030,16 @@ const selection = {
         jfrefreshgrid(d, Store.MBLsheet_select_save);
         selectHightlightShow();
       }
+
+      const startR = last.row_focus;
+      const startC = last.column_focus;
+
+      eventBus.publish("paste", [[data]], {
+        startR,
+        startC,
+        endR: startR,
+        endC: startC,
+      });
     }
   },
   pasteHandlerOfCutPaste: function (copyRange) {
@@ -1975,7 +1984,6 @@ const selection = {
     }
   },
   pasteHandlerOfPaintModel: function (copyRange) {
-    console.log("%c Line:1979 🥓", "color:#3f7cff");
     if (
       !checkProtectionLockedRangeList(
         Store.MBLsheet_select_save,
@@ -2324,7 +2332,6 @@ const selection = {
     }
   },
   matchcopy: function (data1, data2) {
-    console.log("%c Line:2328 🍰", "color:#42b983", data1, data2);
     let data1cache = [],
       data2cache = [],
       data1len,

@@ -85,12 +85,16 @@ function sgInit(setting, config, MBLsheet) {
     },
   });
 
-  MBLsheet.clearTable = () => {
+  MBLsheet.clearTable = (cb) => {
     const data = getData(sheet);
     const newData = data.map(() => {
       return config.columns;
     });
     setData(newData, sheet, MBLsheet);
+
+    if (cb && typeof cb === "function") {
+      cb();
+    }
   };
 
   MBLsheet.setLength = (len) => setLength(len, MBLsheet);
