@@ -1607,6 +1607,8 @@ function MBLsheetrefreshgrid(scrollWidth, scrollHeight) {
   }
 }
 
+MBLsheetrefreshgrid = _.throttle(MBLsheetrefreshgrid, 100);
+
 export {
   jfrefreshgrid,
   jfrefreshgridall,
