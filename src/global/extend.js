@@ -1104,7 +1104,7 @@ function MBLsheetdeletetable(type, st, ed, sheetIndex) {
       MBLsheet.clearTable();
       throw new Error("至少保留一条数据");
     }
-    eventBus.publish("deleteRow", { startR: st });
+    eventBus.publish("deleteRow", { startR: st, endR: ed });
   }
   sheetIndex = sheetIndex || Store.currentSheetIndex;
 
