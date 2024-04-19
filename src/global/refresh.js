@@ -181,7 +181,10 @@ function jfrefreshgrid(
     let r1 = range[s].row[0];
     let c1 = range[s].column[0];
 
-    if (Store.flowdata[r1][c1] != null && Store.flowdata[r1][c1].spl != null) {
+    if (
+      Store.flowdata?.[r1]?.[c1] != null &&
+      Store.flowdata[r1][c1].spl != null
+    ) {
       window.MBLsheetCurrentRow = r1;
       window.MBLsheetCurrentColumn = c1;
       window.MBLsheetCurrentFunction = Store.flowdata[r1][c1].f;
