@@ -333,10 +333,10 @@ export default function MBLsheetHandler() {
         nonexistentCell.includes(row_index) ||
         nonexistentCell.includes(col_index)
       ) {
-        formula.updatecell(
-          Store.MBLsheetCellUpdate[0],
-          Store.MBLsheetCellUpdate[1]
-        );
+        // formula.updatecell(
+        //   Store.MBLsheetCellUpdate[0],
+        //   Store.MBLsheetCellUpdate[1]
+        // );
         MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
         return;
       }

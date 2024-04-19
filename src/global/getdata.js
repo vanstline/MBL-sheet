@@ -145,7 +145,7 @@ export function getcellvalue(r, c, data, type) {
   let d_value;
 
   if (r != null && c != null) {
-    d_value = data[r][c];
+    d_value = data?.[r]?.[c];
   } else if (r != null) {
     d_value = data[r];
   } else if (c != null) {
