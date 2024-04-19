@@ -1021,7 +1021,6 @@ const selection = {
 
       last["row"] = [curR, curR + rlen - 1];
       last["column"] = [curC, curC + clen - 1];
-
       if (addr > 0 || addc > 0) {
         let allParam = {
           RowlChange: true,

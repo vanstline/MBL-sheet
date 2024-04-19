@@ -11,6 +11,7 @@ import { countfunc } from "./count";
 import { icons } from "../controllers/constant";
 import sheetmanage from "../controllers/sheetmanage";
 import { eventBus } from "./sg/event";
+import { jfrefreshgrid } from "./refresh";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -216,18 +217,20 @@ function getDisabledMap() {
 }
 
 function changeSomeValue(obj, config) {
-  const keyNums = config.columns
-    .map((item) => item?.dataIndex)
-    ?.filter((item) => item);
+  let d = _.cloneDeep(Store.flowdata);
 
+  const keyNumMap = d[0]?.reduce((p, n, i) => {
+    p[n.dataIndex] = i;
+    return p;
+  }, {});
   Object.entries(obj).forEach(([k, v]) => {
     const [r, dataIndex] = k?.split("_") ?? [];
-    const c = keyNums.findIndex((item) => item === dataIndex);
-    if (r > -1 && c >= -1) {
-      changeValue(r, c, v);
-      MBLsheet.setCellValue(r, c, v ?? null, true);
+    if (d?.[+r]?.[keyNumMap?.[dataIndex]]) {
+      d[+r][keyNumMap[dataIndex]].v = v;
+      d[+r][keyNumMap[dataIndex]].m = v;
     }
   });
+  jfrefreshgrid(d, Store.MBLsheet_select_save);
 }
 /**
  * 注册事件

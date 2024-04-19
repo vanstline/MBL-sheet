@@ -1001,7 +1001,6 @@ const MBLsheetDropCell = {
       for (let j = apply_str_c; j <= apply_end_c; j++) {
         const curObj = copyData?.[0] ?? {};
         const curData = Object.values(curObj)?.[0]?.[0]?.data?.[0];
-        console.log("%c Line:1002 🍩 curData", "color:#b03734", curData);
         if (!isNaN(curData.m)) {
           if (m === undefined) {
             m = +curData.m + 1;
