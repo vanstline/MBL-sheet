@@ -1981,7 +1981,7 @@ let nullCellRender = function (
       const curValues = textInfo.values[0];
       textInfo.values[0] = {
         ...curValues,
-        left: style.left != null ? style.left : curValues.left,
+        // left: style.left != null ? style.left : curValues.left,
         top: style.top != null ? style.top : curValues.top,
       };
     }
@@ -1997,17 +1997,19 @@ let nullCellRender = function (
     }
 
     const extra = columns?.[c]?.extra;
-    const maxWidth = cell.width - extra?.style?.width ?? 0;
+    const maxWidth = cell.width - (extra?.style?.width ?? 0);
     const textWidthAll = textInfo?.textWidthAll || 0;
     const textLeftAll = textInfo?.textLeftAll || 0;
+
     if (
       textWidthAll + textLeftAll >= maxWidth &&
       textInfo?.values?.[0]?.content
     ) {
       const contentStr = (textInfo?.values?.[0]?.content ?? "").toString();
       const singleWidth = textWidthAll / contentStr?.length;
-      const sliceLen = Math.floor(maxWidth / singleWidth);
-      textInfo.values[0].content = contentStr.slice(0, sliceLen - 2) + "...";
+      const delLen = singleWidth >= 12 ? 1 : 2;
+      const sliceLen = Math.floor(maxWidth / singleWidth) - delLen;
+      textInfo.values[0].content = contentStr.slice(0, sliceLen) + "...";
     }
     if (cell.fontColor) {
       MBLsheetTableContent.fillStyle = cell.fontColor;
@@ -2712,7 +2714,7 @@ let cellRender = function (
       const curValues = textInfo.values[0];
       textInfo.values[0] = {
         ...curValues,
-        left: style.left != null ? style.left : curValues.left,
+        // left: style.left != null ? style.left : curValues.left,
         top: curValues.top,
       };
     }
@@ -2732,17 +2734,19 @@ let cellRender = function (
     } else if (cell.fontColor) {
       MBLsheetTableContent.fillStyle = cell.fontColor;
     }
-    const maxWidth = cell.width - extra?.style?.width ?? 0;
+    const maxWidth = cell.width - (extra?.style?.width ?? 0);
     const textWidthAll = textInfo?.textWidthAll || 0;
     const textLeftAll = textInfo?.textLeftAll || 0;
+
     if (
       textWidthAll + textLeftAll >= maxWidth &&
       textInfo?.values?.[0]?.content
     ) {
       const contentStr = (textInfo?.values?.[0]?.content ?? "").toString();
       const singleWidth = textWidthAll / contentStr?.length;
-      const sliceLen = Math.floor(maxWidth / singleWidth);
-      textInfo.values[0].content = contentStr.slice(0, sliceLen - 2) + "...";
+      const delLen = singleWidth >= 12 ? 1 : 2;
+      const sliceLen = Math.floor(maxWidth / singleWidth) - delLen;
+      textInfo.values[0].content = contentStr.slice(0, sliceLen) + "...";
     }
 
     if (cell.fontColor) {
@@ -2930,6 +2934,20 @@ let cellRender = function (
 
     MBLsheetTableContent.fillStyle = cell.fontColor || "#bfbfbf";
 
+    const maxWidth = cell.width - (extra?.style?.width ?? 0);
+    const textWidthAll = curTextInfo?.textWidthAll || 0;
+    const textLeftAll = curTextInfo?.textLeftAll || 0;
+    if (
+      textWidthAll + textLeftAll >= maxWidth &&
+      curTextInfo?.values?.[0]?.content
+    ) {
+      const contentStr = (curTextInfo?.values?.[0]?.content ?? "").toString();
+      const singleWidth = textWidthAll / contentStr?.length;
+      const delLen = singleWidth >= 12 ? 1 : 2;
+      const sliceLen = Math.floor(maxWidth / singleWidth) - delLen;
+      curTextInfo.values[0].content = contentStr.slice(0, sliceLen) + "...";
+    }
+
     cellTextRender(curTextInfo, MBLsheetTableContent, {
       pos_x: pos_x,
       pos_y: pos_y,
@@ -3036,7 +3054,7 @@ let cellOverflowRender = function (
     MBLsheetTableContent.fillStyle = checksCF["textColor"];
   }
 
-  const maxWidth = cell.width - extra?.style?.width ?? 0;
+  const maxWidth = cell.width - (extra?.style?.width ?? 0);
   const textWidthAll = textInfo?.textWidthAll || 0;
   const textLeftAll = textInfo?.textLeftAll || 0;
   if (
@@ -3045,8 +3063,9 @@ let cellOverflowRender = function (
   ) {
     const contentStr = (textInfo?.values?.[0]?.content ?? "").toString();
     const singleWidth = textWidthAll / contentStr?.length;
-    const sliceLen = Math.floor(maxWidth / singleWidth);
-    textInfo.values[0].content = contentStr.slice(0, sliceLen - 2) + "...";
+    const delLen = singleWidth >= 12 ? 1 : 2;
+    const sliceLen = Math.floor(maxWidth / singleWidth) - delLen;
+    textInfo.values[0].content = contentStr.slice(0, sliceLen) + "...";
   }
 
   if (cell.fontColor) {
@@ -3372,7 +3391,6 @@ function cellOverflow_colIn(map, r, c, col_st, col_ed) {
 }
 
 function cellTextRender(textInfo, ctx, option) {
-  // console.log("%c Line:3315 🍕 textInfo", "color:#b03734", textInfo);
   if (textInfo == null) {
     return;
   }
