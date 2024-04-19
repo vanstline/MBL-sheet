@@ -31,7 +31,10 @@ $(document).ready(function () {
         isEdit = false;
       } else {
         // console.log("%c Line:35 🍎", "color:#b03734");
+        // ;
+        // setTimeout(() => {
         // exitEditMode();
+        // }, 200);
       }
     }
 

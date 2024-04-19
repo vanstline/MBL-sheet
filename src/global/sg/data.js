@@ -1,5 +1,6 @@
 import Store from "../../store";
 import { transToCellData, transToCellDataV2 } from "../api";
+import { jfrefreshgrid } from "../refresh";
 import {
   fieldsMap,
   lengthMap,
@@ -72,9 +73,14 @@ function initVerification(data, sheet, MBLsheet) {
 function setData(data, sheet, MBLsheet) {
   const curData = processData(data, sheet, MBLsheet);
 
+  let d = _.cloneDeep(Store.flowdata);
   curData.forEach((item) => {
-    MBLsheet.setCellValue(item.r, item.c, item.v);
+    const { r, c, v: V } = item;
+    if (d?.[r]?.[c]) {
+      d[r][c] = V ?? d[r][v];
+    }
   });
+  jfrefreshgrid(d, Store.MBLsheet_select_save);
 }
 
 function getData(sheet) {
