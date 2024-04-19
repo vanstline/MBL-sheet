@@ -357,10 +357,10 @@ export default function MBLsheetHandler() {
           }
         });
 
-        formula.updatecell(
-          Store.MBLsheetCellUpdate[0],
-          Store.MBLsheetCellUpdate[1]
-        );
+        // formula.updatecell(
+        //   Store.MBLsheetCellUpdate[0],
+        //   Store.MBLsheetCellUpdate[1]
+        // );
         return rowData;
       }
 
@@ -5591,6 +5591,7 @@ export default function MBLsheetHandler() {
   $("#MBLsheet-cell-main div.MBLsheet-cs-draghandle").mousedown(function (
     event
   ) {
+    return;
     if (isEditMode() || Store.allowEdit === false) {
       //此模式下禁用选区拖动
       return;

@@ -2083,7 +2083,7 @@ body:not(.ewa-ipad) .MBLsheet-rows-h-cell-sel:hover {
 
 .MBLsheet-cs-draghandle {
   position: absolute;
-  cursor: move;
+  /* cursor: move; */
   background-color: #fff;
   opacity: 0.01;
   z-index: 15;
