@@ -887,20 +887,6 @@ const selection = {
         { row: [minh, maxh], column: [minc, maxc] },
       ];
 
-      if (addr > 0 || addc > 0 || RowlChange) {
-        let allParam = {
-          cfg: cfg,
-          RowlChange: true,
-        };
-        jfrefreshgrid(d, Store.MBLsheet_select_save, allParam);
-      } else {
-        let allParam = {
-          cfg: cfg,
-        };
-        jfrefreshgrid(d, Store.MBLsheet_select_save, allParam);
-        selectHightlightShow();
-      }
-
       const columns = sheetmanage.getSheetByIndex().columns;
       const maxC = Math.min(maxc, columns.length);
       const publishArr = [];
@@ -919,6 +905,23 @@ const selection = {
           publishArr[i].push(d[r][c]?.v);
         }
       }
+
+      if (addr > 0 || addc > 0 || RowlChange) {
+        let allParam = {
+          cfg: cfg,
+          RowlChange: true,
+        };
+
+        jfrefreshgrid(d, Store.MBLsheet_select_save, allParam);
+      } else {
+        let allParam = {
+          cfg: cfg,
+        };
+
+        jfrefreshgrid(d, Store.MBLsheet_select_save, allParam);
+        selectHightlightShow();
+      }
+
       setTimeout(() => {
         eventBus.publish("paste", publishArr, {
           startR: minh,
