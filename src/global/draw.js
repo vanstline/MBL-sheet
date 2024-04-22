@@ -1940,6 +1940,8 @@ let nullCellRender = function (
       MBLsheetTableContent.closePath();
 
       setVerifyByKey(r + "_" + c, true);
+    } else {
+      clearVerify(r + "_" + c);
     }
   } else {
     clearVerify(r + "_" + c);
@@ -2233,6 +2235,14 @@ let cellRender = function (
 
   let dataVerification = dataVerificationCtrl.dataVerification;
 
+  if (r == 0 && c == 7) {
+    const errRes = dataVerificationCtrl.validateCellDataCustom(
+      value,
+      dataVerification[r + "_" + c],
+      r
+    );
+    console.log("%c Line:2241 🍧 errRes", "color:#ffdd4d", errRes);
+  }
   if (
     dataVerification != null &&
     dataVerification[r + "_" + c] != null &&
@@ -2322,6 +2332,8 @@ let cellRender = function (
     MBLsheetTableContent.lineWidth = 1;
     MBLsheetTableContent.stroke();
     MBLsheetTableContent.closePath();
+
+    console.log("%c Line:2329 🌭 setVerifyByKey", "color:#ea7e5c", r, c);
     setVerifyByKey(r + "_" + c, value);
   } else {
     clearVerify(r + "_" + c);

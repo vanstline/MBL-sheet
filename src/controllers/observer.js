@@ -205,10 +205,12 @@ export function updateBlur(event) {
     const curSetRowData = (obj, dependence = []) =>
       setRowData(obj, r, keyNumMap, true, dependence);
 
-    curColumn.onblur(newVal, rowData, r, {
-      setRowData: curSetRowData,
-      setDisabled: curSetDisabled,
-    });
+    setTimeout(() => {
+      curColumn.onblur(newVal, rowData, r, {
+        setRowData: curSetRowData,
+        setDisabled: curSetDisabled,
+      });
+    }, 200);
   }
 
   MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");

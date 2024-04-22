@@ -20,10 +20,10 @@ function sgInit(setting, config, MBLsheet) {
 
   delete MBLsheet.create;
 
-  const dataSource = _.cloneDeep(config.dataSource);
+  // const dataSource = _.cloneDeep(config.dataSource);
 
   const sheet = { ...config };
-  initDataSource(dataSource, sheet, MBLsheet);
+  initDataSource(config.dataSource, sheet, MBLsheet);
 
   if (!config.columns) {
     throw new Error("columns 是必填字段");
@@ -172,7 +172,7 @@ function verify() {
   return false;
 }
 
-function verifyRowFn(row) {
+async function verifyRowFn(row) {
   // const sheet = sheetmanage.getSheetByIndex();
   // const fristValue = Store.flowdata[rows][0]?.v;
 
@@ -189,14 +189,15 @@ function verifyRowFn(row) {
   //   console.log("%c Line:189 🍫 cur", "color:#b03734", cur);
   //   return !cur.status;
   // });
+
   const rows = Object.keys(Store.verifyMap)?.reduce((prev, next) => {
+    console.log("%c Line:194 🍌 next", "color:#ffdd4d", next);
     const curR = next.split("_")[0];
     if (curR && !prev.includes(+curR)) {
       prev.push(+curR);
     }
     return prev;
   }, []);
-  console.log("%c Line:200 🍏 rows", "color:#465975", rows);
   return rows.includes(row);
 }
 
