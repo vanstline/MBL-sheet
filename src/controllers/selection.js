@@ -21,6 +21,7 @@ import Store from "../store";
 import locale from "../locale/locale";
 import imageCtrl from "./imageCtrl";
 import { eventBus } from "../global/sg/event";
+import sheetmanage from "./sheetmanage";
 
 const selection = {
   clearcopy: function (e) {
@@ -900,18 +901,20 @@ const selection = {
         selectHightlightShow();
       }
 
+      const columns = sheetmanage.getSheetByIndex().columns;
+      const maxC = Math.min(maxc, columns.length);
       const publishArr = [];
       for (let r = minh, i = 0; r <= maxh; r++, i++) {
         publishArr.push([]);
-        for (let c = minc, j = 0; c <= maxc; c++, j++) {
-          if (Store.flowdata[0][c]?.dataIndex) {
+        for (let c = minc, j = 0; c <= maxC; c++, j++) {
+          if (columns[c]?.dataIndex) {
             d[r][c] = {
-              ...Store.flowdata[0][c],
+              ...Store.flowdata[r][c],
               m: data[i][j].m,
               v: data[i][j].v,
             };
           } else {
-            d[r][c] = Store.flowdata?.[r]?.[c];
+            d[r][c] = columns[c];
           }
           publishArr[i].push(d[r][c]?.v);
         }
