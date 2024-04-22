@@ -99,6 +99,7 @@ export function changeValue(r, c, value, falg = true) {
   let newVal = value;
 
   const rowData = getRowData(r, c, newVal);
+  MBLsheet.setCellValue(r, c, newVal ?? null, false);
 
   const sheet = sheetmanage.getSheetByIndex();
 
@@ -167,8 +168,6 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
 
 export function updateBlur(event) {
   const [r, c] = Store.MBLsheetCellUpdate;
-  formula.updatecell(r, c);
-
   const curColumn = Store?.flowdata?.[0]?.[c];
   if (["autocomplete", "select"].includes(curColumn?.fieldsProps?.type)) {
     $("#MBLsheet-dataVerification-dropdown-List").hide();
@@ -176,11 +175,13 @@ export function updateBlur(event) {
   const sheet = sheetmanage.getSheetByIndex();
   const curEle = Store?.flowdata?.[r]?.[c];
   const onblur = sheet?.columns?.[c]?.onblur;
+  let newVal = event.target.classList.contains("dropdown-List-item")
+    ? event.target.innerText
+    : curEle?.v ?? null;
+  formula.updatecell(r, c, newVal);
+
   if (onblur && typeof onblur === "function") {
     const keyNumMap = {};
-    let newVal = event.target.classList.contains("dropdown-List-item")
-      ? event.target.innerText
-      : curEle.v;
 
     const rowData = getRowData(r, c, newVal, keyNumMap);
 
