@@ -19,6 +19,7 @@ import { getSheetIndex } from "../methods/get";
 import Store from "../store";
 import sheetmanage from "../controllers/sheetmanage";
 import { eventBus } from "./sg/event";
+import { clearVerify } from "./verify";
 
 /**
  * 增加行列
@@ -1100,6 +1101,14 @@ function MBLsheetextendData(rowlen, newData) {
 //删除行列
 function MBLsheetdeletetable(type, st, ed, sheetIndex) {
   if (type === "row") {
+    const verifyKeys = Object.keys(Store.verifyMap);
+    verifyKeys.forEach((item) => {
+      const [k] = item?.split("_");
+      if (k >= st && k <= ed) {
+        clearVerify(item);
+      }
+    });
+
     if (st === 0 && ed === 0 && Store.flowdata?.length === 1) {
       const cb = () => eventBus.publish("deleteRow", { startR: st, endR: ed });
       MBLsheet.clearTable(cb);

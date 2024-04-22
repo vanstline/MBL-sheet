@@ -172,7 +172,7 @@ function verify() {
   return false;
 }
 
-async function verifyRowFn(row) {
+function verifyRowFn(row) {
   // const sheet = sheetmanage.getSheetByIndex();
   // const fristValue = Store.flowdata[rows][0]?.v;
 
@@ -191,7 +191,6 @@ async function verifyRowFn(row) {
   // });
 
   const rows = Object.keys(Store.verifyMap)?.reduce((prev, next) => {
-    console.log("%c Line:194 🍌 next", "color:#ffdd4d", next);
     const curR = next.split("_")[0];
     if (curR && !prev.includes(+curR)) {
       prev.push(+curR);
