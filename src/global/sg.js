@@ -172,20 +172,32 @@ function verify() {
   return false;
 }
 
-function verifyRowFn(rows) {
-  const sheet = sheetmanage.getSheetByIndex();
-  const fristValue = Store.flowdata[rows][0]?.v;
+function verifyRowFn(row) {
+  // const sheet = sheetmanage.getSheetByIndex();
+  // const fristValue = Store.flowdata[rows][0]?.v;
 
-  const keyNumMap = {};
-  const curRowData = getRowData(rows, 0, fristValue, keyNumMap);
+  // const keyNumMap = {};
+  // const curRowData = getRowData(rows, 0, fristValue, keyNumMap);
 
-  const verifyArr = sheet.columns?.filter(
-    (item) => typeof item.fieldsProps?.verifyFn === "function"
-  );
-  return verifyArr.some((item, i) => {
-    const cur = item.fieldsProps.verifyFn(curRowData[item.dataIndex], rows);
-    return !cur.status;
-  });
+  // const verifyArr = sheet.columns?.filter(
+  //   (item) => typeof item.fieldsProps?.verifyFn === "function"
+  // );
+
+  // console.log("%c Line:186 🥓", "color:#ed9ec7", verifyArr);
+  // return verifyArr.some((item, i) => {
+  //   const cur = item.fieldsProps.verifyFn(curRowData[item.dataIndex], rows);
+  //   console.log("%c Line:189 🍫 cur", "color:#b03734", cur);
+  //   return !cur.status;
+  // });
+  const rows = Object.keys(Store.verifyMap)?.reduce((prev, next) => {
+    const curR = next.split("_")[0];
+    if (curR && !prev.includes(+curR)) {
+      prev.push(+curR);
+    }
+    return prev;
+  }, []);
+  console.log("%c Line:200 🍏 rows", "color:#465975", rows);
+  return rows.includes(row);
 }
 
 // 全局设置disabled状态
