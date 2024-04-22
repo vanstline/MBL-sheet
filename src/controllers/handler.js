@@ -80,7 +80,7 @@ import {
   createLuckyChart,
   hideAllNeedRangeShow,
 } from "../expendPlugins/chart/plugin";
-import { setDisabled, setRowData } from "./observer";
+import { setDisabled, setRowData, updateBlur } from "./observer";
 import { execCustomEvent } from "../global/sg";
 
 const nonexistentCell = [undefined, -1];
@@ -308,6 +308,7 @@ export default function MBLsheetHandler() {
   //表格mousedown
   $("#MBLsheet-cell-main, #MBLsheetTableContent")
     .mousedown(function (event) {
+      console.log("%c Line:311 🍫 event", "color:#ed9ec7", event);
       if ($(event.target).hasClass("MBLsheet-mousedown-cancel")) {
         return;
       }
@@ -337,6 +338,7 @@ export default function MBLsheetHandler() {
         //   Store.MBLsheetCellUpdate[0],
         //   Store.MBLsheetCellUpdate[1]
         // );
+        updateBlur(event);
         MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
         return;
       }
