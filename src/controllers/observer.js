@@ -6,9 +6,11 @@ import Store from "../store";
 import sheetmanage from "./sheetmanage";
 import { exitEditMode } from "../global/api";
 
-const nonexistentCell = [undefined, -1];
+// $(document).ready(function () {
 
-$(document).ready(function () {
+// });
+
+export function linseter() {
   let isEdit = false;
 
   setTimeout(() => {
@@ -39,6 +41,18 @@ $(document).ready(function () {
     }
 
     if (editableElement) {
+      editableElement?.removeEventListener("input", processChange);
+      editableElement?.removeEventListener("blur", processBlur);
+
+      // 如果需要兼容旧版IE浏览器（IE9及更低版本不支持input事件）
+      if ("oninput" in document.createElement("div")) {
+        // 使用input事件
+      } else {
+        editableElement?.removeEventListener("keyup", processChange);
+      }
+    }
+
+    if (editableElement) {
       // 添加input事件监听器
       editableElement?.addEventListener("input", processChange);
       editableElement?.addEventListener("blur", processBlur);
@@ -57,7 +71,7 @@ $(document).ready(function () {
       }
     }
   });
-});
+}
 
 export function getRowData(r, c, newVal, keyNumMap = {}) {
   const sheet = sheetmanage.getSheetByIndex();
@@ -95,6 +109,7 @@ export function getRowData(r, c, newVal, keyNumMap = {}) {
 }
 
 export function changeValue(r, c, value, falg = true) {
+  console.log("%c Line:98 🧀 r, c, value", "color:#ed9ec7", r, c, value);
   const keyNumMap = {};
   let newVal = value;
 
@@ -178,6 +193,7 @@ export function updateBlur(event) {
   let newVal = event.target.classList.contains("dropdown-List-item")
     ? event.target.innerText
     : curEle?.v ?? null;
+
   formula.updatecell(r, c, newVal);
 
   if (onblur && typeof onblur === "function") {
