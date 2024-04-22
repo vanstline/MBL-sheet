@@ -23,6 +23,8 @@ function sgInit(setting, config, MBLsheet) {
   const dataSource = _.cloneDeep(config.dataSource);
 
   const sheet = { ...config };
+  initDataSource(dataSource, sheet, MBLsheet);
+
   if (!config.columns) {
     throw new Error("columns 是必填字段");
     // columns;
@@ -49,8 +51,6 @@ function sgInit(setting, config, MBLsheet) {
   sheet.columnHeaderArr = config.columns.map((item) => item.title);
   sheet.defaultColWidth = config.defaultColWidth || 150;
   setting.lang = setting.lang || "zh";
-
-  initDataSource(dataSource, sheet, MBLsheet);
 
   // sheet.celldata = dataSource || [];
 

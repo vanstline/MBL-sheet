@@ -74,6 +74,16 @@ function setData(data, sheet, MBLsheet) {
   const curData = processData(data, sheet, MBLsheet);
 
   let d = _.cloneDeep(Store.flowdata);
+  if (!d?.length) {
+    d = sheet.celldata?.reduce((p, n, i) => {
+      if (i % sheet.column === 0) {
+        p.push([n.v]);
+      } else {
+        const curI = Math.floor(i / sheet.column);
+        p[curI].push(n.v);
+      }
+    }, []);
+  }
   curData.forEach((item) => {
     const { r, c, v: V } = item;
     if (d?.[r]?.[c]) {
