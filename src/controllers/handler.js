@@ -341,6 +341,8 @@ export default function MBLsheetHandler() {
         updateBlur(event);
         MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
         return;
+      } else {
+        updateBlur(event);
       }
       let sheetFile = sheetmanage.getSheetByIndex();
 

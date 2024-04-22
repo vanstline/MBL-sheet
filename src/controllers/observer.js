@@ -205,6 +205,8 @@ export function updateBlur(event) {
     const curSetRowData = (obj, dependence = []) =>
       setRowData(obj, r, keyNumMap, true, dependence);
 
+    isEdit = false;
+
     setTimeout(() => {
       curColumn.onblur(newVal, rowData, r, {
         setRowData: curSetRowData,
