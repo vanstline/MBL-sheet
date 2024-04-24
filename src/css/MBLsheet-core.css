@@ -3043,12 +3043,17 @@ fieldset[disabled] .btn-danger.focus {
   padding: 2px 3px;
   border-radius: 3px;
   transition: all 0.3s;
-  display: none;
+  display: none !important;
   white-space: nowrap;
 }
 
 .MBLsheet-row-count-show {
   text-align: center;
+  display: none !important;
+}
+
+.MBLsheet-column-count-show {
+  display: none !important;
 }
 
 .MBLsheet-row-count-show div {
