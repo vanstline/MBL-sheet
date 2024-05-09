@@ -1196,13 +1196,13 @@ export function keyboardInitial() {
         event.preventDefault();
       } else if (kcode == keycode.UP && parseInt($inputbox.css("top")) > 0) {
         formulaMoveEvent("up", ctrlKey, shiftKey, event);
-        updateBlur(event);
+        // updateBlur(event);
       } else if (kcode == keycode.DOWN && parseInt($inputbox.css("top")) > 0) {
         formulaMoveEvent("down", ctrlKey, shiftKey, event);
-        updateBlur(event);
+        // updateBlur(event);
       } else if (kcode == keycode.LEFT && parseInt($inputbox.css("top")) > 0) {
         formulaMoveEvent("left", ctrlKey, shiftKey, event);
-        updateBlur(event);
+        // updateBlur(event);
       } else if (kcode == keycode.RIGHT && parseInt($inputbox.css("top")) > 0) {
         formulaMoveEvent("right", ctrlKey, shiftKey, event);
       } else if (
