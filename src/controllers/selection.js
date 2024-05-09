@@ -852,21 +852,21 @@ const selection = {
             }
           }
 
-          if (borderInfo[h - minh + "_" + (c - minc)]) {
-            let bd_obj = {
-              rangeType: "cell",
-              value: {
-                row_index: h,
-                col_index: c,
-                l: borderInfo[h - minh + "_" + (c - minc)].l,
-                r: borderInfo[h - minh + "_" + (c - minc)].r,
-                t: borderInfo[h - minh + "_" + (c - minc)].t,
-                b: borderInfo[h - minh + "_" + (c - minc)].b,
-              },
-            };
+          // if (borderInfo[h - minh + "_" + (c - minc)]) {
+          //   let bd_obj = {
+          //     rangeType: "cell",
+          //     value: {
+          //       row_index: h,
+          //       col_index: c,
+          //       l: borderInfo[h - minh + "_" + (c - minc)].l,
+          //       r: borderInfo[h - minh + "_" + (c - minc)].r,
+          //       t: borderInfo[h - minh + "_" + (c - minc)].t,
+          //       b: borderInfo[h - minh + "_" + (c - minc)].b,
+          //     },
+          //   };
 
-            cfg["borderInfo"].push(bd_obj);
-          }
+          //   cfg["borderInfo"].push(bd_obj);
+          // }
 
           let fontset = MBLsheetfontformat(x[c]);
           let oneLineTextHeight = menuButton.getTextSize("田", fontset)[1];
@@ -2075,7 +2075,7 @@ const selection = {
     let cellMaxLength = d[0].length;
     let rowMaxLength = d.length;
 
-    let borderInfoCompute = getBorderInfoCompute(copySheetIndex);
+    // let borderInfoCompute = getBorderInfoCompute(copySheetIndex);
     let c_dataVerification = $.extend(
       true,
       {},
@@ -2109,47 +2109,47 @@ const selection = {
           let x = [].concat(d[h]);
 
           for (let c = mtc; c < maxcellCahe; c++) {
-            if (borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]) {
-              let bd_obj = {
-                rangeType: "cell",
-                value: {
-                  row_index: h,
-                  col_index: c,
-                  l: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
-                    .l,
-                  r: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
-                    .r,
-                  t: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
-                    .t,
-                  b: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
-                    .b,
-                },
-              };
+            // if (borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]) {
+            //   let bd_obj = {
+            //     rangeType: "cell",
+            //     value: {
+            //       row_index: h,
+            //       col_index: c,
+            //       l: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
+            //         .l,
+            //       r: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
+            //         .r,
+            //       t: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
+            //         .t,
+            //       b: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
+            //         .b,
+            //     },
+            //   };
 
-              if (cfg["borderInfo"] == null) {
-                cfg["borderInfo"] = [];
-              }
+            //   if (cfg["borderInfo"] == null) {
+            //     cfg["borderInfo"] = [];
+            //   }
 
-              cfg["borderInfo"].push(bd_obj);
-            } else if (borderInfoCompute[h + "_" + c]) {
-              let bd_obj = {
-                rangeType: "cell",
-                value: {
-                  row_index: h,
-                  col_index: c,
-                  l: null,
-                  r: null,
-                  t: null,
-                  b: null,
-                },
-              };
+            //   cfg["borderInfo"].push(bd_obj);
+            // } else if (borderInfoCompute[h + "_" + c]) {
+            //   let bd_obj = {
+            //     rangeType: "cell",
+            //     value: {
+            //       row_index: h,
+            //       col_index: c,
+            //       l: null,
+            //       r: null,
+            //       t: null,
+            //       b: null,
+            //     },
+            //   };
 
-              if (cfg["borderInfo"] == null) {
-                cfg["borderInfo"] = [];
-              }
+            //   if (cfg["borderInfo"] == null) {
+            //     cfg["borderInfo"] = [];
+            //   }
 
-              cfg["borderInfo"].push(bd_obj);
-            }
+            //   cfg["borderInfo"].push(bd_obj);
+            // }
 
             //数据验证 复制
             if (c_dataVerification[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]) {
