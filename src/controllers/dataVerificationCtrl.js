@@ -1529,13 +1529,13 @@ const dataVerificationCtrl = {
       return;
     }
 
-    let failureText;
+    let failureText = "";
 
-    if (Store.lang == "en") {
-      failureText = '<span style="color:#f72626;">Failure: </span>';
-    } else {
-      failureText = '<span style="color:#f72626;">失效：</span>';
-    }
+    // if (Store.lang == "en") {
+    //   failureText = '<span style="color:#f72626;">Failure: </span>';
+    // } else {
+    //   failureText = '<span style="color:#f72626;">失效：</span>';
+    // }
 
     let failureTextExtra;
 
@@ -1555,6 +1555,7 @@ const dataVerificationCtrl = {
       .css({
         left: col_pre,
         top: row,
+        color: "#f00",
       });
   },
   getHintText: function (item) {
