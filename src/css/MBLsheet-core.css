@@ -3018,6 +3018,7 @@ fieldset[disabled] .btn-danger.focus {
   background: #0188fb;
   cursor: ew-resize;
   opacity: 0;
+  display: none;
 }
 
 .MBLsheet-rows-change-size {
@@ -3026,6 +3027,7 @@ fieldset[disabled] .btn-danger.focus {
   background: #0188fb;
   cursor: ns-resize;
   opacity: 0;
+  display: none;
 }
 
 .MBLsheet-change-size-line {
