@@ -137,6 +137,10 @@ function sgInit(setting, config, MBLsheet) {
 
   MBLsheet.setData = (data) => setData(data, sheet, MBLsheet);
 
+  MBLsheet.getFoucsInfo = () => {
+    return MBLsheet.getAllSheets()[0].MBLsheet_select_save[0];
+  };
+
   MBLsheet.setDisabledMap = (obj = {}) => setDisabledMap(obj, config, MBLsheet);
   MBLsheet.getDisabledMap = () => getDisabledMap(config);
 
