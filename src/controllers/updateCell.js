@@ -125,22 +125,22 @@ export function MBLsheetupdateCell(
   }
 
   let input_postition = {
-    width: col - col_pre + 1 - 8,
-    height: row - row_pre + 1 - 4,
+    "min-width": col - col_pre + 1 - 8,
+    "min-height": row - row_pre + 1 - 4,
 
-    // "max-width": winW + scrollLeft - col_pre - 20 - Store.rowHeaderWidth,
-    // "max-width": winW + scrollLeft - col_pre - 20 - Store.rowHeaderWidth,
-    // "max-height":
-    //   winH +
-    //   scrollTop -
-    //   row_pre -
-    //   20 -
-    //   15 -
-    //   Store.toolbarHeight -
-    //   Store.infobarHeight -
-    //   Store.calculatebarHeight -
-    //   Store.sheetBarHeight -
-    //   Store.statisticBarHeight,
+    "max-width":
+      container_offset.width - scrollLeft - col_pre - 20 - Store.rowHeaderWidth,
+    "max-height":
+      container_offset.height -
+      scrollTop -
+      row_pre -
+      20 -
+      15 -
+      Store.toolbarHeight -
+      Store.infobarHeight -
+      Store.calculatebarHeight -
+      Store.sheetBarHeight -
+      Store.statisticBarHeight,
     left: left - wrapRect.left,
     top: top - wrapRect.top,
   };
