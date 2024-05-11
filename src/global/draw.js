@@ -2333,7 +2333,7 @@ let cellRender = function (
     MBLsheetTableContent.stroke();
     MBLsheetTableContent.closePath();
 
-    console.log("%c Line:2329 🌭 setVerifyByKey", "color:#ea7e5c", r, c);
+    // console.log("%c Line:2329 🌭 setVerifyByKey", "color:#ea7e5c", r, c);
     setVerifyByKey(r + "_" + c, value);
   } else {
     clearVerify(r + "_" + c);

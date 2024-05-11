@@ -308,7 +308,6 @@ export default function MBLsheetHandler() {
   //表格mousedown
   $("#MBLsheet-cell-main, #MBLsheetTableContent")
     .mousedown(function (event) {
-      console.log("%c Line:311 🍫 event", "color:#ed9ec7", event);
       if ($(event.target).hasClass("MBLsheet-mousedown-cancel")) {
         return;
       }

@@ -1558,7 +1558,8 @@ export function rowColumnOperationInitial() {
       try {
         cellRightClickConfig.customs[
           Number(clickEvent.currentTarget.dataset.index)
-        ].onClick(clickEvent, event, { rowIndex, columnIndex });
+          // ].onClick(clickEvent, event, { rowIndex, columnIndex }); // 不需要回传两个event
+        ].onClick(clickEvent, { rowIndex, columnIndex });
       } catch (e) {
         console.error("custom click error", e);
       }
@@ -2469,6 +2470,11 @@ export function rowColumnOperationInitial() {
 
       const delPosiArr = [];
 
+      console.log(
+        "%c Line:2473 🍪 Store.MBLsheet_select_save",
+        "color:#f5ce50",
+        Store.MBLsheet_select_save
+      );
       for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
         let r1 = Store.MBLsheet_select_save[s].row[0],
           r2 = Store.MBLsheet_select_save[s].row[1];
@@ -2502,6 +2508,7 @@ export function rowColumnOperationInitial() {
               //   delete d[r][c]["ct"];
               // }
 
+              console.log("%c Line:2505 🌶", "color:#7f2b82", r, c);
               delPosiArr.push({ r, c });
             } else {
               d[r][c] = null;
