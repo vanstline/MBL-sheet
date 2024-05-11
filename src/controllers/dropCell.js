@@ -214,6 +214,10 @@ const MBLsheetDropCell = {
     return isChnNumber;
   },
   isExtendNumber: function (txt) {
+    if (typeof txt === "number") {
+      // 兼容数字类型 正则报错
+      txt = txt.toString();
+    }
     let reg = /0|([1-9]+[0-9]*)/g;
     let isExtendNumber = reg.test(txt);
 
