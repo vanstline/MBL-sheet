@@ -9,6 +9,8 @@ import { hasChinaword, isRealNum } from "../global/validate";
 import Store from "../store";
 import locale from "../locale/locale";
 import numeral from "numeral";
+import MBLsheetConfigsetting from "../controllers/MBLsheetConfigsetting";
+import { getMBLsheet_select_save } from "../methods/get";
 // import method from '../global/method';
 
 /**
@@ -203,7 +205,6 @@ function ABCatNum(a) {
     charnum = getCharNumber(str[i]);
     numout += charnum * Math.pow(26, al - i - 1);
   }
-  // console.log(a, numout-1);
   if (numout == 0) {
     return NaN;
   }
@@ -473,6 +474,29 @@ function MBLsheetfontformat(format) {
   }
 }
 
+// 隐藏自定义右键菜单
+function hideCustomRightBtns() {
+  // MBLsheet-cols-menuitem
+  // MBLsheetConfigsetting;
+  const customs = MBLsheetConfigsetting?.cellRightClickConfig?.customs ?? [];
+  const { column_focus } = getMBLsheet_select_save()?.[0] ?? {};
+  for (var i = 0; i < customs.length; i++) {
+    const curCustoms = customs[i];
+    let hide = false;
+    if (curCustoms.key) {
+      if (curCustoms?.range?.col?.length) {
+        if (!curCustoms.range.col.includes(column_focus)) {
+          hide = true;
+        }
+      }
+    }
+    $(`.MBLsheet-cols-menuitem-${curCustoms.key}`).css({
+      display: hide ? "none" : "block",
+    });
+  }
+  // const customs = MBLsheet?.sheetRightClickConfig;
+}
+
 //右键菜单
 function showrightclickmenu($menu, x, y) {
   let winH = $(window).height(),
@@ -493,6 +517,8 @@ function showrightclickmenu($menu, x, y) {
   if (top < 0) {
     top = 0;
   }
+
+  hideCustomRightBtns();
 
   $menu.css({ top: top, left: left }).show();
 }
@@ -886,7 +912,6 @@ function defineBasicReactive(obj, key, value, callback) {
     },
     set(newValue) {
       if (value === newValue) return;
-      console.log(`发现 ${key} 属性 ${value} -> ${newValue}`);
 
       setTimeout(() => {
         callback(value, newValue);

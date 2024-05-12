@@ -283,8 +283,7 @@ const MBLsheetPostil = {
     let row = Store.visibledatarow[row_index],
       row_pre = row_index - 1 == -1 ? 0 : Store.visibledatarow[row_index - 1];
     let col = Store.cloumnLenSum[col_index],
-      col_pre =
-        col_index - 1 == -1 ? 0 : Store.cloumnLenSum[col_index - 1];
+      col_pre = col_index - 1 == -1 ? 0 : Store.cloumnLenSum[col_index - 1];
 
     if (!!margeset) {
       row = margeset.row[1];

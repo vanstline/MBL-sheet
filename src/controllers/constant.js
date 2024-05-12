@@ -402,14 +402,15 @@ function rightclickHTML() {
   }
 
   const customsButtons = (config.customs || [])
-    .map(
-      (item, index) => `
-            <div data-index="${index}" class="MBLsheetColsRowsHandleAdd_custom MBLsheet-cols-menuitem MBLsheet-mousedown-cancel">
+    .map((item, index) => {
+      const keyName = item.key ? `MBLsheet-cols-menuitem-${item.key} ` : "";
+      return `
+            <div data-index="${index}" class="MBLsheetColsRowsHandleAdd_custom MBLsheet-cols-menuitem ${keyName}MBLsheet-mousedown-cancel">
                 <div class="MBLsheet-cols-menuitem-content MBLsheet-mousedown-cancel">
                 ${item.title}
                 </div>
-            </div>`
-    )
+            </div>`;
+    })
     .join("");
 
   const rightclickContainer = `<div id="MBLsheet-rightclick-menu" class="MBLsheet-cols-menu MBLsheet-rightgclick-menu MBLsheet-mousedown-cancel">
