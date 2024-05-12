@@ -618,31 +618,31 @@ export function keyboardInitial() {
             }
 
             //复制范围内包含部分合并单元格，提示
-            if (Store.config["merge"] != null) {
-              let has_PartMC = false;
+            // if (Store.config["merge"] != null) {
+            //   let has_PartMC = false;
 
-              for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
-                let r1 = Store.MBLsheet_select_save[s].row[0],
-                  r2 = Store.MBLsheet_select_save[s].row[1];
-                let c1 = Store.MBLsheet_select_save[s].column[0],
-                  c2 = Store.MBLsheet_select_save[s].column[1];
+            //   for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
+            //     let r1 = Store.MBLsheet_select_save[s].row[0],
+            //       r2 = Store.MBLsheet_select_save[s].row[1];
+            //     let c1 = Store.MBLsheet_select_save[s].column[0],
+            //       c2 = Store.MBLsheet_select_save[s].column[1];
 
-                has_PartMC = hasPartMC(Store.config, r1, r2, c1, c2);
+            //     has_PartMC = hasPartMC(Store.config, r1, r2, c1, c2);
 
-                if (has_PartMC) {
-                  break;
-                }
-              }
+            //     if (has_PartMC) {
+            //       break;
+            //     }
+            //   }
 
-              if (has_PartMC) {
-                if (isEditMode()) {
-                  alert(locale_drag.noMerge);
-                } else {
-                  tooltip.info(locale_drag.noMerge, "");
-                }
-                return;
-              }
-            }
+            //   if (has_PartMC) {
+            //     if (isEditMode()) {
+            //       alert(locale_drag.noMerge);
+            //     } else {
+            //       tooltip.info(locale_drag.noMerge, "");
+            //     }
+            //     return;
+            //   }
+            // }
 
             //多重选区 有条件格式时 提示
             let cdformat =
@@ -784,31 +784,31 @@ export function keyboardInitial() {
             }
 
             //复制范围内包含部分合并单元格，提示
-            if (Store.config["merge"] != null) {
-              let has_PartMC = false;
+            // if (Store.config["merge"] != null) {
+            //   let has_PartMC = false;
 
-              for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
-                let r1 = Store.MBLsheet_select_save[s].row[0],
-                  r2 = Store.MBLsheet_select_save[s].row[1];
-                let c1 = Store.MBLsheet_select_save[s].column[0],
-                  c2 = Store.MBLsheet_select_save[s].column[1];
+            //   for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
+            //     let r1 = Store.MBLsheet_select_save[s].row[0],
+            //       r2 = Store.MBLsheet_select_save[s].row[1];
+            //     let c1 = Store.MBLsheet_select_save[s].column[0],
+            //       c2 = Store.MBLsheet_select_save[s].column[1];
 
-                has_PartMC = hasPartMC(Store.config, r1, r2, c1, c2);
+            //     has_PartMC = hasPartMC(Store.config, r1, r2, c1, c2);
 
-                if (has_PartMC) {
-                  break;
-                }
-              }
+            //     if (has_PartMC) {
+            //       break;
+            //     }
+            //   }
 
-              if (has_PartMC) {
-                if (MBLsheetConfigsetting.editMode) {
-                  alert(_locale_drag.noMerge);
-                } else {
-                  tooltip.info(_locale_drag.noMerge, "");
-                }
-                return;
-              }
-            }
+            //   if (has_PartMC) {
+            //     if (MBLsheetConfigsetting.editMode) {
+            //       alert(_locale_drag.noMerge);
+            //     } else {
+            //       tooltip.info(_locale_drag.noMerge, "");
+            //     }
+            //     return;
+            //   }
+            // }
 
             //多重选区时 提示
             if (Store.MBLsheet_select_save.length > 1) {

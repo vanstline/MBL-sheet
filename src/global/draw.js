@@ -817,6 +817,7 @@ function MBLsheetDrawMain(
       if (Store.flowdata[r] != null && Store.flowdata[r][c] != null) {
         let value = Store.flowdata[r][c];
 
+        // console.log("%c Line:828 🍋", "color:#33a5ff", value);
         if (getObjType(value) == "object" && "mc" in value) {
           borderOffset[r + "_" + c] = {
             start_r: start_r,

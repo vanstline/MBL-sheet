@@ -3207,23 +3207,23 @@ export function setRangeFilter(type, options = {}) {
 
 /**
  * 为指定索引的工作表，选定的范围设定合并单元格
- * @param {String} type 合并类型 all-全部合并  horizontal-水平合并  vertical-垂直合并
+//  * @param {String} type 合并类型 all-全部合并  horizontal-水平合并  vertical-垂直合并
  * @param {Object} options 可选参数
  * @param {Object | String} options.range 选区范围
  * @param {Number} options.order 工作表索引；默认值为当前工作表索引
  * @param {Object} options.success 操作结束的回调函数
  */
-export function setRangeMerge(type, options = {}) {
-  let typeValues = ["all", "horizontal", "vertical"];
-  if (typeValues.indexOf(type) < 0) {
-    return tooltip.info(
-      "The type parameter must be included in ['all', 'horizontal', 'vertical']",
-      ""
-    );
-  }
+export function setRangeMerge(options = {}, type = "all") {
+  // let typeValues = ["all", "horizontal", "vertical"];
+  // if (typeValues.indexOf(type) < 0) {
+  //   return tooltip.info(
+  //     "The type parameter must be included in ['all', 'horizontal', 'vertical']",
+  //     ""
+  //   );
+  // }
 
-  let curSheetOrder = getSheetIndex(Store.currentSheetIndex),
-    curRange = JSON.parse(JSON.stringify(Store.MBLsheet_select_save));
+  let curSheetOrder = getSheetIndex(Store.currentSheetIndex);
+  // curRange = JSON.parse(JSON.stringify(Store.MBLsheet_select_save));
   let { range = curRange, order = curSheetOrder, success } = { ...options };
 
   let file = Store.MBLsheetfile[order],

@@ -5053,25 +5053,25 @@ export default function MBLsheetHandler() {
       }
 
       //选区包含部分单元格
-      if (
-        hasPartMC(
-          cfg,
-          last["row"][0],
-          last["row"][1],
-          last["column"][0],
-          last["column"][1]
-        )
-      ) {
-        if (isEditMode()) {
-          alert(locale_drag.noMerge);
-        } else {
-          tooltip.info(
-            '<i class="fa fa-exclamation-triangle"></i>',
-            locale_drag.noMerge
-          );
-        }
-        return;
-      }
+      // if (
+      //   hasPartMC(
+      //     cfg,
+      //     last["row"][0],
+      //     last["row"][1],
+      //     last["column"][0],
+      //     last["column"][1]
+      //   )
+      // ) {
+      //   if (isEditMode()) {
+      //     alert(locale_drag.noMerge);
+      //   } else {
+      //     tooltip.info(
+      //       '<i class="fa fa-exclamation-triangle"></i>',
+      //       locale_drag.noMerge
+      //     );
+      //   }
+      //   return;
+      // }
 
       let row_s = last["row"][0] - row_index_original + row_index,
         row_e = last["row"][1] - row_index_original + row_index;
@@ -5116,17 +5116,17 @@ export default function MBLsheetHandler() {
       }
 
       //替换的位置包含部分单元格
-      if (hasPartMC(cfg, row_s, row_e, col_s, col_e)) {
-        if (isEditMode()) {
-          alert(locale_drag.noMerge);
-        } else {
-          tooltip.info(
-            '<i class="fa fa-exclamation-triangle"></i>',
-            locale_drag.noMerge
-          );
-        }
-        return;
-      }
+      // if (hasPartMC(cfg, row_s, row_e, col_s, col_e)) {
+      //   if (isEditMode()) {
+      //     alert(locale_drag.noMerge);
+      //   } else {
+      //     tooltip.info(
+      //       '<i class="fa fa-exclamation-triangle"></i>',
+      //       locale_drag.noMerge
+      //     );
+      //   }
+      //   return;
+      // }
 
       let borderInfoCompute = getBorderInfoCompute(Store.currentSheetIndex);
 
@@ -5527,15 +5527,15 @@ export default function MBLsheetHandler() {
           }
         }
 
-        if (hasMc) {
-          if (isEditMode()) {
-            alert(locale_drag.noMerge);
-          } else {
-            tooltip.info(locale_drag.noMerge, "");
-          }
+        // if (hasMc) {
+        //   if (isEditMode()) {
+        //     alert(locale_drag.noMerge);
+        //   } else {
+        //     tooltip.info(locale_drag.noMerge, "");
+        //   }
 
-          return;
-        }
+        //   return;
+        // }
 
         for (let r = row_s; r <= row_e; r++) {
           for (let c = col_s; c <= col_e; c++) {
@@ -5548,15 +5548,15 @@ export default function MBLsheetHandler() {
           }
         }
 
-        if (hasMc) {
-          if (isEditMode()) {
-            alert(locale_drag.noMerge);
-          } else {
-            tooltip.info(locale_drag.noMerge, "");
-          }
+        // if (hasMc) {
+        //   if (isEditMode()) {
+        //     alert(locale_drag.noMerge);
+        //   } else {
+        //     tooltip.info(locale_drag.noMerge, "");
+        //   }
 
-          return;
-        }
+        //   return;
+        // }
       }
 
       last["row"] = [row_s, row_e];
