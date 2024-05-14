@@ -27,12 +27,12 @@ export function linseter() {
     }
 
     function processBlur(event) {
-      // console.log("%c Line:30 🍆 event", "color:#ffdd4d", event);
+      //
       if (isEdit) {
         updateBlur(event);
         isEdit = false;
       } else {
-        // console.log("%c Line:35 🍎", "color:#b03734");
+        //
         // ;
         // setTimeout(() => {
         // exitEditMode();
@@ -109,7 +109,6 @@ export function getRowData(r, c, newVal, keyNumMap = {}) {
 }
 
 export function changeValue(r, c, value, falg = true) {
-  console.log("%c Line:98 🧀 r, c, value", "color:#ed9ec7", r, c, value);
   const keyNumMap = {};
   let newVal = value;
 

@@ -1,6 +1,8 @@
 import Store from "../../store";
 import { transToCellData, transToCellDataV2 } from "../api";
 import { jfrefreshgrid } from "../refresh";
+import { setVerifyByKey, clearVerify } from "../verify";
+import dataVerificationCtrl from "../../controllers/dataVerificationCtrl";
 import {
   fieldsMap,
   lengthMap,
@@ -72,6 +74,7 @@ function initVerification(data, sheet, MBLsheet) {
 
 function setData(data, sheet, MBLsheet) {
   const curData = processData(data, sheet, MBLsheet);
+  let dataVerification = dataVerificationCtrl.dataVerification;
 
   let d = _.cloneDeep(Store.flowdata);
   if (!d?.length) {
@@ -88,8 +91,23 @@ function setData(data, sheet, MBLsheet) {
     const { r, c, v: V } = item;
     if (d?.[r]?.[c]) {
       d[r][c] = V ?? d[r][v];
+      let value = d[r][c]?.v;
+      if (
+        dataVerification != null &&
+        dataVerification[r + "_" + c] != null &&
+        !dataVerificationCtrl.validateCellDataCustom(
+          value,
+          dataVerification[r + "_" + c],
+          r
+        ).status
+      ) {
+        setVerifyByKey(r + "_" + c, true);
+      } else {
+        clearVerify(r + "_" + c);
+      }
     }
   });
+
   jfrefreshgrid(d, Store.MBLsheet_select_save);
 }
 

@@ -481,7 +481,6 @@ export function rowColumnOperationInitial() {
     })
     .mouseup(function (event) {
       if (event.which == 3) {
-        console.log("%c Line:486 🥛", "color:#f5ce50");
         // *如果禁止前台编辑，则中止下一步操作
         if (!checkIsAllowEdit()) {
           return;
@@ -684,7 +683,6 @@ export function rowColumnOperationInitial() {
 
       //mousedown是右键
       if (event.which == "3") {
-        console.log("%c Line:689 🥖", "color:#465975");
         let isright = false;
 
         for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
@@ -1072,7 +1070,7 @@ export function rowColumnOperationInitial() {
     .mouseup(function (event) {
       if (event.which == 3) {
         return;
-        console.log("%c Line:1076 🍺", "color:#42b983");
+
         // *如果禁止前台编辑，则中止下一步操作
         if (!checkIsAllowEdit()) {
           return;
@@ -2464,7 +2462,7 @@ export function rowColumnOperationInitial() {
       }
 
       const file = Store.MBLsheetfile[getSheetIndex(Store.currentSheetIndex)];
-      console.log("%c Line:2462 🍖 file", "color:#fca650", file);
+
       const hyperlink = file.hyperlink && $.extend(true, {}, file.hyperlink);
       let hyperlinkUpdated;
 
@@ -2488,7 +2486,6 @@ export function rowColumnOperationInitial() {
             }
 
             if (getObjType(d[r][c]) == "object") {
-              console.log("%c Line:2481 🍪 d[r][c]", "color:#fca650", d[r][c]);
               // delete d[r][c]["m"];
               // delete d[r][c]["v"];
               d[r][c] = {
@@ -2508,7 +2505,6 @@ export function rowColumnOperationInitial() {
               //   delete d[r][c]["ct"];
               // }
 
-              console.log("%c Line:2505 🌶", "color:#7f2b82", r, c);
               delPosiArr.push({ r, c });
             } else {
               d[r][c] = null;
@@ -2745,7 +2741,7 @@ function MBLsheetcolsdbclick() {
         });
 
         let computeRowlen = 0;
-        // console.log("rowlen", textInfo);
+        //
         if (textInfo != null) {
           computeRowlen = textInfo.textWidthAll;
         }
@@ -2801,7 +2797,7 @@ function MBLsheetcolsdbclick() {
           });
 
           let computeRowlen = 0;
-          // console.log("rowlen", textInfo);
+          //
           if (textInfo != null) {
             computeRowlen = textInfo.textWidthAll;
           }

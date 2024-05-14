@@ -12,6 +12,7 @@ import { icons } from "../controllers/constant";
 import sheetmanage from "../controllers/sheetmanage";
 import { eventBus } from "./sg/event";
 import { jfrefreshgrid } from "./refresh";
+import formula from "../global/formula";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -189,10 +190,10 @@ function verifyRowFn(row) {
   //   (item) => typeof item.fieldsProps?.verifyFn === "function"
   // );
 
-  // console.log("%c Line:186 🥓", "color:#ed9ec7", verifyArr);
+  //
   // return verifyArr.some((item, i) => {
   //   const cur = item.fieldsProps.verifyFn(curRowData[item.dataIndex], rows);
-  //   console.log("%c Line:189 🍫 cur", "color:#b03734", cur);
+  //
   //   return !cur.status;
   // });
 
@@ -272,7 +273,6 @@ export function execCustomEvent(event) {
   const pageX = event.pageX - offset.left;
   const pageY = event.pageY - offset.top;
   const eventKeys = Object.keys(Store.customEvents);
-  console.log("%c Line:219 🍐 eventKeys", "color:#2eafb0", eventKeys, event);
 
   eventKeys.forEach((keys) => {
     const [xK, yK] = keys.split("-");
@@ -280,7 +280,6 @@ export function execCustomEvent(event) {
     const [startR, endR] = yK.split("_");
 
     if (pageX >= startC && pageX <= endC && pageY >= startR && pageY <= endR) {
-      console.log("%c Line:1089 🥟", "color:#ed9ec7");
       if (typeof Store.customEvents[keys].onclick === "function") {
         Store.customEvents[keys].onclick();
       }
@@ -791,7 +790,7 @@ function renderExtraIcon(curColumns, coord, curSheet, ctx) {
     const drawStartC = end_c - width + 0 - 1;
 
     // _.debounce(function () {
-    //   console.log("%c Line:767 🥥", "color:#ea7e5c");
+    //
     // }, 200);
 
     // _.throttle(function () {

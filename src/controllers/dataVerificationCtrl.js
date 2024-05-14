@@ -1799,6 +1799,10 @@ const dataVerificationCtrl = {
     if (type == "dropdown") {
       let list = _this.getDropdownList(value1);
 
+      if (cellValue === undefined || cellValue === null) {
+        return true;
+      }
+
       // 多选的情况 检查每个都在下拉列表中
       if (type2 && cellValue) {
         if (type2 === "autocomplete") {

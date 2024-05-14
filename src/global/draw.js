@@ -817,7 +817,7 @@ function MBLsheetDrawMain(
       if (Store.flowdata[r] != null && Store.flowdata[r][c] != null) {
         let value = Store.flowdata[r][c];
 
-        // console.log("%c Line:828 🍋", "color:#33a5ff", value);
+        //
         if (getObjType(value) == "object" && "mc" in value) {
           borderOffset[r + "_" + c] = {
             start_r: start_r,
@@ -2242,7 +2242,6 @@ let cellRender = function (
       dataVerification[r + "_" + c],
       r
     );
-    console.log("%c Line:2241 🍧 errRes", "color:#ffdd4d", errRes);
   }
   if (
     dataVerification != null &&
@@ -2334,7 +2333,7 @@ let cellRender = function (
     MBLsheetTableContent.stroke();
     MBLsheetTableContent.closePath();
 
-    // console.log("%c Line:2329 🌭 setVerifyByKey", "color:#ea7e5c", r, c);
+    //
     setVerifyByKey(r + "_" + c, value);
   } else {
     clearVerify(r + "_" + c);
