@@ -155,8 +155,8 @@ function dynamicArrayHightShow(r, c) {
 
     let row = Store.visibledatarow[d_row_end],
       row_pre = d_row - 1 == -1 ? 0 : Store.visibledatarow[d_row - 1];
-    let col = Store.visibledatacolumn[d_col_end],
-      col_pre = d_col - 1 == -1 ? 0 : Store.visibledatacolumn[d_col - 1];
+    let col = Store.cloumnLenSum[d_col_end],
+      col_pre = d_col - 1 == -1 ? 0 : Store.cloumnLenSum[d_col - 1];
 
     $("#MBLsheet-dynamicArray-hightShow").css({
       left: col_pre,

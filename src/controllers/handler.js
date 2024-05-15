@@ -80,6 +80,10 @@ import {
   createLuckyChart,
   hideAllNeedRangeShow,
 } from "../expendPlugins/chart/plugin";
+import { setDisabled, setRowData, updateBlur } from "./observer";
+import { execCustomEvent } from "../global/sg";
+
+const nonexistentCell = [undefined, -1];
 
 //, columeflowset, rowflowset
 export default function MBLsheetHandler() {
@@ -157,7 +161,7 @@ export default function MBLsheetHandler() {
   $("#MBLsheet-grid-window-1").mousewheel(function (event, delta) {
     let scrollLeft = $("#MBLsheet-scrollbar-x").scrollLeft(),
       scrollTop = $("#MBLsheet-scrollbar-y").scrollTop();
-    let visibledatacolumn_c = Store.visibledatacolumn,
+    let visibledatacolumn_c = Store.cloumnLenSum,
       visibledatarow_c = Store.visibledatarow;
 
     if (MBLsheetFreezen.freezenhorizontaldata != null) {
@@ -292,11 +296,99 @@ export default function MBLsheetHandler() {
     menuButton.inputMenuButtonFocus(e.target);
   });
 
+  $("#MBLsheet-cols-h-c").mousedown(function (event) {
+    let mainSheetMouse = mouseposition(event.pageX, event.pageY);
+    let container_offset = $("#" + Store.container).offset();
+    let mouse = [
+      mainSheetMouse[0] + Store.rowHeaderWidth,
+      mainSheetMouse[1] + container_offset.top,
+    ];
+  });
+
   //表格mousedown
   $("#MBLsheet-cell-main, #MBLsheetTableContent")
     .mousedown(function (event) {
       if ($(event.target).hasClass("MBLsheet-mousedown-cancel")) {
         return;
+      }
+
+      let mouse = mouseposition(event.pageX, event.pageY);
+
+      let x = mouse[0] + $("#MBLsheet-cell-main").scrollLeft();
+      let y = mouse[1] + $("#MBLsheet-cell-main").scrollTop();
+      let row_location = rowLocation(y),
+        row = row_location[1],
+        row_pre = row_location[0],
+        row_index = row_location[2];
+
+      let col_location = colLocation(x),
+        col = col_location[1],
+        col_pre = col_location[0],
+        col_index = col_location[2];
+
+      let row_index_ed = row_index,
+        col_index_ed = col_index;
+
+      if (
+        nonexistentCell.includes(row_index) ||
+        nonexistentCell.includes(col_index)
+      ) {
+        // formula.updatecell(
+        //   Store.MBLsheetCellUpdate[0],
+        //   Store.MBLsheetCellUpdate[1]
+        // );
+        updateBlur(event);
+        MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
+        return;
+      }
+      let sheetFile = sheetmanage.getSheetByIndex();
+
+      function update() {
+        const curRowData = Store.flowdata[row_index_ed];
+        const rowData = {};
+        const curKey = curRowData?.[col_index]?.dataIndex;
+
+        sheetFile.columns.forEach((item, i) => {
+          if (item.dataIndex) {
+            const v = curRowData?.find(
+              (sub) => sub?.dataIndex === item.dataIndex
+            )?.v;
+
+            rowData[item.dataIndex] = v;
+          }
+        });
+
+        // formula.updatecell(
+        //   Store.MBLsheetCellUpdate[0],
+        //   Store.MBLsheetCellUpdate[1]
+        // );
+        return rowData;
+      }
+
+      var curColumn = sheetFile?.columns?.[col_index_ed] ?? {};
+      if (typeof curColumn?.extra === "object") {
+        const extra = curColumn.extra;
+        const { width = 0 } = extra?.style ?? {};
+        if (col - x <= width && typeof extra.onclick === "function") {
+          const rowData = update();
+          extra.onclick(rowData[curColumn.dataIndex], rowData, row_index_ed);
+          MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
+          return;
+        }
+      }
+
+      if (Store.flowdata[0][col_index].disabled) {
+        if (
+          Store.flowdata[0][col_index].onclick &&
+          typeof Store.flowdata[0][col_index].onclick === "function"
+        ) {
+          const rowData = update();
+          Store.flowdata[0][col_index].onclick(
+            rowData[curColumn.dataIndex],
+            rowData,
+            row_index_ed
+          );
+        }
       }
 
       // 协同编辑其他用户不在操作的时候，用户名框隐藏
@@ -324,16 +416,13 @@ export default function MBLsheetHandler() {
       }
 
       //MBLsheetautoadjustmousedown = 1;
-      let mouse = mouseposition(event.pageX, event.pageY);
+
       if (
         mouse[0] >= Store.cellmainWidth - Store.cellMainSrollBarSize ||
         mouse[1] >= Store.cellmainHeight - Store.cellMainSrollBarSize
       ) {
         return;
       }
-
-      let x = mouse[0] + $("#MBLsheet-cell-main").scrollLeft();
-      let y = mouse[1] + $("#MBLsheet-cell-main").scrollTop();
 
       if (
         MBLsheetFreezen.freezenverticaldata != null &&
@@ -353,23 +442,10 @@ export default function MBLsheetHandler() {
         y = mouse[1] + MBLsheetFreezen.freezenhorizontaldata[2];
       }
 
-      let sheetFile = sheetmanage.getSheetByIndex();
       let MBLsheetTableContent = $("#MBLsheetTableContent")
         .get(0)
         .getContext("2d");
 
-      let row_location = rowLocation(y),
-        row = row_location[1],
-        row_pre = row_location[0],
-        row_index = row_location[2];
-
-      let col_location = colLocation(x),
-        col = col_location[1],
-        col_pre = col_location[0],
-        col_index = col_location[2];
-
-      let row_index_ed = row_index,
-        col_index_ed = col_index;
       let margeset = menuButton.mergeborer(
         Store.flowdata,
         row_index,
@@ -1755,6 +1831,69 @@ export default function MBLsheetHandler() {
         col_index = margeset.column[2];
       }
 
+      // TODO: 暂时弃用 与自定义区域点击事件冲突
+      // 检查当前坐标和焦点坐标是否一致，如果不一致那么进行修正
+      // let column_focus = Store.MBLsheet_select_save[0]["column_focus"];
+      // let row_focus = Store.MBLsheet_select_save[0]["row_focus"];
+      // if (column_focus !== col_index || row_focus !== row_index) {
+      //   row_index = row_focus;
+      //   col_index = column_focus;
+      // }
+
+      const curSheet = sheetmanage.getSheetByIndex();
+
+      var columns = curSheet?.columns ?? [];
+      if (typeof columns[col_index]?.extra === "object") {
+        const extra = columns[col_index].extra;
+        const { width = 0 } = extra?.style ?? {};
+        if (col_location[1] - x <= width) {
+          // TODO: 双击事件
+
+          return;
+        }
+      }
+
+      const curRowData = Store.flowdata[row_index];
+      const rowData = {};
+
+      const keyNumMap = {};
+      curSheet.columns.forEach((item, i) => {
+        if (item.dataIndex) {
+          keyNumMap[item.dataIndex] = i;
+          const v = curRowData?.find(
+            (sub) => sub?.dataIndex === item.dataIndex
+          )?.v;
+
+          rowData[item.dataIndex] = v;
+        }
+      });
+
+      // 单元格禁用
+      if (Store.flowdata[row_index][col_index].disabled) {
+        return;
+      }
+      // 单元格禁用
+      if (
+        Store.flowdata[row_index][col_index]?.fieldsProps?.type === "select"
+      ) {
+        return;
+      }
+
+      if (curSheet.columns?.[0]?.[col_index]?.dataIndex == null) {
+        const curKey = curSheet.columns?.[0]?.dataIndex;
+        const changeFn = curSheet.columns?.[0].onchange;
+        if (changeFn && typeof changeFn === "function") {
+          const curSetDisabled = (obj) =>
+            setDisabled(obj, row_index, keyNumMap, true);
+          const curSetRowData = (obj, dependence = []) =>
+            setRowData(obj, row_index, keyNumMap, true, dependence);
+          changeFn(rowData[curKey], rowData, row_index, {
+            setRowData: curSetRowData,
+            setDisabled: curSetDisabled,
+          });
+        }
+      }
+
       if (pivotTable.isPivotRange(row_index, col_index)) {
         //数据透视表没有 任何数据
         if (
@@ -1850,13 +1989,6 @@ export default function MBLsheetHandler() {
           menuButton.cancelPaintModel();
         }
 
-        // 检查当前坐标和焦点坐标是否一致，如果不一致那么进行修正
-        let column_focus = Store.MBLsheet_select_save[0]["column_focus"];
-        let row_focus = Store.MBLsheet_select_save[0]["row_focus"];
-        if (column_focus !== col_index || row_focus !== row_index) {
-          row_index = row_focus;
-          col_index = column_focus;
-        }
         MBLsheetupdateCell(row_index, col_index, Store.flowdata);
 
         /* 设置选区高亮 */
@@ -1963,7 +2095,6 @@ export default function MBLsheetHandler() {
   $(document).on("mousemove.MBLsheetEvent", function (event) {
     MBLsheetPostil.overshow(event); //有批注显示
     hyperlinkCtrl.overshow(event); //链接提示显示
-
     window.cancelAnimationFrame(Store.jfautoscrollTimeout);
 
     if (
@@ -2167,7 +2298,7 @@ export default function MBLsheetHandler() {
           col,
           col_index + 1,
           scrollLeft,
-          MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_index + 1),
+          MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_index + 1),
           left,
         ];
       } else {
@@ -2176,7 +2307,7 @@ export default function MBLsheetHandler() {
           col_pre,
           col_index,
           scrollLeft,
-          MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_index),
+          MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_index),
           left,
         ];
       }
@@ -2733,8 +2864,8 @@ export default function MBLsheetHandler() {
             row = row_location[1],
             row_pre = row_location[0],
             row_index = row_location[2];
-          let col_index = Store.visibledatacolumn.length - 1,
-            col = Store.visibledatacolumn[col_index],
+          let col_index = Store.cloumnLenSum.length - 1,
+            col = Store.cloumnLenSum[col_index],
             col_pre = 0;
 
           let last = $.extend(
@@ -2917,20 +3048,19 @@ export default function MBLsheetHandler() {
           }
 
           if (
-            col_e >=
-              Store.visibledatacolumn[Store.visibledatacolumn.length - 1] ||
+            col_e >= Store.cloumnLenSum[Store.cloumnLenSum.length - 1] ||
             x > winW
           ) {
             col_s =
-              Store.visibledatacolumn.length -
+              Store.cloumnLenSum.length -
               1 -
               Store.MBLsheet_select_save[0]["column"][1] +
               Store.MBLsheet_select_save[0]["column"][0];
-            col_e = Store.visibledatacolumn.length - 1;
+            col_e = Store.cloumnLenSum.length - 1;
           }
 
-          col_pre = col_s - 1 == -1 ? 0 : Store.visibledatacolumn[col_s - 1];
-          col = Store.visibledatacolumn[col_e];
+          col_pre = col_s - 1 == -1 ? 0 : Store.cloumnLenSum[col_s - 1];
+          col = Store.cloumnLenSum[col_e];
           row_pre = row_s - 1 == -1 ? 0 : Store.visibledatarow[row_s - 1];
           row = Store.visibledatarow[row_e];
 
@@ -3000,16 +3130,15 @@ export default function MBLsheetHandler() {
           }
 
           if (
-            col_e >=
-              Store.visibledatacolumn[Store.visibledatacolumn.length - 1] ||
+            col_e >= Store.cloumnLenSum[Store.cloumnLenSum.length - 1] ||
             x > winW
           ) {
             col_s =
-              Store.visibledatacolumn.length -
+              Store.cloumnLenSum.length -
               1 -
               Store.MBLsheet_select_save[0]["column"][1] +
               Store.MBLsheet_select_save[0]["column"][0];
-            col_e = Store.visibledatacolumn.length - 1;
+            col_e = Store.cloumnLenSum.length - 1;
           }
 
           let top = Store.MBLsheet_select_save[0].top_move,
@@ -4924,25 +5053,25 @@ export default function MBLsheetHandler() {
       }
 
       //选区包含部分单元格
-      if (
-        hasPartMC(
-          cfg,
-          last["row"][0],
-          last["row"][1],
-          last["column"][0],
-          last["column"][1]
-        )
-      ) {
-        if (isEditMode()) {
-          alert(locale_drag.noMerge);
-        } else {
-          tooltip.info(
-            '<i class="fa fa-exclamation-triangle"></i>',
-            locale_drag.noMerge
-          );
-        }
-        return;
-      }
+      // if (
+      //   hasPartMC(
+      //     cfg,
+      //     last["row"][0],
+      //     last["row"][1],
+      //     last["column"][0],
+      //     last["column"][1]
+      //   )
+      // ) {
+      //   if (isEditMode()) {
+      //     alert(locale_drag.noMerge);
+      //   } else {
+      //     tooltip.info(
+      //       '<i class="fa fa-exclamation-triangle"></i>',
+      //       locale_drag.noMerge
+      //     );
+      //   }
+      //   return;
+      // }
 
       let row_s = last["row"][0] - row_index_original + row_index,
         row_e = last["row"][1] - row_index_original + row_index;
@@ -4978,29 +5107,26 @@ export default function MBLsheetHandler() {
       }
 
       if (
-        col_e >= Store.visibledatacolumn[Store.visibledatacolumn.length - 1] ||
+        col_e >= Store.cloumnLenSum[Store.cloumnLenSum.length - 1] ||
         x > winW
       ) {
         col_s =
-          Store.visibledatacolumn.length -
-          1 -
-          last["column"][1] +
-          last["column"][0];
-        col_e = Store.visibledatacolumn.length - 1;
+          Store.cloumnLenSum.length - 1 - last["column"][1] + last["column"][0];
+        col_e = Store.cloumnLenSum.length - 1;
       }
 
       //替换的位置包含部分单元格
-      if (hasPartMC(cfg, row_s, row_e, col_s, col_e)) {
-        if (isEditMode()) {
-          alert(locale_drag.noMerge);
-        } else {
-          tooltip.info(
-            '<i class="fa fa-exclamation-triangle"></i>',
-            locale_drag.noMerge
-          );
-        }
-        return;
-      }
+      // if (hasPartMC(cfg, row_s, row_e, col_s, col_e)) {
+      //   if (isEditMode()) {
+      //     alert(locale_drag.noMerge);
+      //   } else {
+      //     tooltip.info(
+      //       '<i class="fa fa-exclamation-triangle"></i>',
+      //       locale_drag.noMerge
+      //     );
+      //   }
+      //   return;
+      // }
 
       let borderInfoCompute = getBorderInfoCompute(Store.currentSheetIndex);
 
@@ -5280,15 +5406,12 @@ export default function MBLsheetHandler() {
       }
 
       if (
-        col_e >= Store.visibledatacolumn[Store.visibledatacolumn.length - 1] ||
+        col_e >= Store.cloumnLenSum[Store.cloumnLenSum.length - 1] ||
         x > winW
       ) {
         col_s =
-          Store.visibledatacolumn.length -
-          1 -
-          last["column"][1] +
-          last["column"][0];
-        col_e = Store.visibledatacolumn.length - 1;
+          Store.cloumnLenSum.length - 1 - last["column"][1] + last["column"][0];
+        col_e = Store.cloumnLenSum.length - 1;
       }
 
       //复制范围
@@ -5404,15 +5527,15 @@ export default function MBLsheetHandler() {
           }
         }
 
-        if (hasMc) {
-          if (isEditMode()) {
-            alert(locale_drag.noMerge);
-          } else {
-            tooltip.info(locale_drag.noMerge, "");
-          }
+        // if (hasMc) {
+        //   if (isEditMode()) {
+        //     alert(locale_drag.noMerge);
+        //   } else {
+        //     tooltip.info(locale_drag.noMerge, "");
+        //   }
 
-          return;
-        }
+        //   return;
+        // }
 
         for (let r = row_s; r <= row_e; r++) {
           for (let c = col_s; c <= col_e; c++) {
@@ -5425,15 +5548,15 @@ export default function MBLsheetHandler() {
           }
         }
 
-        if (hasMc) {
-          if (isEditMode()) {
-            alert(locale_drag.noMerge);
-          } else {
-            tooltip.info(locale_drag.noMerge, "");
-          }
+        // if (hasMc) {
+        //   if (isEditMode()) {
+        //     alert(locale_drag.noMerge);
+        //   } else {
+        //     tooltip.info(locale_drag.noMerge, "");
+        //   }
 
-          return;
-        }
+        //   return;
+        // }
       }
 
       last["row"] = [row_s, row_e];
@@ -5469,6 +5592,7 @@ export default function MBLsheetHandler() {
   $("#MBLsheet-cell-main div.MBLsheet-cs-draghandle").mousedown(function (
     event
   ) {
+    return;
     if (isEditMode() || Store.allowEdit === false) {
       //此模式下禁用选区拖动
       return;
@@ -5650,7 +5774,6 @@ export default function MBLsheetHandler() {
         event.stopPropagation();
         return;
       }
-
       //复制范围
       MBLsheetDropCell.copyRange = { row: [r0, r1], column: [c0, c1] };
 
@@ -5957,11 +6080,10 @@ export default function MBLsheetHandler() {
     let scrollWidth, ch_width;
     if (st_c - 1 < 0) {
       scrollWidth = 0;
-      ch_width = Store.visibledatacolumn[ed_c];
+      ch_width = Store.cloumnLenSum[ed_c];
     } else {
-      scrollWidth = Store.visibledatacolumn[st_c - 1];
-      ch_width =
-        Store.visibledatacolumn[ed_c] - Store.visibledatacolumn[st_c - 1];
+      scrollWidth = Store.cloumnLenSum[st_c - 1];
+      ch_width = Store.cloumnLenSum[ed_c] - Store.cloumnLenSum[st_c - 1];
     }
 
     let newCanvas = $("<canvas>")

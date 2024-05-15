@@ -2654,12 +2654,12 @@ const menuButton = {
 
               let col_st = 0;
               let left =
-                Store.visibledatacolumn[col_st] - 2 + Store.rowHeaderWidth;
+                Store.cloumnLenSum[col_st] - 2 + Store.rowHeaderWidth;
               let freezenverticaldata = [
-                Store.visibledatacolumn[col_st],
+                Store.cloumnLenSum[col_st],
                 col_st + 1,
                 0,
-                MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+                MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
                 left,
               ];
               MBLsheetFreezen.saveFreezen(
@@ -2705,22 +2705,22 @@ const menuButton = {
 
               let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
               let col_st = MBLsheet_searcharray(
-                Store.visibledatacolumn,
+                Store.cloumnLenSum,
                 scrollLeft
               );
               if (col_st == -1) {
                 col_st = 0;
               }
               let left =
-                Store.visibledatacolumn[col_st] -
+                Store.cloumnLenSum[col_st] -
                 2 -
                 scrollLeft +
                 Store.rowHeaderWidth;
               let freezenverticaldata = [
-                Store.visibledatacolumn[col_st],
+                Store.cloumnLenSum[col_st],
                 col_st + 1,
                 scrollLeft,
-                MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+                MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
                 left,
               ];
               MBLsheetFreezen.saveFreezen(
@@ -2835,7 +2835,7 @@ const menuButton = {
             }
             let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
             let col_st = MBLsheet_searcharray(
-              Store.visibledatacolumn,
+              Store.cloumnLenSum,
               scrollLeft
             );
 
@@ -2849,25 +2849,25 @@ const menuButton = {
 
             let left, freezenverticaldata;
             if (MBLsheetFreezen.freezenRealFirstRowColumn) {
-              left = Store.visibledatacolumn[col_st] - 2 + Store.rowHeaderWidth;
+              left = Store.cloumnLenSum[col_st] - 2 + Store.rowHeaderWidth;
               freezenverticaldata = [
-                Store.visibledatacolumn[col_st],
+                Store.cloumnLenSum[col_st],
                 col_st + 1,
                 0,
-                MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+                MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
                 left,
               ];
             } else {
               left =
-                Store.visibledatacolumn[col_st] -
+                Store.cloumnLenSum[col_st] -
                 2 -
                 scrollLeft +
                 Store.rowHeaderWidth;
               freezenverticaldata = [
-                Store.visibledatacolumn[col_st],
+                Store.cloumnLenSum[col_st],
                 col_st + 1,
                 scrollLeft,
-                MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+                MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
                 left,
               ];
             }
@@ -2965,7 +2965,7 @@ const menuButton = {
 
             let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
             let col_st = MBLsheet_searcharray(
-              Store.visibledatacolumn,
+              Store.cloumnLenSum,
               scrollLeft
             );
 
@@ -2977,25 +2977,25 @@ const menuButton = {
 
             let left, freezenverticaldata;
             if (MBLsheetFreezen.freezenRealFirstRowColumn) {
-              left = Store.visibledatacolumn[col_st] - 2 + Store.rowHeaderWidth;
+              left = Store.cloumnLenSum[col_st] - 2 + Store.rowHeaderWidth;
               freezenverticaldata = [
-                Store.visibledatacolumn[col_st],
+                Store.cloumnLenSum[col_st],
                 col_st + 1,
                 0,
-                MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+                MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
                 left,
               ];
             } else {
               left =
-                Store.visibledatacolumn[col_st] -
+                Store.cloumnLenSum[col_st] -
                 2 -
                 scrollLeft +
                 Store.rowHeaderWidth;
               freezenverticaldata = [
-                Store.visibledatacolumn[col_st],
+                Store.cloumnLenSum[col_st],
                 col_st + 1,
                 scrollLeft,
-                MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+                MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
                 left,
               ];
             }
@@ -5219,7 +5219,7 @@ const menuButton = {
   },
   checkstatus: function (d, r, c, a) {
     if (d == null || d[r] == null) {
-      console.warn("It's incorrect data", r, c);
+      // console.warn("It's incorrect data", r, c);
       return null;
     }
     let foucsStatus = d[r][c];
@@ -5351,7 +5351,7 @@ const menuButton = {
   },
   mergeborer: function (d, row_index, col_index) {
     if (d == null || d[row_index] == null) {
-      console.warn("Merge info is null", row_index, col_index);
+      // console.warn("Merge info is null", row_index, col_index);
       return null;
     }
     let value = d[row_index][col_index];
@@ -5359,14 +5359,14 @@ const menuButton = {
     if (getObjType(value) == "object" && "mc" in value) {
       let margeMaindata = value["mc"];
       if (margeMaindata == null) {
-        console.warn("Merge info is null", row_index, col_index);
+        // console.warn("Merge info is null", row_index, col_index);
         return null;
       }
       col_index = margeMaindata.c;
       row_index = margeMaindata.r;
 
       if (d[row_index][col_index] == null) {
-        console.warn("Main merge Cell info is null", row_index, col_index);
+        // console.warn("Main merge Cell info is null", row_index, col_index);
         return null;
       }
       let col_rs = d[row_index][col_index].mc.cs;
@@ -5397,10 +5397,10 @@ const menuButton = {
         if (c == 0) {
           start_c = 0;
         } else {
-          start_c = Store.visibledatacolumn[c - 1];
+          start_c = Store.cloumnLenSum[c - 1];
         }
 
-        end_c = Store.visibledatacolumn[c];
+        end_c = Store.cloumnLenSum[c];
 
         if (col_pre == null) {
           col_pre = start_c;

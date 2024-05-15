@@ -30,8 +30,8 @@ const cellDatePickerCtrl = {
   cellFocus: function (r, c, cell) {
     let row = Store.visibledatarow[r],
       row_pre = r == 0 ? 0 : Store.visibledatarow[r - 1];
-    let col = Store.visibledatacolumn[c],
-      col_pre = c == 0 ? 0 : Store.visibledatacolumn[c - 1];
+    let col = Store.cloumnLenSum[c],
+      col_pre = c == 0 ? 0 : Store.cloumnLenSum[c - 1];
 
     let margeset = menuButton.mergeborer(Store.flowdata, r, c);
     let type = cell.ct.fa || "YYYY-MM-DD";

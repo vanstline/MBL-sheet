@@ -6,6 +6,7 @@ import { checkWordByteLength, hasChinaword, isRealNull } from "./validate";
 import { isInlineStringCell } from "../controllers/inlineString";
 
 import Store from "../store";
+import sheetmanage from "../controllers/sheetmanage";
 
 /**
  * 计算范围行高
@@ -304,7 +305,7 @@ function getMeasureText(value, ctx, fontset) {
         cache.actualBoundingBoxAscent = oneLineTextHeight;
       }
 
-      //console.log(value, oneLineTextHeight, measureText.actualBoundingBoxDescent+measureText.actualBoundingBoxAscent,ctx.font);
+      //
     }
 
     if (ctx.textBaseline == "alphabetic") {
@@ -345,7 +346,7 @@ function getMeasureText(value, ctx, fontset) {
     cache.actualBoundingBoxAscent *= Store.zoomRatio;
     Store.measureTextCache[value + "_" + Store.zoomRatio + "_" + ctx.font] =
       cache;
-    // console.log(measureText, value);
+    //
     return cache;
   }
 }
@@ -366,7 +367,7 @@ function getCellTextInfo(cell, ctx, option) {
   let cellHeight = option.cellHeight;
   let isMode = "",
     isModeSplit = "";
-  // console.log("initialinfo", cell, option);
+  //
   if (cellWidth == null) {
     isMode = "onlyWidth";
     isModeSplit = "_";
@@ -515,10 +516,40 @@ function getCellTextInfo(cell, ctx, option) {
     underLine = checkstatusByCell(cell, "un"); //underLine
     fontSize = checkstatusByCell(cell, "fs");
 
+    // if (cell instanceof Object) {
+    //   if (cell.render && typeof cell.render === "function") {
+    //     const dom = cell.render(
+    //       null,
+    //       { cell, r: option.r, c: option.c },
+    //       option.r
+    //     );
+    //     value = dom.innerText;
+    //
+    //   } else {
+    //     value = cell.m;
+    //     if (value == null) {
+    //       value = cell.v;
+    //     }
+    //   }
+    // } else {
+    //   value = cell;
+    // }
+
     if (cell instanceof Object) {
       value = cell.m;
       if (value == null) {
         value = cell.v;
+      }
+
+      const curColumn = sheetmanage
+        .getSheetByIndex()
+        ?.columns?.find((item) => item.dataIndex === cell.dataIndex);
+
+      if (curColumn?.render) {
+        value =
+          typeof curColumn.render === "function"
+            ? curColumn.render(cell.v, option.r)
+            : curColumn.render;
       }
     } else {
       value = cell;
@@ -554,7 +585,7 @@ function getCellTextInfo(cell, ctx, option) {
             preShareCell.wrap !== true &&
             i < inlineStringArr.length - 1
           ) {
-            // console.log("wrap",i,colIndex,preShareCell.wrap);
+            //
             textH_all_ColumnHeight.push(textH_all_cache);
             textH_all_cache = 0;
             colIndex += 1;
@@ -582,7 +613,7 @@ function getCellTextInfo(cell, ctx, option) {
           ) {
             // textW_all += textW;
             // textH_all = Math.max(textH_all,textH_all_cache);
-            // console.log(">",i,colIndex);
+            //
             textH_all_ColumnHeight.push(textH_all_cache - textH);
             textH_all_cache = textH;
             colIndex += 1;
@@ -702,7 +733,7 @@ function getCellTextInfo(cell, ctx, option) {
     textContent.textHeightAll = textH_all;
 
     if (isMode == "onlyWidth") {
-      // console.log("verticalWrap", textContent,cell, option);
+      //
       return textContent;
     }
 
@@ -866,7 +897,7 @@ function getCellTextInfo(cell, ctx, option) {
               sc.measureText.actualBoundingBoxAscent +
                 sc.measureText.actualBoundingBoxDescent
             );
-            // console.log(sc.v,sc.measureText.width,sc.measureText.actualBoundingBoxAscent,sc.measureText.actualBoundingBoxDescent);
+            //
           }
 
           let width =
@@ -886,7 +917,7 @@ function getCellTextInfo(cell, ctx, option) {
 
           if (rt != 0) {
             //rotate
-            // console.log("all",anchor, i , str);
+            //
             console.log(
               height,
               space_height,
@@ -900,7 +931,7 @@ function getCellTextInfo(cell, ctx, option) {
               tb == "2" &&
               i != inlineStringArr.length
             ) {
-              // console.log("cut",anchor, i , str);
+              //
 
               if (spaceOrTwoByteIndex != null && spaceOrTwoByteIndex < i) {
                 for (let s = 0; s < spaceOrTwoByteIndex - anchor; s++) {
@@ -953,7 +984,7 @@ function getCellTextInfo(cell, ctx, option) {
                 splitIndex += 1;
               }
             } else if (i == inlineStringArr.length) {
-              // console.log("last",anchor, i , str);
+              //
               if (text_all_split[splitIndex] == null) {
                 text_all_split[splitIndex] = [];
               }
@@ -1104,16 +1135,16 @@ function getCellTextInfo(cell, ctx, option) {
             }
           }
           // textW_all += textW;
-          // console.log(str,anchor,i);
+          //
           if (rt != 0) {
             //rotate
-            // console.log("all",anchor, i , str);
+            //
             if (
               height + space_height > cellHeight &&
               text_all_split[splitIndex] != null &&
               i != value.length
             ) {
-              // console.log("cut",anchor, i , str);
+              //
 
               if (spaceOrTwoByte != null && spaceOrTwoByte.index < i) {
                 anchor = spaceOrTwoByte.index;
@@ -1133,7 +1164,7 @@ function getCellTextInfo(cell, ctx, option) {
                   fs: fontSize,
                 });
 
-                // console.log(1,anchor,i,splitIndex , spaceOrTwoByte.str);
+                //
 
                 splitIndex += 1;
 
@@ -1154,12 +1185,12 @@ function getCellTextInfo(cell, ctx, option) {
                   fs: fontSize,
                 });
 
-                // console.log(2,anchor,i, splitIndex, preStr);
+                //
 
                 splitIndex += 1;
               }
             } else if (i == value.length) {
-              // console.log("last",anchor, i , str);
+              //
               if (text_all_split[splitIndex] == null) {
                 text_all_split[splitIndex] = [];
               }
@@ -1189,7 +1220,7 @@ function getCellTextInfo(cell, ctx, option) {
               text_all_split[splitIndex] != null &&
               i != value.length
             ) {
-              // console.log(spaceOrTwoByte, i, anchor);
+              //
               if (spaceOrTwoByte != null && spaceOrTwoByte.index < i) {
                 anchor = spaceOrTwoByte.index;
 
@@ -1228,7 +1259,7 @@ function getCellTextInfo(cell, ctx, option) {
                   fs: fontSize,
                 });
 
-                // console.log(2);
+                //
 
                 splitIndex += 1;
               }
@@ -1264,12 +1295,12 @@ function getCellTextInfo(cell, ctx, option) {
           preMeasureText = measureText;
         }
 
-        // console.log(text_all_split)
+        //
       }
 
       let split_all_size = [],
         oneLinemaxWordCount = 0;
-      // console.log("split",splitIndex, text_all_split);
+      //
       let splitLen = Object.keys(text_all_split).length;
       for (let i = 0; i < splitLen; i++) {
         let splitLists = text_all_split[i];
@@ -1314,7 +1345,7 @@ function getCellTextInfo(cell, ctx, option) {
           textH_all += sHeight;
         } else {
           //plain
-          // console.log("textH_all",textW_all, textH_all);
+          //
           sHeight += lineHeight;
           textW_all = Math.max(textW_all, sWidth);
           textH_all += sHeight;
@@ -1329,7 +1360,7 @@ function getCellTextInfo(cell, ctx, option) {
           wordCount: maxWordCount,
         });
       }
-      // console.log(textH_all,textW_all,textW_all_inner);
+      //
       // let cumColumnWidth = 0;
       let cumWordHeight = 0,
         cumColumnWidth = 0;
@@ -1356,7 +1387,7 @@ function getCellTextInfo(cell, ctx, option) {
       }
 
       if (isMode == "onlyWidth") {
-        // console.log("plainWrap", textContent,cell, option);
+        //
         return textContent;
       }
 
@@ -1477,7 +1508,7 @@ function getCellTextInfo(cell, ctx, option) {
             wordGroup.left = left;
             wordGroup.top = top;
 
-            // console.log(left, top,  cumWordHeight, size.height);
+            //
 
             drawLineInfo(wordGroup, cancelLine, underLine, {
               width: wordGroup.width,
@@ -1768,9 +1799,9 @@ function getCellTextInfo(cell, ctx, option) {
       }
       textContent.textWidthAll = textWidthAll;
 
-      // console.log(textContent.textWidthAll , textContent.textHeightAll);
+      //
       if (isMode == "onlyWidth") {
-        // console.log("plain", textContent,cell, option);
+        //
         return textContent;
       }
 
@@ -1841,7 +1872,7 @@ function getCellTextInfo(cell, ctx, option) {
       textContent.asc = measureText.actualBoundingBoxAscent;
       textContent.desc = measureText.actualBoundingBoxDescent;
 
-      // console.log("plain",left,top);
+      //
     }
   }
 

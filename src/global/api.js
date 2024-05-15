@@ -133,7 +133,7 @@ export function getCellValue(row, column, options = {}) {
  * @param {Function} options.success 操作结束的回调函数
  */
 export function setCellValue(row, column, value, options = {}) {
-  let curv = Store.flowdata[row][column];
+  let curv = Store.flowdata?.[row]?.[column];
 
   // Store old value for hook function
   const oldValue = JSON.stringify(curv);
@@ -204,8 +204,14 @@ export function setCellValue(row, column, value, options = {}) {
     setcellvalue(row, column, data, value);
   } else if (value instanceof Object) {
     let curv = {};
-    if (isRealNull(data[row][column])) {
-      data[row][column] = {};
+    if (isRealNull(data?.[row]?.[column])) {
+      if (!data?.[row]) {
+        data[row] = {
+          [column]: {},
+        };
+      } else {
+        data[row][column] = {};
+      }
     }
     let cell = data[row][column];
     if (value.f != null && value.v == null) {
@@ -260,7 +266,7 @@ export function setCellValue(row, column, value, options = {}) {
       "cellUpdated",
       row,
       column,
-      JSON.parse(oldValue),
+      oldValue === "undefined" ? JSON.parse(oldValue) : undefined,
       Store.flowdata[row][column],
       isRefresh
     );
@@ -634,6 +640,7 @@ export function exitEditMode(options = {}) {
       $("#MBLsheet-search-formula-parm-select").hide();
     }
   }
+  $("#MBLsheet-dataVerification-dropdown-List").hide();
 
   if (options.success && typeof options.success === "function") {
     options.success();
@@ -731,29 +738,28 @@ export function frozenFirstColumn(order) {
     let freezenverticaldata, col_st, left;
     if (MBLsheetFreezen.freezenRealFirstRowColumn) {
       col_st = 0;
-      left = Store.visibledatacolumn[col_st] - 2 + Store.rowHeaderWidth;
+      left = Store.cloumnLenSum[col_st] - 2 + Store.rowHeaderWidth;
       freezenverticaldata = [
-        Store.visibledatacolumn[col_st],
+        Store.cloumnLenSum[col_st],
         col_st + 1,
         0,
-        MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+        MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
         left,
       ];
     } else {
       let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
 
-      col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollLeft);
+      col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollLeft);
       if (col_st == -1) {
         col_st = 0;
       }
 
-      left =
-        Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+      left = Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
       freezenverticaldata = [
-        Store.visibledatacolumn[col_st],
+        Store.cloumnLenSum[col_st],
         col_st + 1,
         scrollLeft,
-        MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+        MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
         left,
       ];
     }
@@ -867,7 +873,7 @@ export function frozenColumnRange(range, order) {
 
   if (!order || order == getSheetIndex(Store.currentSheetIndex)) {
     let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
-    let col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollLeft);
+    let col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollLeft);
 
     let column_focus = range.column_focus;
     if (column_focus > col_st) {
@@ -878,12 +884,12 @@ export function frozenColumnRange(range, order) {
     }
 
     let left =
-      Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+      Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
     let freezenverticaldata = [
-      Store.visibledatacolumn[col_st],
+      Store.cloumnLenSum[col_st],
       col_st + 1,
       scrollLeft,
-      MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+      MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
       left,
     ];
     MBLsheetFreezen.saveFreezen(null, null, freezenverticaldata, left);
@@ -1017,17 +1023,17 @@ export function setBothFrozen(isRange, options = {}) {
       MBLsheetFreezen.createFreezenHorizontal(freezenhorizontaldata, top);
 
       let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
-      let col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollLeft);
+      let col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollLeft);
       if (col_st == -1) {
         col_st = 0;
       }
       let left =
-        Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+        Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
       let freezenverticaldata = [
-        Store.visibledatacolumn[col_st],
+        Store.cloumnLenSum[col_st],
         col_st + 1,
         scrollLeft,
-        MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+        MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
         left,
       ];
       MBLsheetFreezen.saveFreezen(null, null, freezenverticaldata, left);
@@ -1095,7 +1101,7 @@ export function setBothFrozen(isRange, options = {}) {
       MBLsheetFreezen.createFreezenHorizontal(freezenhorizontaldata, top);
 
       let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
-      let col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollLeft);
+      let col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollLeft);
 
       let column_focus = range.column_focus;
 
@@ -1108,12 +1114,12 @@ export function setBothFrozen(isRange, options = {}) {
       }
 
       let left =
-        Store.visibledatacolumn[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
+        Store.cloumnLenSum[col_st] - 2 - scrollLeft + Store.rowHeaderWidth;
       let freezenverticaldata = [
-        Store.visibledatacolumn[col_st],
+        Store.cloumnLenSum[col_st],
         col_st + 1,
         scrollLeft,
-        MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, col_st + 1),
+        MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, col_st + 1),
         left,
       ];
       MBLsheetFreezen.saveFreezen(null, null, freezenverticaldata, left);
@@ -3038,8 +3044,6 @@ export function setSingleRangeFormat(attr, value, options = {}) {
 
   for (let r = range.row[0]; r <= range.row[1]; r++) {
     for (let c = range.column[0]; c <= range.column[1]; c++) {
-      console.log("r", r);
-      console.log("c", c);
       setCellValue(
         r,
         c,
@@ -3203,23 +3207,23 @@ export function setRangeFilter(type, options = {}) {
 
 /**
  * 为指定索引的工作表，选定的范围设定合并单元格
- * @param {String} type 合并类型 all-全部合并  horizontal-水平合并  vertical-垂直合并
+//  * @param {String} type 合并类型 all-全部合并  horizontal-水平合并  vertical-垂直合并
  * @param {Object} options 可选参数
  * @param {Object | String} options.range 选区范围
  * @param {Number} options.order 工作表索引；默认值为当前工作表索引
  * @param {Object} options.success 操作结束的回调函数
  */
-export function setRangeMerge(type, options = {}) {
-  let typeValues = ["all", "horizontal", "vertical"];
-  if (typeValues.indexOf(type) < 0) {
-    return tooltip.info(
-      "The type parameter must be included in ['all', 'horizontal', 'vertical']",
-      ""
-    );
-  }
+export function setRangeMerge(options = {}, type = "all") {
+  // let typeValues = ["all", "horizontal", "vertical"];
+  // if (typeValues.indexOf(type) < 0) {
+  //   return tooltip.info(
+  //     "The type parameter must be included in ['all', 'horizontal', 'vertical']",
+  //     ""
+  //   );
+  // }
 
-  let curSheetOrder = getSheetIndex(Store.currentSheetIndex),
-    curRange = JSON.parse(JSON.stringify(Store.MBLsheet_select_save));
+  let curSheetOrder = getSheetIndex(Store.currentSheetIndex);
+  // curRange = JSON.parse(JSON.stringify(Store.MBLsheet_select_save));
   let { range = curRange, order = curSheetOrder, success } = { ...options };
 
   let file = Store.MBLsheetfile[order],
@@ -4919,7 +4923,7 @@ export function matrixOperation(type, options = {}) {
       break;
     case "newMatrix":
       // TODO
-      console.log("TODO");
+
       break;
   }
   editor.controlHandler(arr, range);
@@ -5792,9 +5796,8 @@ export function scroll(options = {}) {
       return tooltip.info("The targetColumn parameter is invalid.", "");
     }
 
-    let col = Store.visibledatacolumn[targetColumn],
-      col_pre =
-        targetColumn <= 0 ? 0 : Store.visibledatacolumn[targetColumn - 1];
+    let col = Store.cloumnLenSum[targetColumn],
+      col_pre = targetColumn <= 0 ? 0 : Store.cloumnLenSum[targetColumn - 1];
 
     $("#MBLsheet-scrollbar-x").scrollLeft(col_pre);
   }
@@ -5881,7 +5884,7 @@ export function getScreenshot(options = {}) {
   }
 
   let visibledatarow = Store.visibledatarow;
-  let visibledatacolumn = Store.visibledatacolumn;
+  let cloumnLenSum = Store.cloumnLenSum;
 
   let scrollHeight, rh_height;
   if (str - 1 < 0) {
@@ -5895,10 +5898,10 @@ export function getScreenshot(options = {}) {
   let scrollWidth, ch_width;
   if (stc - 1 < 0) {
     scrollWidth = 0;
-    ch_width = visibledatacolumn[edc];
+    ch_width = cloumnLenSum[edc];
   } else {
-    scrollWidth = visibledatacolumn[stc - 1];
-    ch_width = visibledatacolumn[edc] - visibledatacolumn[stc - 1];
+    scrollWidth = cloumnLenSum[stc - 1];
+    ch_width = cloumnLenSum[edc] - cloumnLenSum[stc - 1];
   }
 
   let newCanvas = $("<canvas>")
@@ -6040,7 +6043,7 @@ export function redo(options = {}) {
  */
 export function getAllSheets() {
   let data = $.extend(true, [], Store.MBLsheetfile);
-
+  // FIXME: 这里的取值有问题 导致初始话 select 没有展示 对应的label
   data.forEach((item, index, arr) => {
     if (item.data != null && item.data.length > 0) {
       item.celldata = sheetmanage.getGridData(item.data);
@@ -6580,11 +6583,11 @@ export function insertImage(src, options = {}) {
       colIndex = 0;
     }
 
-    if (colIndex > Store.visibledatacolumn.length) {
-      colIndex = Store.visibledatacolumn.length;
+    if (colIndex > Store.cloumnLenSum.length) {
+      colIndex = Store.cloumnLenSum.length;
     }
 
-    let left = colIndex == 0 ? 0 : Store.visibledatacolumn[colIndex - 1];
+    let left = colIndex == 0 ? 0 : Store.cloumnLenSum[colIndex - 1];
     let top = rowIndex == 0 ? 0 : Store.visibledatarow[rowIndex - 1];
 
     let image = new Image();
@@ -6636,8 +6639,8 @@ export function insertImage(src, options = {}) {
     }
 
     let colwidth = file.column;
-    let visibledatacolumn = file.visibledatacolumn || [];
-    if (visibledatacolumn.length === 0) {
+    let cloumnLenSum = file.cloumnLenSum || [];
+    if (cloumnLenSum.length === 0) {
       let ch_width = 0;
 
       for (let c = 0; c < colwidth; c++) {
@@ -6648,13 +6651,13 @@ export function insertImage(src, options = {}) {
         }
 
         if (config["colhidden"] != null && config["colhidden"][c] != null) {
-          visibledatacolumn.push(ch_width);
+          cloumnLenSum.push(ch_width);
           continue;
         }
 
         ch_width += Math.round((firstcolumnlen + 1) * zoomRatio);
 
-        visibledatacolumn.push(ch_width); //列的临时长度分布
+        cloumnLenSum.push(ch_width); //列的临时长度分布
       }
     }
 
@@ -6678,11 +6681,11 @@ export function insertImage(src, options = {}) {
       colIndex = 0;
     }
 
-    if (colIndex > visibledatacolumn.length) {
-      colIndex = visibledatacolumn.length;
+    if (colIndex > cloumnLenSum.length) {
+      colIndex = cloumnLenSum.length;
     }
 
-    let left = colIndex == 0 ? 0 : visibledatacolumn[colIndex - 1];
+    let left = colIndex == 0 ? 0 : cloumnLenSum[colIndex - 1];
     let top = rowIndex == 0 ? 0 : visibledatarow[rowIndex - 1];
 
     let image = new Image();
@@ -6831,6 +6834,33 @@ export function transToCellData(data, options = {}) {
       success();
     }
   }, 0);
+
+  return sheetmanage.getGridData(data);
+}
+
+/**
+ * data => celldata ，data二维数组数据转化成 {r, c, v}格式一维数组
+ *
+ * @param {Array} data 二维数组数据
+ * @param {Object} options 可选参数
+ * @param {Function} options.success 操作结束的回调函数
+ */
+export function transToCellDataV2(data, options = {}) {
+  let { success } = { ...options };
+
+  setTimeout(() => {
+    if (success && typeof success === "function") {
+      success();
+    }
+  }, 0);
+
+  data?.forEach((item) => {
+    item.forEach((it) => {
+      if (!it?.ct) {
+        it.ct = { fa: "@", t: "s" };
+      }
+    });
+  });
 
   return sheetmanage.getGridData(data);
 }

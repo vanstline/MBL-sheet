@@ -38,6 +38,7 @@ import Mandarin from "flatpickr/dist/l10n/zh.js";
 import { initListener } from "./controllers/listener";
 import { hideloading, showloading } from "./global/loading.js";
 import { MBLsheetextendData } from "./global/extend.js";
+import { sgInit } from "./global/sg.js";
 
 let MBLsheet = {};
 
@@ -59,7 +60,6 @@ MBLsheet.create = function (setting) {
   }
 
   let extendsetting = common_extend(defaultSetting, setting);
-  console.log("%c Line:62 🌶 extendsetting", "color:#e41a6a", extendsetting);
 
   let loadurl = extendsetting.loadUrl,
     menu = extendsetting.menu,
@@ -71,6 +71,9 @@ MBLsheet.create = function (setting) {
   Store.MBLsheetfile = extendsetting.data;
   Store.defaultcolumnNum = extendsetting.column;
   Store.defaultrowNum = extendsetting.row;
+  Store.columnHeaderBackgroundColor =
+    extendsetting?.columnHeaderBackgroundColor;
+  Store.columnHeaderArr = extendsetting.data[0]?.columnHeaderArr;
   Store.defaultFontSize = extendsetting.defaultFontSize;
   Store.fullscreenmode = extendsetting.fullscreenmode;
   Store.lang = extendsetting.lang; //language
@@ -136,6 +139,8 @@ MBLsheet.create = function (setting) {
 
   MBLsheetConfigsetting.rowHeaderWidth = extendsetting.rowHeaderWidth;
   MBLsheetConfigsetting.columnHeaderHeight = extendsetting.columnHeaderHeight;
+  MBLsheetConfigsetting.columnHeaderBackgroundColor =
+    extendsetting.columnHeaderBackgroundColor;
 
   MBLsheetConfigsetting.defaultColWidth = extendsetting.defaultColWidth;
   MBLsheetConfigsetting.defaultRowHeight = extendsetting.defaultRowHeight;
@@ -156,6 +161,14 @@ MBLsheet.create = function (setting) {
 
   if (Store.lang === "zh") flatpickr.localize(Mandarin.zh);
 
+  if (extendsetting.columnHeaderBackgroundColor) {
+    setTimeout(() => {
+      $(".MBLsheet-paneswrapper")
+        .eq(0)
+        .css({ background: extendsetting.columnHeaderBackgroundColor });
+    });
+  }
+
   // Store the currently used plugins for monitoring asynchronous loading
   Store.asyncLoad.push(...MBLsheetConfigsetting.plugins);
 
@@ -163,7 +176,7 @@ MBLsheet.create = function (setting) {
   initPlugins(extendsetting.plugins, extendsetting.data);
 
   // Store formula information, including internationalization
-  functionlist(extendsetting.customFunctions);
+  // functionlist(extendsetting.customFunctions);
 
   let devicePixelRatio = extendsetting.devicePixelRatio;
   if (devicePixelRatio == null) {
@@ -261,5 +274,7 @@ MBLsheet.hideLoadingProgress = hideloading;
 MBLsheet.MBLsheetextendData = MBLsheetextendData;
 
 MBLsheet.locales = locales;
+
+MBLsheet.init = (setting, config) => sgInit(setting, config, MBLsheet);
 
 export { MBLsheet };

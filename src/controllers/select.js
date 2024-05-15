@@ -14,8 +14,8 @@ import { refreshMenuButtonFocus } from "../global/api";
 function seletedHighlistByindex(id, r1, r2, c1, c2) {
   let row = Store.visibledatarow[r2],
     row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-  let col = Store.visibledatacolumn[c2],
-    col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+  let col = Store.cloumnLenSum[c2],
+    col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
   $("#" + id).css({
     left: col_pre,
@@ -54,13 +54,13 @@ function selectHightlightShow(isRestore = false) {
 
       let row = Store.visibledatarow[r2],
         row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-      let col = Store.visibledatacolumn[c2],
-        col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+      let col = Store.cloumnLenSum[c2],
+        col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
       let row_f = Store.visibledatarow[rf],
         row_pre_f = rf - 1 == -1 ? 0 : Store.visibledatarow[rf - 1];
-      let col_f = Store.visibledatacolumn[cf],
-        col_pre_f = cf - 1 == -1 ? 0 : Store.visibledatacolumn[cf - 1];
+      let col_f = Store.cloumnLenSum[cf],
+        col_pre_f = cf - 1 == -1 ? 0 : Store.cloumnLenSum[cf - 1];
 
       let margeset = menuButton.mergeborer(Store.flowdata, rf, cf);
       if (!!margeset) {
@@ -389,7 +389,7 @@ function selectIsOverlap(range) {
 }
 // 协同提示框
 function collaborativeEditBox() {
-  let all_width = Store.visibledatacolumn; //当前操作页的所有列距离左边的距离
+  let all_width = Store.cloumnLenSum; //当前操作页的所有列距离左边的距离
   let all_height = Store.visibledatarow; //当前操作页的所有列距离顶部的距离
 
   Store.cooperativeEdit.changeCollaborationSize.forEach((value) => {
@@ -553,8 +553,8 @@ function selectionCopyShow(range) {
 
       let row = Store.visibledatarow[r2],
         row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-      let col = Store.visibledatacolumn[c2],
-        col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+      let col = Store.cloumnLenSum[c2],
+        col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
       let copyDomHtml =
         '<div class="MBLsheet-selection-copy" style="display: block; left: ' +

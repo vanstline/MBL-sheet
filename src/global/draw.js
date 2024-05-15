@@ -23,6 +23,9 @@ import method from "./method";
 import Store from "../store";
 import locale from "../locale/locale";
 import sheetmanage from "../controllers/sheetmanage";
+import { setVerifyByKey, clearVerify, hasVerifyByKey } from "./verify";
+import { getRowData } from "../controllers/observer";
+import { renderIcon } from "./sg";
 
 function MBLsheetDrawgridRowTitle(scrollHeight, drawHeight, offsetTop) {
   if (scrollHeight == null) {
@@ -115,7 +118,8 @@ function MBLsheetDrawgridRowTitle(scrollHeight, drawHeight, offsetTop) {
       Store.config["rowhidden"][r] != null
     ) {
     } else {
-      MBLsheetTableContent.fillStyle = "#ffffff";
+      MBLsheetTableContent.fillStyle =
+        Store.columnHeaderBackgroundColor ?? "#fff";
       MBLsheetTableContent.fillRect(
         0,
         start_r + offsetTop + firstOffset,
@@ -272,9 +276,9 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
   MBLsheetTableContent.fillStyle = MBLsheetdefaultstyle.fillStyle;
 
   let dataset_col_st, dataset_col_ed;
-  dataset_col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollWidth);
+  dataset_col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollWidth);
   dataset_col_ed = MBLsheet_searcharray(
-    Store.visibledatacolumn,
+    Store.cloumnLenSum,
     scrollWidth + drawWidth
   );
 
@@ -282,7 +286,7 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
     dataset_col_st = 0;
   }
   if (dataset_col_ed == -1) {
-    dataset_col_ed = Store.visibledatacolumn.length - 1;
+    dataset_col_ed = Store.cloumnLenSum.length - 1;
   }
 
   MBLsheetTableContent.save();
@@ -295,7 +299,7 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
   );
   MBLsheetTableContent.clip();
 
-  // console.log(offsetLeft, 0, drawWidth, Store.columnHeaderHeight -1);
+  //
 
   let end_c, start_c;
   let bodrder05 = 0.5; //Default 0.5
@@ -304,20 +308,24 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
     if (c == 0) {
       start_c = -scrollWidth;
     } else {
-      start_c = Store.visibledatacolumn[c - 1] - scrollWidth;
+      start_c = Store.cloumnLenSum[c - 1] - scrollWidth;
     }
-    end_c = Store.visibledatacolumn[c] - scrollWidth;
+    end_c = Store.cloumnLenSum[c] - scrollWidth;
 
     //若超出绘制区域终止
     // if(end_c > scrollWidth + drawWidth+1){
     //     break;
     // }
-    let abc = chatatABC(c);
+    // let abc = chatatABC(c);
+    // abc = `${abc}
+    // 123
+    // ${abc}`;
+    let titleInfo = Store.columnHeaderArr[c];
     //列标题单元格渲染前触发，return false 则不渲染该单元格
     if (
       !method.createHookFunction(
         "columnTitleCellRenderBefore",
-        abc,
+        titleInfo,
         {
           c: c,
           left: start_c + offsetLeft - 1,
@@ -335,7 +343,8 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
       Store.config["colhidden"][c] != null
     ) {
     } else {
-      MBLsheetTableContent.fillStyle = "#ffffff";
+      MBLsheetTableContent.fillStyle =
+        Store.columnHeaderBackgroundColor ?? "#fff";
       MBLsheetTableContent.fillRect(
         start_c + offsetLeft - 1,
         0,
@@ -347,20 +356,139 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
       //列标题栏序列号
       MBLsheetTableContent.save(); //save scale before draw text
       MBLsheetTableContent.scale(Store.zoomRatio, Store.zoomRatio);
+      // MBLsheetTableContent.scale(Store.devicePixelRatio, Store.devicePixelRatio);
 
-      let textMetrics = getMeasureText(abc, MBLsheetTableContent);
-      //MBLsheetTableContent.measureText(abc);
+      function renderTitle(columnTitle, length = 1, line = 0) {
+        let horizonAlignPos;
+        // 垂直居中高度
+        let verticalAlignPos = Math.round(
+          Store.columnHeaderHeight / (1 + length)
+        );
+        let finallyVer = Math.round(verticalAlignPos) * (line + 1);
 
-      let horizonAlignPos = Math.round(
-        start_c + (end_c - start_c) / 2 + offsetLeft - textMetrics.width / 2
-      );
-      let verticalAlignPos = Math.round(Store.columnHeaderHeight / 2);
+        let title;
 
-      MBLsheetTableContent.fillText(
-        abc,
-        horizonAlignPos / Store.zoomRatio,
-        verticalAlignPos / Store.zoomRatio
-      );
+        if (typeof columnTitle === "object") {
+          if (Array.isArray(columnTitle)) {
+            const firstMarginLeft = columnTitle[0]?.marginLeft ?? 0;
+            const contentWidth = columnTitle.reduce((prev, next) => {
+              const { marginLeft = 0, iconSize = [20, 20] } = next;
+              const curIconSize = Array.isArray(iconSize)
+                ? iconSize
+                : [iconSize ?? 20, iconSize ?? 20];
+              const curMarginLeft = (prev += marginLeft + curIconSize[0]);
+              return prev;
+            }, 0);
+
+            let prevWidth = 0 - firstMarginLeft / 2;
+            columnTitle?.forEach((item) => {
+              const {
+                marginLeft = 0,
+                icon,
+                iconSize = [20, 20],
+                marginTop = 0,
+              } = item;
+              const curIconSize = Array.isArray(iconSize)
+                ? iconSize
+                : [iconSize ?? 20, iconSize ?? 20];
+
+              // 水平居中宽度
+              horizonAlignPos = Math.round(
+                start_c + (end_c - start_c) / 2 + offsetLeft - contentWidth / 2
+              );
+
+              if (icon) {
+                renderIcon(
+                  icon,
+                  MBLsheetTableContent,
+                  {
+                    // x: 0 / Store.zoomRatio,
+                    x: Math.round(horizonAlignPos + prevWidth + marginLeft),
+                    // x: horizonAlignPos,
+                    // y: Math.round(finallyVer - curIconSize[1] / 2 + marginTop),
+                    y: finallyVer - curIconSize[1] / 2 + marginTop,
+                    // y: 0,
+                    w: curIconSize[0],
+                    h: curIconSize[1],
+                  },
+                  item
+                );
+              }
+
+              prevWidth += marginLeft + curIconSize[0];
+            });
+          } else {
+            const {
+              marginLeft = 0,
+              icon,
+              iconSize = [20, 20],
+              marginTop = 0,
+            } = columnTitle;
+            const curIconSize = Array.isArray(iconSize)
+              ? iconSize
+              : [iconSize ?? 20, iconSize ?? 20];
+
+            let textMetrics = getMeasureText(
+              columnTitle.title,
+              MBLsheetTableContent
+            );
+
+            const contentWidth =
+              textMetrics.width + curIconSize[0] + marginLeft;
+
+            // 水平居中宽度
+            horizonAlignPos = Math.round(
+              start_c + (end_c - start_c) / 2 + offsetLeft - contentWidth / 2
+            );
+
+            title = columnTitle.title;
+
+            if (icon) {
+              renderIcon(
+                icon,
+                MBLsheetTableContent,
+                {
+                  // x: 0 / Store.zoomRatio,
+                  x: Math.round(
+                    horizonAlignPos + contentWidth - marginLeft * 2
+                  ),
+                  // x: horizonAlignPos,
+                  // y: Math.round(finallyVer - curIconSize[1] / 2 + marginTop),
+                  y: finallyVer - curIconSize[1] / 2 + marginTop,
+                  // y: 0,
+                  w: curIconSize[0],
+                  h: curIconSize[1],
+                },
+                columnTitle
+              );
+            }
+          }
+        } else {
+          let textMetrics = getMeasureText(columnTitle, MBLsheetTableContent);
+
+          // 水平居中宽度
+          horizonAlignPos = Math.round(
+            start_c + (end_c - start_c) / 2 + offsetLeft - textMetrics.width / 2
+          );
+          title = columnTitle;
+        }
+
+        if (title != null) {
+          MBLsheetTableContent.fillText(
+            title,
+            horizonAlignPos / Store.zoomRatio,
+            finallyVer / Store.zoomRatio
+          );
+        }
+      }
+
+      if (Array.isArray(titleInfo)) {
+        for (let i = 0; i < titleInfo.length; i++) {
+          renderTitle(titleInfo[i], titleInfo.length, i);
+        }
+      } else if (typeof titleInfo === "string") {
+        renderTitle(titleInfo);
+      }
       MBLsheetTableContent.restore(); //restore scale after draw text
     }
 
@@ -434,7 +562,7 @@ function MBLsheetDrawgridColumnTitle(scrollWidth, drawWidth, offsetLeft) {
 
     method.createHookFunction(
       "columnTitleCellRenderAfter",
-      abc,
+      titleInfo,
       {
         c: c,
         left: start_c + offsetLeft - 1,
@@ -570,9 +698,9 @@ function MBLsheetDrawMain(
     dataset_row_ed = Store.visibledatarow.length - 1;
   }
 
-  dataset_col_st = MBLsheet_searcharray(Store.visibledatacolumn, scrollWidth);
+  dataset_col_st = MBLsheet_searcharray(Store.cloumnLenSum, scrollWidth);
   dataset_col_ed = MBLsheet_searcharray(
-    Store.visibledatacolumn,
+    Store.cloumnLenSum,
     scrollWidth + drawWidth
   );
 
@@ -583,13 +711,13 @@ function MBLsheetDrawMain(
   dataset_col_st += columnOffsetCell;
 
   if (dataset_col_ed == -1) {
-    dataset_col_ed = Store.visibledatacolumn.length - 1;
+    dataset_col_ed = Store.cloumnLenSum.length - 1;
   }
 
   dataset_col_ed += columnOffsetCell;
 
-  if (dataset_col_ed >= Store.visibledatacolumn.length) {
-    dataset_col_ed = Store.visibledatacolumn.length - 1;
+  if (dataset_col_ed >= Store.cloumnLenSum.length) {
+    dataset_col_ed = Store.cloumnLenSum.length - 1;
   }
 
   //表格渲染区域 起止行列坐标
@@ -606,10 +734,10 @@ function MBLsheetDrawMain(
   if (dataset_col_st == 0) {
     fill_col_st = 0;
   } else {
-    fill_col_st = Store.visibledatacolumn[dataset_col_st - 1];
+    fill_col_st = Store.cloumnLenSum[dataset_col_st - 1];
   }
 
-  fill_col_ed = Store.visibledatacolumn[dataset_col_ed];
+  fill_col_ed = Store.cloumnLenSum[dataset_col_ed];
 
   //表格canvas 初始化处理
   MBLsheetTableContent.fillStyle = "#ffffff";
@@ -655,15 +783,20 @@ function MBLsheetDrawMain(
       continue;
     }
 
-    for (let c = dataset_col_st; c <= dataset_col_ed; c++) {
+    // for (let c = dataset_col_st; c <= dataset_col_ed; c++) {
+    for (
+      let c = dataset_col_st;
+      c <= sheetmanage.getSheetByIndex().column - 1;
+      c++
+    ) {
       let start_c;
       if (c == 0) {
         start_c = -scrollWidth;
       } else {
-        start_c = Store.visibledatacolumn[c - 1] - scrollWidth;
+        start_c = Store.cloumnLenSum[c - 1] - scrollWidth;
       }
 
-      let end_c = Store.visibledatacolumn[c] - scrollWidth;
+      let end_c = Store.cloumnLenSum[c] - scrollWidth;
 
       if (
         Store.config["colhidden"] != null &&
@@ -673,6 +806,7 @@ function MBLsheetDrawMain(
       }
 
       let firstcolumnlen = Store.defaultcollen;
+
       if (
         Store.config["columnlen"] != null &&
         Store.config["columnlen"][c] != null
@@ -683,6 +817,7 @@ function MBLsheetDrawMain(
       if (Store.flowdata[r] != null && Store.flowdata[r][c] != null) {
         let value = Store.flowdata[r][c];
 
+        //
         if (getObjType(value) == "object" && "mc" in value) {
           borderOffset[r + "_" + c] = {
             start_r: start_r,
@@ -829,10 +964,14 @@ function MBLsheetDrawMain(
         mcArr.push(cellupdate[cud]);
         // continue;
       } else {
-        value = getRealCellValue(r, c);
+        if (typeof cell == "object" && cell?.v?.nodeType) {
+          value = cell.v;
+        } else {
+          value = getRealCellValue(r, c);
+        }
       }
 
-      if (value == null || value.toString().length == 0) {
+      if (value == null) {
         nullCellRender(
           r,
           c,
@@ -936,7 +1075,7 @@ function MBLsheetDrawMain(
     if (c == 0) {
       start_c = -scrollWidth;
     } else {
-      start_c = Store.visibledatacolumn[c - 1] - scrollWidth;
+      start_c = Store.cloumnLenSum[c - 1] - scrollWidth;
     }
 
     if (r == 0) {
@@ -946,9 +1085,9 @@ function MBLsheetDrawMain(
     }
 
     end_r = Store.visibledatarow[r + mainCell["mc"].rs - 1] - scrollHeight;
-    end_c = Store.visibledatacolumn[c + mainCell["mc"].cs - 1] - scrollWidth;
+    end_c = Store.cloumnLenSum[c + mainCell["mc"].cs - 1] - scrollWidth;
 
-    if (value == null || value.toString().length == 0) {
+    if (value == null) {
       nullCellRender(
         r,
         c,
@@ -1033,10 +1172,10 @@ function MBLsheetDrawMain(
       if (c == 0) {
         start_c = -scrollWidth;
       } else {
-        start_c = Store.visibledatacolumn[c - 1] - scrollWidth;
+        start_c = Store.cloumnLenSum[c - 1] - scrollWidth;
       }
 
-      let end_c = Store.visibledatacolumn[c] - scrollWidth;
+      let end_c = Store.cloumnLenSum[c] - scrollWidth;
 
       //数据透视表
       if (!!Store.MBLsheetcurrentisPivotTable && pivotTable.drawPivotTable) {
@@ -1368,13 +1507,76 @@ function MBLsheetDrawMain(
   }
 
   //渲染表格时有尾列时，清除右边灰色区域，防止表格有值溢出
-  if (dataset_col_ed == Store.visibledatacolumn.length - 1) {
+  if (dataset_col_ed == Store.cloumnLenSum.length - 1) {
     MBLsheetTableContent.clearRect(
       fill_col_ed - scrollWidth + offsetLeft - 1,
       offsetTop - 1,
-      Store.ch_width - Store.visibledatacolumn[dataset_col_ed],
+      Store.ch_width - Store.cloumnLenSum[dataset_col_ed],
       fill_row_ed - scrollHeight
     );
+  }
+
+  const curSheet = sheetmanage.getSheetByIndex();
+
+  for (let r = dataset_row_st; r <= dataset_row_ed; r++) {
+    let start_r;
+    if (r == 0) {
+      start_r = -scrollHeight - 1;
+    } else {
+      start_r = Store.visibledatarow[r - 1] - scrollHeight - 1;
+    }
+
+    let end_r = Store.visibledatarow[r] - scrollHeight;
+
+    if (
+      Store.config["rowhidden"] != null &&
+      Store.config["rowhidden"][r] != null
+    ) {
+      continue;
+    }
+
+    for (let c = dataset_col_st; c <= dataset_col_ed; c++) {
+      let start_c;
+      if (c == 0) {
+        start_c = -scrollWidth;
+      } else {
+        start_c = Store.cloumnLenSum[c - 1] - scrollWidth;
+      }
+
+      let end_c = Store.cloumnLenSum[c] - scrollWidth;
+      if (curSheet?.columns?.[r]?.[c]?.disabled) {
+        MBLsheetTableContent.beginPath();
+
+        // 左上起点
+        MBLsheetTableContent.moveTo(
+          start_c + offsetLeft - 1 - bodrder05,
+          start_r + offsetTop - bodrder05
+        );
+        // 右上 向右移动
+        MBLsheetTableContent.lineTo(
+          end_c + offsetLeft - 1 - bodrder05,
+          start_r + offsetTop - bodrder05
+        );
+        // 右下 向下移动
+        MBLsheetTableContent.lineTo(
+          end_c + offsetLeft - 1 - bodrder05,
+          end_r + offsetTop - 1 - bodrder05
+        );
+        // 左下 向左移动
+        MBLsheetTableContent.lineTo(
+          start_c + offsetLeft - 1 - bodrder05,
+          end_r + offsetTop - 1 - bodrder05
+        );
+        // 左上 回到起点
+        MBLsheetTableContent.lineTo(
+          start_c + offsetLeft - 1 - bodrder05,
+          start_r + offsetTop - bodrder05
+        );
+        MBLsheetTableContent.fillStyle = "transparent";
+        MBLsheetTableContent.fill();
+        MBLsheetTableContent.closePath();
+      }
+    }
   }
 
   MBLsheetTableContent.restore();
@@ -1461,6 +1663,15 @@ let nullCellRender = function (
   bodrder05,
   isMerge
 ) {
+  let cell = Store.flowdata[r][c];
+
+  let cellWidth = end_c - start_c - 2;
+  let cellHeight = end_r - start_r - 2;
+  let space_width = 2,
+    space_height = 2; //宽高方向 间隙
+
+  const curSheet = sheetmanage.getSheetByIndex();
+  dataset_col_ed = curSheet.column - 1;
   let checksAF = alternateformat.checksAF(r, c, af_compute); //交替颜色
   let checksCF = conditionformat.checksCF(r, c, cf_compute); //条件格式
 
@@ -1636,6 +1847,278 @@ let nullCellRender = function (
     MBLsheetTableContent.closePath();
   }
 
+  // 自定义额外渲染区
+  const columns = sheetmanage.getSheetByIndex().columns;
+
+  let dataVerification = dataVerificationCtrl.dataVerification;
+
+  if (dataVerification != null && dataVerification[r + "_" + c] != null) {
+    if (dataVerification[r + "_" + c]?.required) {
+      const maxRowLen = Store.flowdata.length;
+      const maxColLen = Store.flowdata[0].length;
+      const curSheetTable = document.querySelector("#MBLsheet-cell-main");
+      const curSheetTableRect = curSheetTable?.getBoundingClientRect();
+      const curMax =
+        // 绘制异常红色边框
+        MBLsheetTableContent.beginPath();
+      const dissLeft = c === 0 ? 1 : 0;
+      const dissTop = r === 0 ? 1 : 0;
+
+      const endRight = end_c + offsetLeft - 1 - bodrder05;
+      const endBottom = end_r + offsetTop - 1 - bodrder05;
+      let dissRight = 0;
+      let dissBottom = 0;
+
+      if (c === maxColLen - 1 && end_c >= curSheetTableRect.width) {
+        dissRight = 10;
+      }
+
+      if (r === maxRowLen - 1 && c * maxRowLen > curSheetTableRect.height) {
+        dissBottom = 1;
+      }
+
+      // 左上起点
+      MBLsheetTableContent.moveTo(
+        start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+        start_r + offsetTop - bodrder05 + dissTop
+      );
+      // 右上 向右移动
+      MBLsheetTableContent.lineTo(
+        end_c + offsetLeft - 1 - bodrder05,
+        start_r + offsetTop - bodrder05 + dissTop
+      );
+      // 右下 向下移动
+      MBLsheetTableContent.lineTo(
+        end_c + offsetLeft - 1 - bodrder05,
+        end_r + offsetTop - 1 - bodrder05
+      );
+      // 左下 向左移动
+      MBLsheetTableContent.lineTo(
+        start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+        end_r + offsetTop - 1 - bodrder05
+      );
+      // 左上 回到起点
+      MBLsheetTableContent.lineTo(
+        start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+        start_r + offsetTop - bodrder05 + dissTop
+      );
+      // MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
+      // MBLsheetTableContent.lineWidth = 1;
+      // MBLsheetTableContent.stroke();
+      MBLsheetTableContent.fillStyle = "#FFEAEA";
+      MBLsheetTableContent.fill();
+      MBLsheetTableContent.closePath();
+
+      MBLsheetTableContent.beginPath();
+      // 左上起点
+      MBLsheetTableContent.moveTo(
+        start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+        start_r + offsetTop - bodrder05 + dissTop
+      );
+      // 右上 向右移动
+      MBLsheetTableContent.lineTo(
+        end_c + offsetLeft - 1 - bodrder05,
+        start_r + offsetTop - bodrder05 + dissTop
+      );
+      // 右下 向下移动
+      MBLsheetTableContent.lineTo(
+        end_c + offsetLeft - 1 - bodrder05,
+        end_r + offsetTop - 1 - bodrder05
+      );
+      // 左下 向左移动
+      MBLsheetTableContent.lineTo(
+        start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+        end_r + offsetTop - 1 - bodrder05
+      );
+      // 左上 回到起点
+      MBLsheetTableContent.lineTo(
+        start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+        start_r + offsetTop - bodrder05 + dissTop
+      );
+      MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
+      MBLsheetTableContent.lineWidth = 1;
+      MBLsheetTableContent.stroke();
+      MBLsheetTableContent.closePath();
+
+      setVerifyByKey(r + "_" + c, true);
+    } else {
+      clearVerify(r + "_" + c);
+    }
+  } else {
+    clearVerify(r + "_" + c);
+
+    let pos_x = start_c + offsetLeft;
+    let pos_y = start_r + offsetTop + 1;
+
+    MBLsheetTableContent.save();
+    MBLsheetTableContent.beginPath();
+    MBLsheetTableContent.rect(pos_x, pos_y, cellWidth, cellHeight);
+    MBLsheetTableContent.clip();
+    MBLsheetTableContent.scale(Store.zoomRatio, Store.zoomRatio);
+
+    let textInfo = getCellTextInfo(cell, MBLsheetTableContent, {
+      cellWidth: cellWidth,
+      cellHeight: cellHeight,
+      space_width: space_width,
+      space_height: space_height,
+      r: r,
+      c: c,
+    });
+
+    const fillStyle = menuButton.checkstatus(Store.flowdata, r, c, "fc");
+    const style = columns?.[c]?.extra?.style;
+
+    //单元格 文本颜色
+    MBLsheetTableContent.fillStyle = style?.color ?? fillStyle;
+
+    //若单元格有交替颜色 文本颜色
+    if (checksAF != null && checksAF[0] != null) {
+      MBLsheetTableContent.fillStyle = checksAF[0];
+    }
+    //若单元格有条件格式 文本颜色
+    if (checksCF != null && checksCF["textColor"] != null) {
+      MBLsheetTableContent.fillStyle = checksCF["textColor"];
+    }
+
+    if (style != null && textInfo?.values?.[0]) {
+      const curValues = textInfo.values[0];
+      textInfo.values[0] = {
+        ...curValues,
+        // left: style.left != null ? style.left : curValues.left,
+        top: style.top != null ? style.top : curValues.top,
+      };
+    }
+    //若单元格格式为自定义数字格式（[red]） 文本颜色为红色
+    if (
+      cell.ct &&
+      cell.ct.fa &&
+      cell.ct.fa.indexOf("[Red]") > -1 &&
+      cell.ct.t == "n" &&
+      cell.v < 0
+    ) {
+      MBLsheetTableContent.fillStyle = "#ff0000";
+    }
+
+    const extra = columns?.[c]?.extra;
+    const maxWidth = cell.width - (extra?.style?.width ?? 0);
+    const textWidthAll = textInfo?.textWidthAll || 0;
+    const textLeftAll = textInfo?.textLeftAll || 0;
+
+    if (
+      textWidthAll + textLeftAll >= maxWidth &&
+      textInfo?.values?.[0]?.content
+    ) {
+      const contentStr = (textInfo?.values?.[0]?.content ?? "").toString();
+      const singleWidth = textWidthAll / contentStr?.length;
+      const delLen = singleWidth >= 12 ? 1 : 2;
+      const sliceLen = Math.floor(maxWidth / singleWidth) - delLen;
+      textInfo.values[0].content = contentStr.slice(0, sliceLen) + "...";
+    }
+    if (cell.fontColor) {
+      MBLsheetTableContent.fillStyle = cell.fontColor;
+    }
+
+    cellTextRender(textInfo, MBLsheetTableContent, {
+      pos_x: pos_x,
+      pos_y: pos_y,
+    });
+
+    MBLsheetTableContent.restore();
+  }
+
+  if (cell?.disabled) {
+    MBLsheetTableContent.beginPath();
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+
+    MBLsheetTableContent.fillStyle = "transparent";
+    MBLsheetTableContent.fill();
+    MBLsheetTableContent.closePath();
+  }
+
+  if (typeof columns[c]?.extra === "object") {
+    const { style = {} } = columns[c]?.extra;
+    MBLsheetTableContent.beginPath();
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop
+    );
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+
+    MBLsheetTableContent.fillStyle = style.background || "#fff";
+    MBLsheetTableContent.fill();
+    MBLsheetTableContent.closePath();
+  }
+
+  let pos_x = start_c + offsetLeft;
+  let pos_y = start_r + offsetTop + 1;
+
+  // ploaceholder
+  if (curSheet.columns[c]["placeholder"]) {
+    const curTextInfo = {
+      type: "plain",
+      values: [
+        {
+          content: curSheet.columns[c]["placeholder"],
+          height: 12,
+          left: 2,
+          top: 18,
+        },
+      ],
+    };
+
+    MBLsheetTableContent.fillStyle = cell.fontColor || "#bfbfbf";
+    cellTextRender(curTextInfo, MBLsheetTableContent, {
+      pos_x: pos_x,
+      pos_y: pos_y,
+    });
+  }
+
   // 单元格渲染后
   method.createHookFunction(
     "cellRenderAfter",
@@ -1747,30 +2230,113 @@ let cellRender = function (
     cellsize[3]
   );
 
+  // 自定义额外渲染区
+  const columns = sheetmanage.getSheetByIndex().columns;
+  const extra = columns[c]?.extra;
+
   let dataVerification = dataVerificationCtrl.dataVerification;
 
+  if (r == 0 && c == 7) {
+    const errRes = dataVerificationCtrl.validateCellDataCustom(
+      value,
+      dataVerification[r + "_" + c],
+      r
+    );
+  }
   if (
     dataVerification != null &&
     dataVerification[r + "_" + c] != null &&
-    !dataVerificationCtrl.validateCellData(value, dataVerification[r + "_" + c])
+    !dataVerificationCtrl.validateCellDataCustom(
+      value,
+      dataVerification[r + "_" + c],
+      r
+    ).status
   ) {
-    //单元格左上角红色小三角标示
-    let dv_w = 5 * Store.zoomRatio,
-      dv_h = 5 * Store.zoomRatio; //红色小三角宽高
+    const maxRowLen = Store.flowdata.length;
+    const maxColLen = Store.flowdata[0].length;
+    const curSheetTable = document.querySelector("#MBLsheet-cell-main");
+    const curSheetTableRect = curSheetTable?.getBoundingClientRect();
 
+    // 绘制异常红色边框
     MBLsheetTableContent.beginPath();
-    MBLsheetTableContent.moveTo(start_c + offsetLeft, start_r + offsetTop);
-    MBLsheetTableContent.lineTo(
-      start_c + offsetLeft + dv_w,
-      start_r + offsetTop
+    const dissLeft = c === 0 ? 1 : 0;
+    const dissTop = r === 0 ? 1 : 0;
+
+    if (c === maxColLen - 1 && end_c >= curSheetTableRect.width) {
+      dissRight = 10;
+    }
+
+    if (r === maxRowLen - 1 && c * maxRowLen > curSheetTableRect.height) {
+      dissBottom = 1;
+    }
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+      start_r + offsetTop - bodrder05 + dissTop
     );
+    // 右上 向右移动
     MBLsheetTableContent.lineTo(
-      start_c + offsetLeft,
-      start_r + offsetTop + dv_h
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05 + dissTop
     );
-    MBLsheetTableContent.fillStyle = "#FC6666";
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+      start_r + offsetTop - bodrder05 + dissTop
+    );
+    // MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
+    // MBLsheetTableContent.lineWidth = 1;
+    // MBLsheetTableContent.stroke();
+    MBLsheetTableContent.fillStyle = "#FFEAEA";
     MBLsheetTableContent.fill();
     MBLsheetTableContent.closePath();
+
+    MBLsheetTableContent.beginPath();
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+      start_r + offsetTop - bodrder05 + dissTop
+    );
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05 + dissTop
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05 + dissLeft,
+      start_r + offsetTop - bodrder05 + dissTop
+    );
+    MBLsheetTableContent.strokeStyle = "#ff0000"; // 设置描边颜色为红色
+    MBLsheetTableContent.lineWidth = 1;
+    MBLsheetTableContent.stroke();
+    MBLsheetTableContent.closePath();
+
+    //
+    setVerifyByKey(r + "_" + c, value);
+  } else {
+    clearVerify(r + "_" + c);
   }
 
   //若单元格有批注（单元格右上角红色小三角标示）
@@ -1984,9 +2550,12 @@ let cellRender = function (
         MBLsheetTableContent.lineTo(x + w * minusLen, y + h);
         MBLsheetTableContent.lineTo(x + w * minusLen, y);
         MBLsheetTableContent.lineTo(x + w * minusLen * (1 - valueLen), y);
-        MBLsheetTableContent.lineWidth = 1;
-        MBLsheetTableContent.strokeStyle = "#ff0000";
-        MBLsheetTableContent.stroke();
+        // MBLsheetTableContent.lineWidth = 1;
+        // MBLsheetTableContent.strokeStyle = "#ff0000";
+        // MBLsheetTableContent.stroke();
+        MBLsheetTableContent.fillStyle = "#FFEAEA";
+        MBLsheetTableContent.fill();
+        MBLsheetTableContent.closePath();
         MBLsheetTableContent.closePath();
       } else if (valueType == "plus") {
         //正数
@@ -2087,6 +2656,12 @@ let cellRender = function (
       c: c,
     });
 
+    // console.log(
+    //   "%c Line:2505 🌽 MBLsheetTableContent",
+    //   "color:#e41a6a",
+    //   MBLsheetTableContent
+    // );
+
     //若单元格有条件格式图标集
     if (
       checksCF != null &&
@@ -2132,14 +2707,11 @@ let cellRender = function (
           horizonAlignPos + textInfo.textHeightAll / Store.zoomRatio;
       }
     }
+    const fillStyle = menuButton.checkstatus(Store.flowdata, r, c, "fc");
+    const style = columns?.[c]?.extra?.style;
 
     //单元格 文本颜色
-    MBLsheetTableContent.fillStyle = menuButton.checkstatus(
-      Store.flowdata,
-      r,
-      c,
-      "fc"
-    );
+    MBLsheetTableContent.fillStyle = style?.color ?? fillStyle;
 
     //若单元格有交替颜色 文本颜色
     if (checksAF != null && checksAF[0] != null) {
@@ -2150,6 +2722,14 @@ let cellRender = function (
       MBLsheetTableContent.fillStyle = checksCF["textColor"];
     }
 
+    if (style != null && textInfo?.values?.[0]) {
+      const curValues = textInfo.values[0];
+      textInfo.values[0] = {
+        ...curValues,
+        // left: style.left != null ? style.left : curValues.left,
+        top: curValues.top,
+      };
+    }
     //若单元格格式为自定义数字格式（[red]） 文本颜色为红色
     if (
       cell.ct &&
@@ -2161,6 +2741,29 @@ let cellRender = function (
       MBLsheetTableContent.fillStyle = "#ff0000";
     }
 
+    if (cell.disabled) {
+      MBLsheetTableContent.fillStyle = "#bfbfbf";
+    } else if (cell.fontColor) {
+      MBLsheetTableContent.fillStyle = cell.fontColor;
+    }
+    const maxWidth = cell.width - (extra?.style?.width ?? 0);
+    const textWidthAll = textInfo?.textWidthAll || 0;
+    const textLeftAll = textInfo?.textLeftAll || 0;
+
+    if (
+      textWidthAll + textLeftAll >= maxWidth &&
+      textInfo?.values?.[0]?.content
+    ) {
+      const contentStr = (textInfo?.values?.[0]?.content ?? "").toString();
+      const singleWidth = textWidthAll / contentStr?.length;
+      const delLen = singleWidth >= 12 ? 1 : 2;
+      const sliceLen = Math.floor(maxWidth / singleWidth) - delLen;
+      textInfo.values[0].content = contentStr.slice(0, sliceLen) + "...";
+    }
+
+    if (cell.fontColor) {
+      MBLsheetTableContent.fillStyle = cell.fontColor;
+    }
     cellTextRender(textInfo, MBLsheetTableContent, {
       pos_x: pos_x,
       pos_y: pos_y,
@@ -2172,7 +2775,11 @@ let cellRender = function (
   if (cellOverflow_bd_r_render) {
     // 右边框
     // 无论是否有背景色，都默认绘制右边框
-    if (!Store.MBLsheetcurrentisPivotTable && Store.showGridLines) {
+    if (
+      !Store.MBLsheetcurrentisPivotTable &&
+      Store.showGridLines &&
+      !hasVerifyByKey(r + "_" + c)
+    ) {
       MBLsheetTableContent.beginPath();
       MBLsheetTableContent.moveTo(
         end_c + offsetLeft - 2 + bodrder05,
@@ -2191,7 +2798,11 @@ let cellRender = function (
 
   // 下边框
   // 无论是否有背景色，都默认绘制下边框
-  if (!Store.MBLsheetcurrentisPivotTable && Store.showGridLines) {
+  if (
+    !Store.MBLsheetcurrentisPivotTable &&
+    Store.showGridLines &&
+    !hasVerifyByKey(r + "_" + c)
+  ) {
     MBLsheetTableContent.beginPath();
     MBLsheetTableContent.moveTo(
       start_c + offsetLeft - 1,
@@ -2205,6 +2816,154 @@ let cellRender = function (
     MBLsheetTableContent.strokeStyle = MBLsheetdefaultstyle.strokeStyle;
     MBLsheetTableContent.stroke();
     MBLsheetTableContent.closePath();
+  }
+
+  //
+  if (cell?.disabled) {
+    MBLsheetTableContent.beginPath();
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+
+    MBLsheetTableContent.fillStyle = "transparent";
+    MBLsheetTableContent.fill();
+    MBLsheetTableContent.closePath();
+  }
+
+  if (typeof extra === "object") {
+    const { style = {} } = extra;
+    MBLsheetTableContent.beginPath();
+
+    const drawStartR = start_r + offsetTop - bodrder05;
+    const drawStartC = end_c - style.width + offsetLeft - 1 - bodrder05;
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(drawStartC, drawStartR);
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      end_c - style.width + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+
+    MBLsheetTableContent.fillStyle = style.background || "#fff";
+    MBLsheetTableContent.fill();
+    MBLsheetTableContent.closePath();
+  }
+
+  if (value?.nodeType) {
+    MBLsheetTableContent.beginPath();
+
+    // 左上起点
+    MBLsheetTableContent.moveTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右上 向右移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+    // 右下 向下移动
+    MBLsheetTableContent.lineTo(
+      end_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左下 向左移动
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      end_r + offsetTop - 1 - bodrder05
+    );
+    // 左上 回到起点
+    MBLsheetTableContent.lineTo(
+      start_c + offsetLeft - 1 - bodrder05,
+      start_r + offsetTop - bodrder05
+    );
+
+    MBLsheetTableContent.fillStyle = "rgba(0, 0, 0, .1)";
+    MBLsheetTableContent.fill();
+    MBLsheetTableContent.closePath();
+  }
+
+  // ploaceholder
+  if (
+    columns[c]["placeholder"] &&
+    !cell?.v &&
+    cell?.v !== 0 &&
+    !columns[c].hasOwnProperty("render")
+  ) {
+    const curTextInfo = {
+      type: "plain",
+      values: [
+        {
+          content: columns[c]["placeholder"],
+          height: 12,
+          left: 2,
+          top: 18,
+        },
+      ],
+    };
+
+    let pos_x = start_c + offsetLeft;
+    let pos_y = start_r + offsetTop + 1;
+
+    MBLsheetTableContent.fillStyle = cell.fontColor || "#bfbfbf";
+
+    const maxWidth = cell.width - (extra?.style?.width ?? 0);
+    const textWidthAll = curTextInfo?.textWidthAll || 0;
+    const textLeftAll = curTextInfo?.textLeftAll || 0;
+    if (
+      textWidthAll + textLeftAll >= maxWidth &&
+      curTextInfo?.values?.[0]?.content
+    ) {
+      const contentStr = (curTextInfo?.values?.[0]?.content ?? "").toString();
+      const singleWidth = textWidthAll / contentStr?.length;
+      const delLen = singleWidth >= 12 ? 1 : 2;
+      const sliceLen = Math.floor(maxWidth / singleWidth) - delLen;
+      curTextInfo.values[0].content = contentStr.slice(0, sliceLen) + "...";
+    }
+
+    cellTextRender(curTextInfo, MBLsheetTableContent, {
+      pos_x: pos_x,
+      pos_y: pos_y,
+    });
   }
 
   // 单元格渲染后
@@ -2252,10 +3011,10 @@ let cellOverflowRender = function (
   if (stc == 0) {
     start_c = -scrollWidth;
   } else {
-    start_c = Store.visibledatacolumn[stc - 1] - scrollWidth;
+    start_c = Store.cloumnLenSum[stc - 1] - scrollWidth;
   }
 
-  let end_c = Store.visibledatacolumn[edc] - scrollWidth;
+  let end_c = Store.cloumnLenSum[edc] - scrollWidth;
 
   //
   let cell = Store.flowdata[r][c];
@@ -2307,6 +3066,23 @@ let cellOverflowRender = function (
     MBLsheetTableContent.fillStyle = checksCF["textColor"];
   }
 
+  const maxWidth = cell.width - (extra?.style?.width ?? 0);
+  const textWidthAll = textInfo?.textWidthAll || 0;
+  const textLeftAll = textInfo?.textLeftAll || 0;
+  if (
+    textWidthAll + textLeftAll >= maxWidth &&
+    textInfo?.values?.[0]?.content
+  ) {
+    const contentStr = (textInfo?.values?.[0]?.content ?? "").toString();
+    const singleWidth = textWidthAll / contentStr?.length;
+    const delLen = singleWidth >= 12 ? 1 : 2;
+    const sliceLen = Math.floor(maxWidth / singleWidth) - delLen;
+    textInfo.values[0].content = contentStr.slice(0, sliceLen) + "...";
+  }
+
+  if (cell.fontColor) {
+    MBLsheetTableContent.fillStyle = cell.fontColor;
+  }
   cellTextRender(textInfo, MBLsheetTableContent, {
     pos_x: pos_x,
     pos_y: pos_y,
@@ -2368,8 +3144,8 @@ function getCellOverflowMap(canvas, col_st, col_ed, row_st, row_end) {
 
         //canvas.measureText(value).width;
 
-        let start_c = c - 1 < 0 ? 0 : Store.visibledatacolumn[c - 1];
-        let end_c = Store.visibledatacolumn[c];
+        let start_c = c - 1 < 0 ? 0 : Store.cloumnLenSum[c - 1];
+        let end_c = Store.cloumnLenSum[c];
 
         let stc, edc;
 
@@ -2510,8 +3286,8 @@ function cellOverflow_trace(
     };
   }
 
-  let start_curC = curC - 1 < 0 ? 0 : Store.visibledatacolumn[curC - 1];
-  let end_curC = Store.visibledatacolumn[curC];
+  let start_curC = curC - 1 < 0 ? 0 : Store.cloumnLenSum[curC - 1];
+  let end_curC = Store.cloumnLenSum[curC];
 
   let w = textMetrics - (end_curC - start_curC);
 
@@ -2527,8 +3303,8 @@ function cellOverflow_trace(
     start_curC -= w;
   }
 
-  let start_traceC = traceC - 1 < 0 ? 0 : Store.visibledatacolumn[traceC - 1];
-  let end_traceC = Store.visibledatacolumn[traceC];
+  let start_traceC = traceC - 1 < 0 ? 0 : Store.cloumnLenSum[traceC - 1];
+  let end_traceC = Store.cloumnLenSum[traceC];
 
   if (traceDir == "forward") {
     if (start_curC < start_traceC) {
@@ -2636,7 +3412,7 @@ function cellTextRender(textInfo, ctx, option) {
   if (values == null) {
     return;
   }
-  // console.log(textInfo, pos_x, pos_y, values[0].width, values[0].left, ctx);
+  //
 
   // for(let i=0;i<values.length;i++){
   //     let word = values[i];

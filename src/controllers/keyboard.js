@@ -26,6 +26,7 @@ import tooltip from "../global/tooltip";
 import locale from "../locale/locale";
 import { enterKeyControll } from "./inlineString";
 import Store from "../store";
+import { updateBlur } from "./observer";
 
 let MBLsheet_shiftkeydown = false;
 
@@ -97,7 +98,7 @@ function formulaMoveEvent(dir, ctrlKey, shiftKey, event) {
       event.preventDefault();
     } else if (formula.israngeseleciton()) {
       let anchor = $(window.getSelection().anchorNode);
-      // console.log(anchor.parent().next().text());
+      //
       if (
         anchor.parent().next().text() == null ||
         anchor.parent().next().text() == ""
@@ -116,8 +117,8 @@ function formulaMoveEvent(dir, ctrlKey, shiftKey, event) {
 
         let row = Store.visibledatarow[r2],
           row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-        let col = Store.visibledatacolumn[c2],
-          col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+        let col = Store.cloumnLenSum[c2],
+          col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
         formula.func_selectedrange = {
           left: col_pre,
@@ -394,11 +395,11 @@ export function keyboardInitial() {
                   cellrange["row"][0] - 1 == -1
                     ? 0
                     : Store.visibledatarow[cellrange["row"][0] - 1];
-              let col = Store.visibledatacolumn[cellrange["column"][1]],
+              let col = Store.cloumnLenSum[cellrange["column"][1]],
                 col_pre =
                   cellrange["column"][0] - 1 == -1
                     ? 0
-                    : Store.visibledatacolumn[cellrange["column"][0] - 1];
+                    : Store.cloumnLenSum[cellrange["column"][0] - 1];
 
               if (col - scrollLeft - winW + 20 > 0) {
                 $("#MBLsheet-scrollbar-x").scrollLeft(col - winW + 20);
@@ -477,6 +478,7 @@ export function keyboardInitial() {
           $("#MBLsheet-search-formula-parm-select").hide();
         }
         event.preventDefault();
+        updateBlur(event);
       } else if (kcode == keycode.TAB) {
         if (parseInt($inputbox.css("top")) > 0) {
           return;
@@ -616,31 +618,31 @@ export function keyboardInitial() {
             }
 
             //复制范围内包含部分合并单元格，提示
-            if (Store.config["merge"] != null) {
-              let has_PartMC = false;
+            // if (Store.config["merge"] != null) {
+            //   let has_PartMC = false;
 
-              for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
-                let r1 = Store.MBLsheet_select_save[s].row[0],
-                  r2 = Store.MBLsheet_select_save[s].row[1];
-                let c1 = Store.MBLsheet_select_save[s].column[0],
-                  c2 = Store.MBLsheet_select_save[s].column[1];
+            //   for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
+            //     let r1 = Store.MBLsheet_select_save[s].row[0],
+            //       r2 = Store.MBLsheet_select_save[s].row[1];
+            //     let c1 = Store.MBLsheet_select_save[s].column[0],
+            //       c2 = Store.MBLsheet_select_save[s].column[1];
 
-                has_PartMC = hasPartMC(Store.config, r1, r2, c1, c2);
+            //     has_PartMC = hasPartMC(Store.config, r1, r2, c1, c2);
 
-                if (has_PartMC) {
-                  break;
-                }
-              }
+            //     if (has_PartMC) {
+            //       break;
+            //     }
+            //   }
 
-              if (has_PartMC) {
-                if (isEditMode()) {
-                  alert(locale_drag.noMerge);
-                } else {
-                  tooltip.info(locale_drag.noMerge, "");
-                }
-                return;
-              }
-            }
+            //   if (has_PartMC) {
+            //     if (isEditMode()) {
+            //       alert(locale_drag.noMerge);
+            //     } else {
+            //       tooltip.info(locale_drag.noMerge, "");
+            //     }
+            //     return;
+            //   }
+            // }
 
             //多重选区 有条件格式时 提示
             let cdformat =
@@ -782,31 +784,31 @@ export function keyboardInitial() {
             }
 
             //复制范围内包含部分合并单元格，提示
-            if (Store.config["merge"] != null) {
-              let has_PartMC = false;
+            // if (Store.config["merge"] != null) {
+            //   let has_PartMC = false;
 
-              for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
-                let r1 = Store.MBLsheet_select_save[s].row[0],
-                  r2 = Store.MBLsheet_select_save[s].row[1];
-                let c1 = Store.MBLsheet_select_save[s].column[0],
-                  c2 = Store.MBLsheet_select_save[s].column[1];
+            //   for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
+            //     let r1 = Store.MBLsheet_select_save[s].row[0],
+            //       r2 = Store.MBLsheet_select_save[s].row[1];
+            //     let c1 = Store.MBLsheet_select_save[s].column[0],
+            //       c2 = Store.MBLsheet_select_save[s].column[1];
 
-                has_PartMC = hasPartMC(Store.config, r1, r2, c1, c2);
+            //     has_PartMC = hasPartMC(Store.config, r1, r2, c1, c2);
 
-                if (has_PartMC) {
-                  break;
-                }
-              }
+            //     if (has_PartMC) {
+            //       break;
+            //     }
+            //   }
 
-              if (has_PartMC) {
-                if (MBLsheetConfigsetting.editMode) {
-                  alert(_locale_drag.noMerge);
-                } else {
-                  tooltip.info(_locale_drag.noMerge, "");
-                }
-                return;
-              }
-            }
+            //   if (has_PartMC) {
+            //     if (MBLsheetConfigsetting.editMode) {
+            //       alert(_locale_drag.noMerge);
+            //     } else {
+            //       tooltip.info(_locale_drag.noMerge, "");
+            //     }
+            //     return;
+            //   }
+            // }
 
             //多重选区时 提示
             if (Store.MBLsheet_select_save.length > 1) {
@@ -1086,6 +1088,17 @@ export function keyboardInitial() {
           kcode == 0 ||
           (event.ctrlKey && kcode == 86)
         ) {
+          const { row_focus, column_focus } =
+            Store.MBLsheet_select_save?.[0] ?? {};
+          const curCellInfo = Store?.flowdata?.[row_focus]?.[column_focus];
+          if (
+            curCellInfo?.disabled ||
+            curCellInfo?.fieldsProps?.type === "select" ||
+            !curCellInfo.dataIndex ||
+            curCellInfo.width === curCellInfo?.extra?.style?.width
+          ) {
+            return;
+          }
           if (
             String.fromCharCode(kcode) != null &&
             $("#MBLsheet-cell-selected").is(":visible") &&
@@ -1142,6 +1155,7 @@ export function keyboardInitial() {
         formula.dontupdate();
         MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
         event.preventDefault();
+        updateBlur(event);
       } else if (kcode == keycode.ENTER && parseInt($inputbox.css("top")) > 0) {
         if (
           $("#MBLsheet-formula-search-c").is(":visible") &&
@@ -1154,6 +1168,8 @@ export function keyboardInitial() {
           );
           event.preventDefault();
         }
+
+        updateBlur(event);
       } else if (kcode == keycode.TAB && parseInt($inputbox.css("top")) > 0) {
         if (
           $("#MBLsheet-formula-search-c").is(":visible") &&
@@ -1173,15 +1189,19 @@ export function keyboardInitial() {
         }
 
         event.preventDefault();
+        updateBlur(event);
       } else if (kcode == keycode.F4 && parseInt($inputbox.css("top")) > 0) {
         formula.setfreezonFuc(event);
         event.preventDefault();
       } else if (kcode == keycode.UP && parseInt($inputbox.css("top")) > 0) {
         formulaMoveEvent("up", ctrlKey, shiftKey, event);
+        // updateBlur(event);
       } else if (kcode == keycode.DOWN && parseInt($inputbox.css("top")) > 0) {
         formulaMoveEvent("down", ctrlKey, shiftKey, event);
+        // updateBlur(event);
       } else if (kcode == keycode.LEFT && parseInt($inputbox.css("top")) > 0) {
         formulaMoveEvent("left", ctrlKey, shiftKey, event);
+        // updateBlur(event);
       } else if (kcode == keycode.RIGHT && parseInt($inputbox.css("top")) > 0) {
         formulaMoveEvent("right", ctrlKey, shiftKey, event);
       } else if (
@@ -1251,6 +1271,7 @@ export function keyboardInitial() {
       let shiftKey = event.shiftKey;
       let kcode = event.keyCode;
       let $t = $(this);
+
       if (kcode == keycode.ENTER) {
         $t.blur().change();
       }

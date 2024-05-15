@@ -86,7 +86,7 @@ const imageCtrl = {
       Store.MBLsheet_select_save[Store.MBLsheet_select_save.length - 1];
     let rowIndex = last.row_focus || 0;
     let colIndex = last.column_focus || 0;
-    let left = colIndex == 0 ? 0 : Store.visibledatacolumn[colIndex - 1];
+    let left = colIndex == 0 ? 0 : Store.cloumnLenSum[colIndex - 1];
     let top = rowIndex == 0 ? 0 : Store.visibledatarow[rowIndex - 1];
 
     let image = new Image();
@@ -1172,7 +1172,7 @@ const imageCtrl = {
 
     let rowIndex = Store.MBLsheet_select_save[0].row_focus || 0;
     let colIndex = Store.MBLsheet_select_save[0].column_focus || 0;
-    let left = colIndex == 0 ? 0 : Store.visibledatacolumn[colIndex - 1];
+    let left = colIndex == 0 ? 0 : Store.cloumnLenSum[colIndex - 1];
     let top = rowIndex == 0 ? 0 : Store.visibledatarow[rowIndex - 1];
 
     let img = $.extend(true, {}, _this.copyImgItemObj);
@@ -1300,8 +1300,8 @@ const imageCtrl = {
         }
       }
     } else if (rc == "column") {
-      let col = Store.visibledatacolumn[index],
-        col_pre = index - 1 == -1 ? 0 : Store.visibledatacolumn[index - 1];
+      let col = Store.cloumnLenSum[index],
+        col_pre = index - 1 == -1 ? 0 : Store.cloumnLenSum[index - 1];
       let changeSize = size - (col - col_pre - 1);
 
       for (let imgId in images) {

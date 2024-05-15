@@ -11,6 +11,8 @@ import imageCtrl from "./imageCtrl";
 let MBLsheetZoomTimeout = null;
 
 export function zoomChange(ratio) {
+  // 禁用缩放
+  return;
   if (Store.flowdata == null || Store.flowdata.length == 0) {
     return;
   }

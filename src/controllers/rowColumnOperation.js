@@ -57,6 +57,7 @@ import {
 } from "./protection";
 import Store from "../store";
 import MBLsheetConfigsetting from "./MBLsheetConfigsetting";
+import { eventBus } from "../global/sg/event";
 
 export function rowColumnOperationInitial() {
   //表格行标题 mouse事件
@@ -83,8 +84,8 @@ export function rowColumnOperationInitial() {
         row = row_location[1],
         row_pre = row_location[0],
         row_index = row_location[2];
-      let col_index = Store.visibledatacolumn.length - 1,
-        col = Store.visibledatacolumn[col_index],
+      let col_index = Store.cloumnLenSum.length - 1,
+        col = Store.cloumnLenSum[col_index],
         col_pre = 0;
 
       $("#MBLsheet-rightclick-menu").hide();
@@ -1045,7 +1046,8 @@ export function rowColumnOperationInitial() {
         width: col - col_pre - 1,
         display: "block",
       });
-      $("#MBLsheet-cols-menu-btn").css({ left: col - 19, display: "block" });
+      // 隐藏头部菜单
+      // $("#MBLsheet-cols-menu-btn").css({ left: col - 19, display: "block" });
 
       $("#MBLsheet-cols-change-size").css({ left: col - 5 });
       if (x < col && x >= col - 5) {
@@ -1067,6 +1069,8 @@ export function rowColumnOperationInitial() {
     })
     .mouseup(function (event) {
       if (event.which == 3) {
+        return;
+
         // *如果禁止前台编辑，则中止下一步操作
         if (!checkIsAllowEdit()) {
           return;
@@ -1552,7 +1556,8 @@ export function rowColumnOperationInitial() {
       try {
         cellRightClickConfig.customs[
           Number(clickEvent.currentTarget.dataset.index)
-        ].onClick(clickEvent, event, { rowIndex, columnIndex });
+          // ].onClick(clickEvent, event, { rowIndex, columnIndex }); // 不需要回传两个event
+        ].onClick(clickEvent, { rowIndex, columnIndex });
       } catch (e) {
         console.error("custom click error", e);
       }
@@ -2457,9 +2462,17 @@ export function rowColumnOperationInitial() {
       }
 
       const file = Store.MBLsheetfile[getSheetIndex(Store.currentSheetIndex)];
+
       const hyperlink = file.hyperlink && $.extend(true, {}, file.hyperlink);
       let hyperlinkUpdated;
 
+      const delPosiArr = [];
+
+      console.log(
+        "%c Line:2473 🍪 Store.MBLsheet_select_save",
+        "color:#f5ce50",
+        Store.MBLsheet_select_save
+      );
       for (let s = 0; s < Store.MBLsheet_select_save.length; s++) {
         let r1 = Store.MBLsheet_select_save[s].row[0],
           r2 = Store.MBLsheet_select_save[s].row[1];
@@ -2473,19 +2486,26 @@ export function rowColumnOperationInitial() {
             }
 
             if (getObjType(d[r][c]) == "object") {
-              delete d[r][c]["m"];
-              delete d[r][c]["v"];
+              // delete d[r][c]["m"];
+              // delete d[r][c]["v"];
+              d[r][c] = {
+                ...file.columns[c],
+                m: file.columns[c]?.fieldsProps?.defaultValue,
+                v: file.columns[c]?.fieldsProps?.defaultValue,
+              };
 
-              if (d[r][c]["f"] != null) {
-                delete d[r][c]["f"];
-                formula.delFunctionGroup(r, c, Store.currentSheetIndex);
+              // if (d[r][c]["f"] != null) {
+              //   delete d[r][c]["f"];
+              //   formula.delFunctionGroup(r, c, Store.currentSheetIndex);
 
-                delete d[r][c]["spl"];
-              }
+              //   delete d[r][c]["spl"];
+              // }
 
-              if (d[r][c]["ct"] != null && d[r][c]["ct"].t == "inlineStr") {
-                delete d[r][c]["ct"];
-              }
+              // if (d[r][c]["ct"] != null && d[r][c]["ct"].t == "inlineStr") {
+              //   delete d[r][c]["ct"];
+              // }
+
+              delPosiArr.push({ r, c });
             } else {
               d[r][c] = null;
             }
@@ -2503,6 +2523,10 @@ export function rowColumnOperationInitial() {
         Store.MBLsheet_select_save,
         hyperlinkUpdated && { hyperlink }
       );
+
+      if (delPosiArr?.length) {
+        eventBus.publish("deleteCell", delPosiArr);
+      }
 
       // 清空编辑框的内容
       // 备注：在functionInputHanddler方法中会把该标签的内容拷贝到 #MBLsheet-functionbox-cell
@@ -2717,7 +2741,7 @@ function MBLsheetcolsdbclick() {
         });
 
         let computeRowlen = 0;
-        // console.log("rowlen", textInfo);
+        //
         if (textInfo != null) {
           computeRowlen = textInfo.textWidthAll;
         }
@@ -2773,7 +2797,7 @@ function MBLsheetcolsdbclick() {
           });
 
           let computeRowlen = 0;
-          // console.log("rowlen", textInfo);
+          //
           if (textInfo != null) {
             computeRowlen = textInfo.textWidthAll;
           }

@@ -67,7 +67,7 @@ function setcellvalue(r, c, d, v) {
     cell = {};
   }
 
-  let vupdateStr = vupdate.toString();
+  let vupdateStr = isRealNull(vupdate) ? "" : vupdate.toString();
 
   if (vupdateStr.substr(0, 1) == "'") {
     cell.m = vupdateStr.substr(1);
@@ -222,6 +222,18 @@ function setcellvalue(r, c, d, v) {
       }
     }
   }
+
+  // if (cell.fieldsProps?.type === "select" && cell.v != null) {
+  //   cell.v = cell.m
+  //     ?.split(",")
+  //     ?.map((item) => {
+  //       return (
+  //         cell.fieldsProps.options.find((ele) => ele.label === item)?.value ??
+  //         item
+  //       );
+  //     })
+  //     .join(",");
+  // }
 
   d[r][c] = cell;
 }

@@ -15,6 +15,7 @@ import sheetmanage from "./sheetmanage";
 import { getSheetIndex, getRangetxt } from "../methods/get";
 import locale from "../locale/locale";
 import Store from "../store";
+import { updateBlur } from "./observer";
 
 const dataVerificationCtrl = {
   defaultItem: {
@@ -301,7 +302,7 @@ const dataVerificationCtrl = {
 
           $("#MBLsheet-rich-text-editor").text(value);
           formula.updatecell(rowIndex, colIndex);
-
+          updateBlur(e);
           e.stopPropagation();
         }
       );
@@ -336,8 +337,8 @@ const dataVerificationCtrl = {
 
             let row = Store.visibledatarow[r2],
               row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-            let col = Store.visibledatacolumn[c2],
-              col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+            let col = Store.cloumnLenSum[c2],
+              col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
             _this.selectRange.push({
               left: col_pre,
@@ -390,8 +391,8 @@ const dataVerificationCtrl = {
 
               let row = Store.visibledatarow[r2],
                 row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-              let col = Store.visibledatacolumn[c2],
-                col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+              let col = Store.cloumnLenSum[c2],
+                col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
               _this.selectRange.push({
                 left: col_pre,
@@ -1448,14 +1449,13 @@ const dataVerificationCtrl = {
       _this.dataVerification == null ||
       _this.dataVerification[r + "_" + c] == null
     ) {
-      $("#MBLsheet-dataVerification-dropdown-List").hide();
       return;
     }
 
     let row = Store.visibledatarow[r],
       row_pre = r == 0 ? 0 : Store.visibledatarow[r - 1];
-    let col = Store.visibledatacolumn[c],
-      col_pre = c == 0 ? 0 : Store.visibledatacolumn[c - 1];
+    let col = Store.cloumnLenSum[c],
+      col_pre = c == 0 ? 0 : Store.cloumnLenSum[c - 1];
 
     let margeset = menuButton.mergeborer(Store.flowdata, r, c);
     if (!!margeset) {
@@ -1475,7 +1475,7 @@ const dataVerificationCtrl = {
     }
 
     //单元格数据验证 类型是 下拉列表
-    if (item.type == "dropdown") {
+    if (item.type == "dropdown" && !Store.flowdata?.[r]?.[c]?.disabled) {
       $("#MBLsheet-dataVerification-dropdown-btn")
         .show()
         .css({
@@ -1498,51 +1498,65 @@ const dataVerificationCtrl = {
       $("#MBLsheet-dataVerification-dropdown-List").hide();
     }
 
-    //提示语
-    if (item.hintShow) {
-      let hintText;
-
-      if (Store.lang == "en") {
-        hintText = '<span style="color:#f5a623;">Hint: </span>';
-      } else {
-        hintText = '<span style="color:#f5a623;">提示：</span>';
-      }
-
-      hintText += _this.getHintText(item);
-
-      $("#MBLsheet-dataVerification-showHintBox").html(hintText).show().css({
-        left: col_pre,
-        top: row,
-      });
-
-      return;
-    }
-
     //数据验证未通过
     let cellValue = getcellvalue(r, c, null);
-
-    if (isRealNull(cellValue)) {
+    let { status, message } = _this.validateCellDataCustom(cellValue, item, r);
+    if (status) {
       return;
     }
 
-    let validate = _this.validateCellData(cellValue, item);
+    // //提示语
+    // if (item.hintShow) {
+    //   let hintText;
 
-    if (!validate) {
-      let failureText;
+    //   if (Store.lang == "en") {
+    //     hintText = '<span style="color:#f5a623;">Hint: </span>';
+    //   } else {
+    //     hintText = '<span style="color:#f5a623;">提示：</span>';
+    //   }
 
-      if (Store.lang == "en") {
-        failureText = '<span style="color:#f72626;">Failure: </span>';
-      } else {
-        failureText = '<span style="color:#f72626;">失效：</span>';
-      }
+    //   hintText += _this.getHintText(item);
 
-      failureText += _this.getFailureText(item);
+    //   $("#MBLsheet-dataVerification-showHintBox").html(hintText).show().css({
+    //     left: col_pre,
+    //     top: row,
+    //   });
 
-      $("#MBLsheet-dataVerification-showHintBox").html(failureText).show().css({
+    //   return;
+    // }
+
+    if (isRealNull(cellValue) && !item.required) {
+      return;
+    }
+
+    let failureText = "";
+
+    // if (Store.lang == "en") {
+    //   failureText = '<span style="color:#f72626;">Failure: </span>';
+    // } else {
+    //   failureText = '<span style="color:#f72626;">失效：</span>';
+    // }
+
+    let failureTextExtra;
+
+    if (
+      (item.required && isRealNull(cellValue)) ||
+      cellValue === "" ||
+      typeof item.verifyFn === "function"
+    ) {
+      failureTextExtra = message;
+    } else {
+      failureTextExtra = _this.getFailureText(item);
+    }
+
+    $("#MBLsheet-dataVerification-showHintBox")
+      .html(failureText + failureTextExtra)
+      .show()
+      .css({
         left: col_pre,
         top: row,
+        color: "#f00",
       });
-    }
   },
   getHintText: function (item) {
     let _this = this;
@@ -1752,7 +1766,22 @@ const dataVerificationCtrl = {
 
     return failureText;
   },
-  validateCellData: function (cellValue, item) {
+  validateCellDataCustom: function (cellValue, item, r) {
+    if (item.required && (isRealNull(cellValue) || cellValue === "")) {
+      return {
+        status: false,
+        message: "不能为空",
+      };
+    }
+    if (typeof item.verifyFn === "function") {
+      return item.verifyFn(cellValue, r);
+    }
+    return {
+      status: this.validateCellData(cellValue, item, r),
+      message: undefined,
+    };
+  },
+  validateCellData: function (cellValue, item, r) {
     let _this = this;
 
     let type = item.type,
@@ -1760,11 +1789,25 @@ const dataVerificationCtrl = {
       value1 = item.value1,
       value2 = item.value2;
 
+    if (
+      typeof item.verifyFn === "function" &&
+      !item.verifyFn(cellValue, r).status
+    ) {
+      return false;
+    }
+
     if (type == "dropdown") {
       let list = _this.getDropdownList(value1);
 
+      if (cellValue === undefined || cellValue === null) {
+        return true;
+      }
+
       // 多选的情况 检查每个都在下拉列表中
       if (type2 && cellValue) {
+        if (type2 === "autocomplete") {
+          return true;
+        }
         return cellValue.split(",").every(function (i) {
           return list.indexOf(i) !== -1;
         });
@@ -1850,7 +1893,7 @@ const dataVerificationCtrl = {
         return false;
       }
     } else if (type == "text_length") {
-      cellValue = cellValue.toString().length;
+      cellValue = cellValue?.toString().length;
 
       value1 = Number(value1);
       value2 = Number(value2);
@@ -1953,8 +1996,8 @@ const dataVerificationCtrl = {
 
     let row = Store.visibledatarow[rowIndex],
       row_pre = rowIndex == 0 ? 0 : Store.visibledatarow[rowIndex - 1];
-    let col = Store.visibledatacolumn[colIndex],
-      col_pre = colIndex == 0 ? 0 : Store.visibledatacolumn[colIndex - 1];
+    let col = Store.cloumnLenSum[colIndex],
+      col_pre = colIndex == 0 ? 0 : Store.cloumnLenSum[colIndex - 1];
 
     let margeset = menuButton.mergeborer(Store.flowdata, rowIndex, colIndex);
     if (!!margeset) {
@@ -1969,7 +2012,7 @@ const dataVerificationCtrl = {
     let list = _this.getDropdownList(item.value1);
 
     let optionHtml = "";
-    if (item.type === "dropdown" && item.type2) {
+    if (item.type === "dropdown" && item.type2 && item.type2 === "multi") {
       // 下拉多选的情况下 将已经选择的标出来
       let cellValue = getcellvalue(rowIndex, colIndex, null);
       let valueArr = isRealNull(cellValue) ? [] : cellValue.split(",");
@@ -1985,13 +2028,68 @@ const dataVerificationCtrl = {
       });
     }
 
+    const curColumnType =
+      Store.flowdata?.[rowIndex]?.[colIndex]?.fieldsProps?.type;
+
+    if (["select", "autocomplete"].includes(curColumnType)) {
+      Store.MBLsheetCellUpdate = [rowIndex, colIndex];
+    }
+
+    if (curColumnType === "autocomplete") {
+      setTimeout(() => {
+        const wrapRect = document
+          .getElementById(Store.container)
+          ?.getBoundingClientRect();
+        let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
+        let scrollTop = $("#MBLsheet-cell-main").scrollTop();
+        let left =
+          col_pre + wrapRect.left + Store.rowHeaderWidth - scrollLeft - 2;
+        let top =
+          row_pre +
+          wrapRect.top +
+          Store.infobarHeight +
+          Store.toolbarHeight +
+          Store.calculatebarHeight +
+          Store.columnHeaderHeight -
+          scrollTop -
+          2;
+        let input_postition = {
+          width: col - col_pre + 1 - 8,
+          height: row - row_pre + 1 - 4,
+          left: left - wrapRect.left,
+          top: top - wrapRect.top,
+        };
+        $("#MBLsheet-input-box")
+          .removeAttr("style")
+          .css({
+            "background-color": "rgb(255, 255, 255)",
+            padding: "0px 2px",
+            "font-size": `${Store.defaultFontSize}pt`,
+            right: "auto",
+            "overflow-y": "auto",
+            "box-sizing": "initial",
+            display: "flex",
+          });
+
+        $("#MBLsheet-input-box").css(input_postition);
+        $("#MBLsheet-rich-text-editor").html(
+          Store.flowdata[rowIndex][colIndex].v
+        );
+      }, 200);
+    }
+
+    // const paneswrapper = document.querySelectorAll(".MBLsheet-paneswrapper");
+    // const { width = 0, height = 0 } = paneswrapper?.[0].getBoundingClientRect();
+
     $("#MBLsheet-dataVerification-dropdown-List")
       .html(optionHtml)
       .prop("data-index", rowIndex + "_" + colIndex)
       .show()
       .css({
-        width: col - col_pre - 1,
+        width: item.width ?? col - col_pre - 1,
+        // left: col_pre + width,
         left: col_pre,
+        // top: row + height,
         top: row,
       });
 
@@ -2000,6 +2098,7 @@ const dataVerificationCtrl = {
 
     if (row + myh > currentWinH - 42 - 6) {
       $("#MBLsheet-dataVerification-dropdown-List").css({
+        // top: row_pre - myh + height,
         top: row_pre - myh,
       });
     }

@@ -70,6 +70,7 @@
 }
 
 .MBLsheet-loading-content {
+  display: none;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
@@ -1334,7 +1335,8 @@ div.MBLsheet-sheets-m:hover {
   outline-style: none;
   position: relative;
   -webkit-user-select: none;
-  background: #f3f3f2;
+  /* background: #f3f3f2; */
+  background-color: #fff;
 }
 
 .MBLsheet-rows-h {
@@ -1634,7 +1636,7 @@ body:not(.ewa-ipad) .MBLsheet-rows-h-cell-sel:hover {
   background-color: white;
   width: 15px;
   height: 15px;
-  background-color: #f3f3f2;
+  /* background-color: #f3f3f2; */
   /*#E7E7E7;*/
   border-collapse: collapse;
   position: relative;
@@ -1659,7 +1661,7 @@ body:not(.ewa-ipad) .MBLsheet-rows-h-cell-sel:hover {
 .MBLsheet-scrollbar-ltr {
   position: absolute;
   overflow: hidden;
-  z-index: 1003;
+  z-index: 999;
 }
 
 .MBLsheet-scrollbar-ltr div {
@@ -2081,7 +2083,7 @@ body:not(.ewa-ipad) .MBLsheet-rows-h-cell-sel:hover {
 
 .MBLsheet-cs-draghandle {
   position: absolute;
-  cursor: move;
+  /* cursor: move; */
   background-color: #fff;
   opacity: 0.01;
   z-index: 15;
@@ -3016,6 +3018,7 @@ fieldset[disabled] .btn-danger.focus {
   background: #0188fb;
   cursor: ew-resize;
   opacity: 0;
+  display: none;
 }
 
 .MBLsheet-rows-change-size {
@@ -3024,6 +3027,7 @@ fieldset[disabled] .btn-danger.focus {
   background: #0188fb;
   cursor: ns-resize;
   opacity: 0;
+  display: none;
 }
 
 .MBLsheet-change-size-line {
@@ -3041,12 +3045,17 @@ fieldset[disabled] .btn-danger.focus {
   padding: 2px 3px;
   border-radius: 3px;
   transition: all 0.3s;
-  display: none;
+  display: none !important;
   white-space: nowrap;
 }
 
 .MBLsheet-row-count-show {
   text-align: center;
+  display: none !important;
+}
+
+.MBLsheet-column-count-show {
+  display: none !important;
 }
 
 .MBLsheet-row-count-show div {
@@ -3101,7 +3110,7 @@ fieldset[disabled] .btn-danger.focus {
   border: 2px #5292f7 solid;
   padding: 0 2px;
   margin: 0;
-  z-index: 15;
+  z-index: 999;
   resize: none;
   overflow: auto;
   overflow: initial;
@@ -3111,12 +3120,14 @@ fieldset[disabled] .btn-danger.focus {
   -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   word-wrap: break-word;
+  overflow: hidden !important;
 }
 
 .MBLsheet-cell-input {
   width: 100%;
   height: 100%;
   margin: 0;
+  line-height: 30px;
   outline: none;
   cursor: text;
   -webkit-user-modify: read-write-plaintext-only;
@@ -4731,7 +4742,7 @@ fieldset[disabled] .btn-danger.focus {
 
 .MBLsheet-freezebar-active .MBLsheet-freezebar-vertical-handle {
   display: block;
-  z-index: 1003;
+  z-index: 999;
 }
 
 .MBLsheet-freezebar-vertical-handle-bar {
@@ -4805,7 +4816,7 @@ fieldset[disabled] .btn-danger.focus {
 
 .MBLsheet-freezebar-active .MBLsheet-freezebar-horizontal-handle {
   display: block;
-  z-index: 1003;
+  z-index: 999;
 }
 
 .MBLsheet-freezebar-horizontal-handle-bar {
@@ -4931,7 +4942,7 @@ fieldset[disabled] .btn-danger.focus {
   color: #535353;
   font-size: 12px;
   background: #fff;
-  z-index: 1003;
+  z-index: 999;
   width: 300px;
   display: none;
 }
@@ -4979,7 +4990,7 @@ fieldset[disabled] .btn-danger.focus {
   color: #535353;
   font-size: 12px;
   background: #fff;
-  z-index: 1003;
+  z-index: 999;
   width: 300px;
 }
 
@@ -5207,6 +5218,11 @@ fieldset[disabled] .btn-danger.focus {
              margin: 0em 0em 0em 0em;
              font: 13.3333px Arial;
          }*/
+
+/* 先禁用 */
+#MBLsheet-search-replace {
+  display: none !important;
+}
 
 /*查找替换弹出框样式*/
 #MBLsheet-search-replace .tabBox {
@@ -6350,6 +6366,10 @@ fieldset[disabled] .btn-danger.focus {
 }
 
 /*下拉图标*/
+#MBLsheet-dropCell-icon {
+  display: none !important;
+}
+
 #MBLsheet-dropCell-icon #icon_dropCell {
   width: 25px;
   height: 15px;
@@ -7335,9 +7355,13 @@ fieldset[disabled] .btn-danger.focus {
   top: 50%;
   margin-left: -5px;
   margin-top: -5px;
+  background-size: 60%;
+  cursor: pointer;
 }
 #MBLsheet-dataVerification-dropdown-List {
+  max-height: 150px;
   display: none;
+  overflow: auto;
   background-color: #fff;
   border: 1px solid #ccc;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -7347,6 +7371,7 @@ fieldset[disabled] .btn-danger.focus {
 }
 #MBLsheet-dataVerification-dropdown-List .dropdown-List-item {
   padding: 5px 10px;
+  min-height: 25px;
   box-sizing: border-box;
   cursor: pointer;
 }
@@ -7382,7 +7407,10 @@ fieldset[disabled] .btn-danger.focus {
   z-index: 1000;
   user-select: none;
   cursor: default;
-  white-space: nowrap;
+  max-width: 160px;
+  word-break: break-all;
+  pointer-events: none;
+  /* white-space: nowrap; */
 }
 
 #MBLsheet-icon-undo.disabled,

@@ -14,6 +14,7 @@ import { getObjType, replaceHtml } from "../utils/util";
 import Store from "../store";
 import locale from "../locale/locale";
 import dayjs from "dayjs";
+import { eventBus } from "../global/sg/event";
 
 //选区下拉
 const MBLsheetDropCell = {
@@ -213,6 +214,10 @@ const MBLsheetDropCell = {
     return isChnNumber;
   },
   isExtendNumber: function (txt) {
+    if (typeof txt === "number") {
+      // 兼容数字类型 正则报错
+      txt = txt.toString();
+    }
     let reg = /0|([1-9]+[0-9]*)/g;
     let isExtendNumber = reg.test(txt);
 
@@ -526,7 +531,8 @@ const MBLsheetDropCell = {
       return;
     }
 
-    let d = editor.deepCopyFlowData(Store.flowdata);
+    // let d = editor.deepCopyFlowData(Store.flowdata);
+    let d = _.cloneDeep(Store.flowdata);
     let file = Store.MBLsheetfile[getSheetIndex(Store.currentSheetIndex)];
 
     let cfg = $.extend(true, {}, Store.config);
@@ -565,455 +571,508 @@ const MBLsheetDropCell = {
     let apply_str_c = applyRange["column"][0],
       apply_end_c = applyRange["column"][1];
 
-    if (direction == "down" || direction == "up") {
-      let asLen = apply_end_r - apply_str_r + 1;
+    // if (direction == "down" || direction == "up") {
+    //   let asLen = apply_end_r - apply_str_r + 1;
 
-      for (let i = apply_str_c; i <= apply_end_c; i++) {
-        let copyD = copyData[i - apply_str_c];
+    //   for (let i = apply_str_c; i <= apply_end_c; i++) {
+    //     let copyD = copyData[i - apply_str_c];
 
-        let applyData = _this.getApplyData(copyD, csLen, asLen);
+    //     let applyData = _this.getApplyData(copyD, csLen, asLen);
 
-        if (direction == "down") {
-          for (let j = apply_str_r; j <= apply_end_r; j++) {
-            let cell = applyData[j - apply_str_r];
+    //     if (direction == "down") {
+    //       for (let j = apply_str_r; j <= apply_end_r; j++) {
+    //         let cell = applyData[j - apply_str_r];
 
-            if (cell.f != null) {
-              let f =
-                "=" + formula.functionCopy(cell.f, "down", j - apply_str_r + 1);
-              let v = formula.execfunction(f, j, i);
+    //         if (cell.f != null) {
+    //           let f =
+    //             "=" + formula.functionCopy(cell.f, "down", j - apply_str_r + 1);
+    //           let v = formula.execfunction(f, j, i);
 
-              formula.execFunctionGroup(j, i, v[1], undefined, d);
+    //           formula.execFunctionGroup(j, i, v[1], undefined, d);
 
-              cell.f = v[2];
-              cell.v = v[1];
+    //           cell.f = v[2];
+    //           cell.v = v[1];
 
-              if (cell.spl != null) {
-                cell.spl = v[3].data;
-              } else {
-                if (
-                  isRealNum(cell.v) &&
-                  !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(
-                    cell.v
-                  )
-                ) {
-                  if (cell.v == Infinity || cell.v == -Infinity) {
-                    cell.m = cell.v.toString();
-                  } else {
-                    if (cell.v.toString().indexOf("e") > -1) {
-                      let len = cell.v
-                        .toString()
-                        .split(".")[1]
-                        .split("e")[0].length;
-                      if (len > 5) {
-                        len = 5;
-                      }
+    //           if (cell.spl != null) {
+    //             cell.spl = v[3].data;
+    //           } else {
+    //             if (
+    //               isRealNum(cell.v) &&
+    //               !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(
+    //                 cell.v
+    //               )
+    //             ) {
+    //               if (cell.v == Infinity || cell.v == -Infinity) {
+    //                 cell.m = cell.v.toString();
+    //               } else {
+    //                 if (cell.v.toString().indexOf("e") > -1) {
+    //                   let len = cell.v
+    //                     .toString()
+    //                     .split(".")[1]
+    //                     .split("e")[0].length;
+    //                   if (len > 5) {
+    //                     len = 5;
+    //                   }
 
-                      cell.m = cell.v.toExponential(len).toString();
-                    } else {
-                      let mask;
-                      if (cell.ct.fa === "##0.00") {
-                        /* 如果是数字类型 */
-                        mask = genarate(
-                          Math.round(cell.v * 1000000000) / 1000000000 + ".00"
-                        );
-                        cell.m = mask[0].toString();
-                      } else {
-                        mask = genarate(
-                          Math.round(cell.v * 1000000000) / 1000000000
-                        );
-                        cell.m = mask[0].toString();
-                      }
-                    }
-                  }
+    //                   cell.m = cell.v.toExponential(len).toString();
+    //                 } else {
+    //                   let mask;
+    //                   if (cell.ct.fa === "##0.00") {
+    //                     /* 如果是数字类型 */
+    //                     mask = genarate(
+    //                       Math.round(cell.v * 1000000000) / 1000000000 + ".00"
+    //                     );
+    //                     cell.m = mask[0].toString();
+    //                   } else {
+    //                     mask = genarate(
+    //                       Math.round(cell.v * 1000000000) / 1000000000
+    //                     );
+    //                     cell.m = mask[0].toString();
+    //                   }
+    //                 }
+    //               }
 
-                  cell.ct = cell.ct || { fa: "General", t: "n" };
-                } else {
-                  let mask = genarate(cell.v);
-                  cell.m = mask[0].toString();
-                  cell.ct = mask[1];
-                }
-              }
-            }
+    //               cell.ct = cell.ct || { fa: "General", t: "n" };
+    //             } else {
+    //               let mask = genarate(cell.v);
+    //               cell.m = mask[0].toString();
+    //               cell.ct = mask[1];
+    //             }
+    //           }
+    //         }
 
-            d[j][i] = cell;
+    //         d[j][i] = cell;
 
-            //边框
-            let bd_r = copy_str_r + ((j - apply_str_r) % csLen);
-            let bd_c = i;
+    //         //边框
+    //         let bd_r = copy_str_r + ((j - apply_str_r) % csLen);
+    //         let bd_c = i;
 
-            if (borderInfoCompute[bd_r + "_" + bd_c]) {
-              let bd_obj = {
-                rangeType: "cell",
-                value: {
-                  row_index: j,
-                  col_index: i,
-                  l: borderInfoCompute[bd_r + "_" + bd_c].l,
-                  r: borderInfoCompute[bd_r + "_" + bd_c].r,
-                  t: borderInfoCompute[bd_r + "_" + bd_c].t,
-                  b: borderInfoCompute[bd_r + "_" + bd_c].b,
-                },
-              };
+    //         if (borderInfoCompute[bd_r + "_" + bd_c]) {
+    //           let bd_obj = {
+    //             rangeType: "cell",
+    //             value: {
+    //               row_index: j,
+    //               col_index: i,
+    //               l: borderInfoCompute[bd_r + "_" + bd_c].l,
+    //               r: borderInfoCompute[bd_r + "_" + bd_c].r,
+    //               t: borderInfoCompute[bd_r + "_" + bd_c].t,
+    //               b: borderInfoCompute[bd_r + "_" + bd_c].b,
+    //             },
+    //           };
 
-              cfg["borderInfo"].push(bd_obj);
-            } else if (borderInfoCompute[j + "_" + i]) {
-              let bd_obj = {
-                rangeType: "cell",
-                value: {
-                  row_index: j,
-                  col_index: i,
-                  l: null,
-                  r: null,
-                  t: null,
-                  b: null,
-                },
-              };
+    //           cfg["borderInfo"].push(bd_obj);
+    //         } else if (borderInfoCompute[j + "_" + i]) {
+    //           let bd_obj = {
+    //             rangeType: "cell",
+    //             value: {
+    //               row_index: j,
+    //               col_index: i,
+    //               l: null,
+    //               r: null,
+    //               t: null,
+    //               b: null,
+    //             },
+    //           };
 
-              cfg["borderInfo"].push(bd_obj);
-            }
+    //           cfg["borderInfo"].push(bd_obj);
+    //         }
 
-            //数据验证
-            if (dataVerification[bd_r + "_" + bd_c]) {
-              dataVerification[j + "_" + i] =
-                dataVerification[bd_r + "_" + bd_c];
-            }
+    //         //数据验证
+    //         if (dataVerification[bd_r + "_" + bd_c]) {
+    //           dataVerification[j + "_" + i] =
+    //             dataVerification[bd_r + "_" + bd_c];
+    //         }
+    //       }
+    //     }
+    //     if (direction == "up") {
+    //       for (let j = apply_end_r; j >= apply_str_r; j--) {
+    //         let cell = applyData[apply_end_r - j];
+
+    //         if (cell.f != null) {
+    //           let f =
+    //             "=" + formula.functionCopy(cell.f, "up", apply_end_r - j + 1);
+    //           let v = formula.execfunction(f, j, i);
+
+    //           formula.execFunctionGroup(j, i, v[1], undefined, d);
+
+    //           cell.f = v[2];
+    //           cell.v = v[1];
+
+    //           if (cell.spl != null) {
+    //             cell.spl = v[3].data;
+    //           } else {
+    //             if (
+    //               isRealNum(cell.v) &&
+    //               !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(
+    //                 cell.v
+    //               )
+    //             ) {
+    //               if (cell.v == Infinity || cell.v == -Infinity) {
+    //                 cell.m = cell.v.toString();
+    //               } else {
+    //                 if (cell.v.toString().indexOf("e") > -1) {
+    //                   let len = cell.v
+    //                     .toString()
+    //                     .split(".")[1]
+    //                     .split("e")[0].length;
+    //                   if (len > 5) {
+    //                     len = 5;
+    //                   }
+
+    //                   cell.m = cell.v.toExponential(len).toString();
+    //                 } else {
+    //                   let mask = genarate(
+    //                     Math.round(cell.v * 1000000000) / 1000000000
+    //                   );
+    //                   cell.m = mask[0].toString();
+    //                 }
+    //               }
+
+    //               cell.ct = { fa: "General", t: "n" };
+    //             } else {
+    //               let mask = genarate(cell.v);
+    //               cell.m = mask[0].toString();
+    //               cell.ct = mask[1];
+    //             }
+    //           }
+    //         }
+
+    //         d[j][i] = cell;
+
+    //         //边框
+    //         let bd_r = copy_end_r - ((apply_end_r - j) % csLen);
+    //         let bd_c = i;
+
+    //         if (borderInfoCompute[bd_r + "_" + bd_c]) {
+    //           let bd_obj = {
+    //             rangeType: "cell",
+    //             value: {
+    //               row_index: j,
+    //               col_index: i,
+    //               l: borderInfoCompute[bd_r + "_" + bd_c].l,
+    //               r: borderInfoCompute[bd_r + "_" + bd_c].r,
+    //               t: borderInfoCompute[bd_r + "_" + bd_c].t,
+    //               b: borderInfoCompute[bd_r + "_" + bd_c].b,
+    //             },
+    //           };
+
+    //           cfg["borderInfo"].push(bd_obj);
+    //         } else if (borderInfoCompute[j + "_" + i]) {
+    //           let bd_obj = {
+    //             rangeType: "cell",
+    //             value: {
+    //               row_index: j,
+    //               col_index: i,
+    //               l: null,
+    //               r: null,
+    //               t: null,
+    //               b: null,
+    //             },
+    //           };
+
+    //           cfg["borderInfo"].push(bd_obj);
+    //         }
+
+    //         //数据验证
+    //         if (dataVerification[bd_r + "_" + bd_c]) {
+    //           dataVerification[j + "_" + i] =
+    //             dataVerification[bd_r + "_" + bd_c];
+    //         }
+    //       }
+    //     }
+    //   }
+    // } else if (direction == "right" || direction == "left") {
+    //   let asLen = apply_end_c - apply_str_c + 1;
+
+    //   for (let i = apply_str_r; i <= apply_end_r; i++) {
+    //     let copyD = copyData[i - apply_str_r];
+
+    //     let applyData = _this.getApplyData(copyD, csLen, asLen);
+
+    //     if (direction == "right") {
+    //       for (let j = apply_str_c; j <= apply_end_c; j++) {
+    //         let cell = applyData[j - apply_str_c];
+
+    //         if (cell.f != null) {
+    //           let f =
+    //             "=" +
+    //             formula.functionCopy(cell.f, "right", j - apply_str_c + 1);
+    //           let v = formula.execfunction(f, i, j);
+
+    //           formula.execFunctionGroup(i, j, v[1], undefined, d);
+
+    //           cell.f = v[2];
+    //           cell.v = v[1];
+
+    //           if (cell.spl != null) {
+    //             cell.spl = v[3].data;
+    //           } else {
+    //             if (
+    //               isRealNum(cell.v) &&
+    //               !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(
+    //                 cell.v
+    //               )
+    //             ) {
+    //               if (cell.v == Infinity || cell.v == -Infinity) {
+    //                 cell.m = cell.v.toString();
+    //               } else {
+    //                 if (cell.v.toString().indexOf("e") > -1) {
+    //                   let len = cell.v
+    //                     .toString()
+    //                     .split(".")[1]
+    //                     .split("e")[0].length;
+    //                   if (len > 5) {
+    //                     len = 5;
+    //                   }
+
+    //                   cell.m = cell.v.toExponential(len).toString();
+    //                 } else {
+    //                   let mask = genarate(
+    //                     Math.round(cell.v * 1000000000) / 1000000000
+    //                   );
+    //                   cell.m = mask[0].toString();
+    //                 }
+    //               }
+
+    //               cell.ct = { fa: "General", t: "n" };
+    //             } else {
+    //               let mask = genarate(cell.v);
+    //               cell.m = mask[0].toString();
+    //               cell.ct = mask[1];
+    //             }
+    //           }
+    //         }
+
+    //         d[i][j] = cell;
+
+    //         //边框
+    //         let bd_r = i;
+    //         let bd_c = copy_str_c + ((j - apply_str_c) % csLen);
+
+    //         if (borderInfoCompute[bd_r + "_" + bd_c]) {
+    //           let bd_obj = {
+    //             rangeType: "cell",
+    //             value: {
+    //               row_index: i,
+    //               col_index: j,
+    //               l: borderInfoCompute[bd_r + "_" + bd_c].l,
+    //               r: borderInfoCompute[bd_r + "_" + bd_c].r,
+    //               t: borderInfoCompute[bd_r + "_" + bd_c].t,
+    //               b: borderInfoCompute[bd_r + "_" + bd_c].b,
+    //             },
+    //           };
+
+    //           cfg["borderInfo"].push(bd_obj);
+    //         } else if (borderInfoCompute[i + "_" + j]) {
+    //           let bd_obj = {
+    //             rangeType: "cell",
+    //             value: {
+    //               row_index: i,
+    //               col_index: j,
+    //               l: null,
+    //               r: null,
+    //               t: null,
+    //               b: null,
+    //             },
+    //           };
+
+    //           cfg["borderInfo"].push(bd_obj);
+    //         }
+
+    //         //数据验证
+    //         if (dataVerification[bd_r + "_" + bd_c]) {
+    //           dataVerification[i + "_" + j] =
+    //             dataVerification[bd_r + "_" + bd_c];
+    //         }
+    //       }
+    //     }
+    //     if (direction == "left") {
+    //       for (let j = apply_end_c; j >= apply_str_c; j--) {
+    //         let cell = applyData[apply_end_c - j];
+
+    //         if (cell.f != null) {
+    //           let f =
+    //             "=" + formula.functionCopy(cell.f, "left", apply_end_c - j + 1);
+    //           let v = formula.execfunction(f, i, j);
+
+    //           formula.execFunctionGroup(i, j, v[1], undefined, d);
+
+    //           cell.f = v[2];
+    //           cell.v = v[1];
+
+    //           if (cell.spl != null) {
+    //             cell.spl = v[3].data;
+    //           } else {
+    //             if (
+    //               isRealNum(cell.v) &&
+    //               !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(
+    //                 cell.v
+    //               )
+    //             ) {
+    //               if (cell.v == Infinity || cell.v == -Infinity) {
+    //                 cell.m = cell.v.toString();
+    //               } else {
+    //                 if (cell.v.toString().indexOf("e") > -1) {
+    //                   let len = cell.v
+    //                     .toString()
+    //                     .split(".")[1]
+    //                     .split("e")[0].length;
+    //                   if (len > 5) {
+    //                     len = 5;
+    //                   }
+
+    //                   cell.m = cell.v.toExponential(len).toString();
+    //                 } else {
+    //                   let mask = genarate(
+    //                     Math.round(cell.v * 1000000000) / 1000000000
+    //                   );
+    //                   cell.m = mask[0].toString();
+    //                 }
+    //               }
+
+    //               cell.ct = { fa: "General", t: "n" };
+    //             } else {
+    //               let mask = genarate(cell.v);
+    //               cell.m = mask[0].toString();
+    //               cell.ct = mask[1];
+    //             }
+    //           }
+    //         }
+
+    //         d[i][j] = cell;
+
+    //         //边框
+    //         let bd_r = i;
+    //         let bd_c = copy_end_c - ((apply_end_c - j) % csLen);
+
+    //         if (borderInfoCompute[bd_r + "_" + bd_c]) {
+    //           let bd_obj = {
+    //             rangeType: "cell",
+    //             value: {
+    //               row_index: i,
+    //               col_index: j,
+    //               l: borderInfoCompute[bd_r + "_" + bd_c].l,
+    //               r: borderInfoCompute[bd_r + "_" + bd_c].r,
+    //               t: borderInfoCompute[bd_r + "_" + bd_c].t,
+    //               b: borderInfoCompute[bd_r + "_" + bd_c].b,
+    //             },
+    //           };
+
+    //           cfg["borderInfo"].push(bd_obj);
+    //         } else if (borderInfoCompute[i + "_" + j]) {
+    //           let bd_obj = {
+    //             rangeType: "cell",
+    //             value: {
+    //               row_index: i,
+    //               col_index: j,
+    //               l: null,
+    //               r: null,
+    //               t: null,
+    //               b: null,
+    //             },
+    //           };
+
+    //           cfg["borderInfo"].push(bd_obj);
+    //         }
+
+    //         //数据验证
+    //         if (dataVerification[bd_r + "_" + bd_c]) {
+    //           dataVerification[i + "_" + j] =
+    //             dataVerification[bd_r + "_" + bd_c];
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+
+    console.log(
+      "%c Line:556 🍡",
+      "color:#3f7cff",
+      copyData,
+      csLen,
+      apply_str_r,
+      apply_end_r,
+      apply_str_c,
+      apply_end_c,
+      csLen
+    );
+
+    let publishArr = [];
+    let m, v;
+    for (let i = apply_str_r; i <= apply_end_r; i++) {
+      var curArr = [];
+      publishArr.push(curArr);
+      for (let j = apply_str_c; j <= apply_end_c; j++) {
+        const curObj = copyData?.[0] ?? {};
+        const curData = Object.values(curObj)?.[0]?.[0]?.data?.[0];
+        if (!isNaN(curData.m)) {
+          if (m === undefined) {
+            m = +curData.m + 1;
+          } else {
+            m++;
           }
+        } else {
+          m = curData.m;
         }
-        if (direction == "up") {
-          for (let j = apply_end_r; j >= apply_str_r; j--) {
-            let cell = applyData[apply_end_r - j];
 
-            if (cell.f != null) {
-              let f =
-                "=" + formula.functionCopy(cell.f, "up", apply_end_r - j + 1);
-              let v = formula.execfunction(f, j, i);
-
-              formula.execFunctionGroup(j, i, v[1], undefined, d);
-
-              cell.f = v[2];
-              cell.v = v[1];
-
-              if (cell.spl != null) {
-                cell.spl = v[3].data;
-              } else {
-                if (
-                  isRealNum(cell.v) &&
-                  !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(
-                    cell.v
-                  )
-                ) {
-                  if (cell.v == Infinity || cell.v == -Infinity) {
-                    cell.m = cell.v.toString();
-                  } else {
-                    if (cell.v.toString().indexOf("e") > -1) {
-                      let len = cell.v
-                        .toString()
-                        .split(".")[1]
-                        .split("e")[0].length;
-                      if (len > 5) {
-                        len = 5;
-                      }
-
-                      cell.m = cell.v.toExponential(len).toString();
-                    } else {
-                      let mask = genarate(
-                        Math.round(cell.v * 1000000000) / 1000000000
-                      );
-                      cell.m = mask[0].toString();
-                    }
-                  }
-
-                  cell.ct = { fa: "General", t: "n" };
-                } else {
-                  let mask = genarate(cell.v);
-                  cell.m = mask[0].toString();
-                  cell.ct = mask[1];
-                }
-              }
-            }
-
-            d[j][i] = cell;
-
-            //边框
-            let bd_r = copy_end_r - ((apply_end_r - j) % csLen);
-            let bd_c = i;
-
-            if (borderInfoCompute[bd_r + "_" + bd_c]) {
-              let bd_obj = {
-                rangeType: "cell",
-                value: {
-                  row_index: j,
-                  col_index: i,
-                  l: borderInfoCompute[bd_r + "_" + bd_c].l,
-                  r: borderInfoCompute[bd_r + "_" + bd_c].r,
-                  t: borderInfoCompute[bd_r + "_" + bd_c].t,
-                  b: borderInfoCompute[bd_r + "_" + bd_c].b,
-                },
-              };
-
-              cfg["borderInfo"].push(bd_obj);
-            } else if (borderInfoCompute[j + "_" + i]) {
-              let bd_obj = {
-                rangeType: "cell",
-                value: {
-                  row_index: j,
-                  col_index: i,
-                  l: null,
-                  r: null,
-                  t: null,
-                  b: null,
-                },
-              };
-
-              cfg["borderInfo"].push(bd_obj);
-            }
-
-            //数据验证
-            if (dataVerification[bd_r + "_" + bd_c]) {
-              dataVerification[j + "_" + i] =
-                dataVerification[bd_r + "_" + bd_c];
-            }
+        if (!isNaN(curData.v)) {
+          if (v === undefined) {
+            v = +curData.v + 1;
+          } else {
+            v++;
           }
+        } else {
+          v = curData.v;
         }
-      }
-    } else if (direction == "right" || direction == "left") {
-      let asLen = apply_end_c - apply_str_c + 1;
-
-      for (let i = apply_str_r; i <= apply_end_r; i++) {
-        let copyD = copyData[i - apply_str_r];
-
-        let applyData = _this.getApplyData(copyD, csLen, asLen);
-
-        if (direction == "right") {
-          for (let j = apply_str_c; j <= apply_end_c; j++) {
-            let cell = applyData[j - apply_str_c];
-
-            if (cell.f != null) {
-              let f =
-                "=" +
-                formula.functionCopy(cell.f, "right", j - apply_str_c + 1);
-              let v = formula.execfunction(f, i, j);
-
-              formula.execFunctionGroup(i, j, v[1], undefined, d);
-
-              cell.f = v[2];
-              cell.v = v[1];
-
-              if (cell.spl != null) {
-                cell.spl = v[3].data;
-              } else {
-                if (
-                  isRealNum(cell.v) &&
-                  !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(
-                    cell.v
-                  )
-                ) {
-                  if (cell.v == Infinity || cell.v == -Infinity) {
-                    cell.m = cell.v.toString();
-                  } else {
-                    if (cell.v.toString().indexOf("e") > -1) {
-                      let len = cell.v
-                        .toString()
-                        .split(".")[1]
-                        .split("e")[0].length;
-                      if (len > 5) {
-                        len = 5;
-                      }
-
-                      cell.m = cell.v.toExponential(len).toString();
-                    } else {
-                      let mask = genarate(
-                        Math.round(cell.v * 1000000000) / 1000000000
-                      );
-                      cell.m = mask[0].toString();
-                    }
-                  }
-
-                  cell.ct = { fa: "General", t: "n" };
-                } else {
-                  let mask = genarate(cell.v);
-                  cell.m = mask[0].toString();
-                  cell.ct = mask[1];
-                }
-              }
-            }
-
-            d[i][j] = cell;
-
-            //边框
-            let bd_r = i;
-            let bd_c = copy_str_c + ((j - apply_str_c) % csLen);
-
-            if (borderInfoCompute[bd_r + "_" + bd_c]) {
-              let bd_obj = {
-                rangeType: "cell",
-                value: {
-                  row_index: i,
-                  col_index: j,
-                  l: borderInfoCompute[bd_r + "_" + bd_c].l,
-                  r: borderInfoCompute[bd_r + "_" + bd_c].r,
-                  t: borderInfoCompute[bd_r + "_" + bd_c].t,
-                  b: borderInfoCompute[bd_r + "_" + bd_c].b,
-                },
-              };
-
-              cfg["borderInfo"].push(bd_obj);
-            } else if (borderInfoCompute[i + "_" + j]) {
-              let bd_obj = {
-                rangeType: "cell",
-                value: {
-                  row_index: i,
-                  col_index: j,
-                  l: null,
-                  r: null,
-                  t: null,
-                  b: null,
-                },
-              };
-
-              cfg["borderInfo"].push(bd_obj);
-            }
-
-            //数据验证
-            if (dataVerification[bd_r + "_" + bd_c]) {
-              dataVerification[i + "_" + j] =
-                dataVerification[bd_r + "_" + bd_c];
-            }
-          }
-        }
-        if (direction == "left") {
-          for (let j = apply_end_c; j >= apply_str_c; j--) {
-            let cell = applyData[apply_end_c - j];
-
-            if (cell.f != null) {
-              let f =
-                "=" + formula.functionCopy(cell.f, "left", apply_end_c - j + 1);
-              let v = formula.execfunction(f, i, j);
-
-              formula.execFunctionGroup(i, j, v[1], undefined, d);
-
-              cell.f = v[2];
-              cell.v = v[1];
-
-              if (cell.spl != null) {
-                cell.spl = v[3].data;
-              } else {
-                if (
-                  isRealNum(cell.v) &&
-                  !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(
-                    cell.v
-                  )
-                ) {
-                  if (cell.v == Infinity || cell.v == -Infinity) {
-                    cell.m = cell.v.toString();
-                  } else {
-                    if (cell.v.toString().indexOf("e") > -1) {
-                      let len = cell.v
-                        .toString()
-                        .split(".")[1]
-                        .split("e")[0].length;
-                      if (len > 5) {
-                        len = 5;
-                      }
-
-                      cell.m = cell.v.toExponential(len).toString();
-                    } else {
-                      let mask = genarate(
-                        Math.round(cell.v * 1000000000) / 1000000000
-                      );
-                      cell.m = mask[0].toString();
-                    }
-                  }
-
-                  cell.ct = { fa: "General", t: "n" };
-                } else {
-                  let mask = genarate(cell.v);
-                  cell.m = mask[0].toString();
-                  cell.ct = mask[1];
-                }
-              }
-            }
-
-            d[i][j] = cell;
-
-            //边框
-            let bd_r = i;
-            let bd_c = copy_end_c - ((apply_end_c - j) % csLen);
-
-            if (borderInfoCompute[bd_r + "_" + bd_c]) {
-              let bd_obj = {
-                rangeType: "cell",
-                value: {
-                  row_index: i,
-                  col_index: j,
-                  l: borderInfoCompute[bd_r + "_" + bd_c].l,
-                  r: borderInfoCompute[bd_r + "_" + bd_c].r,
-                  t: borderInfoCompute[bd_r + "_" + bd_c].t,
-                  b: borderInfoCompute[bd_r + "_" + bd_c].b,
-                },
-              };
-
-              cfg["borderInfo"].push(bd_obj);
-            } else if (borderInfoCompute[i + "_" + j]) {
-              let bd_obj = {
-                rangeType: "cell",
-                value: {
-                  row_index: i,
-                  col_index: j,
-                  l: null,
-                  r: null,
-                  t: null,
-                  b: null,
-                },
-              };
-
-              cfg["borderInfo"].push(bd_obj);
-            }
-
-            //数据验证
-            if (dataVerification[bd_r + "_" + bd_c]) {
-              dataVerification[i + "_" + j] =
-                dataVerification[bd_r + "_" + bd_c];
-            }
-          }
-        }
+        curArr.push(v);
+        d[i][j] = { ...d[i][j], m, v };
       }
     }
 
-    //条件格式
-    let cdformat = $.extend(true, [], file["MBLsheet_conditionformat_save"]);
-    if (cdformat != null && cdformat.length > 0) {
-      for (let i = 0; i < cdformat.length; i++) {
-        let cdformat_cellrange = cdformat[i].cellrange;
+    // // //条件格式
+    // let cdformat = $.extend(true, [], file["MBLsheet_conditionformat_save"]);
+    // if (cdformat != null && cdformat.length > 0) {
+    //   for (let i = 0; i < cdformat.length; i++) {
+    //     let cdformat_cellrange = cdformat[i].cellrange;
 
-        let emptyRange = [];
+    //     let emptyRange = [];
 
-        for (let j = 0; j < cdformat_cellrange.length; j++) {
-          let range = conditionformat.CFSplitRange(
-            cdformat_cellrange[j],
-            { row: copyRange["row"], column: copyRange["column"] },
-            { row: applyRange["row"], column: applyRange["column"] },
-            "operatePart"
-          );
-          if (range.length > 0) {
-            emptyRange = emptyRange.concat(range);
-          }
-        }
+    //     for (let j = 0; j < cdformat_cellrange.length; j++) {
+    //       let range = conditionformat.CFSplitRange(
+    //         cdformat_cellrange[j],
+    //         { row: copyRange["row"], column: copyRange["column"] },
+    //         { row: applyRange["row"], column: applyRange["column"] },
+    //         "operatePart"
+    //       );
+    //       if (range.length > 0) {
+    //         emptyRange = emptyRange.concat(range);
+    //       }
+    //     }
 
-        if (emptyRange.length > 0) {
-          cdformat[i].cellrange.push(applyRange);
-        }
-      }
-    }
+    //     if (emptyRange.length > 0) {
+    //       cdformat[i].cellrange.push(applyRange);
+    //     }
+    //   }
+    // }
 
     //刷新一次表格
     let allParam = {
-      cfg: cfg,
-      cdformat: cdformat,
+      // cfg: cfg,
+      // cdformat: cdformat,
       dataVerification: dataVerification,
     };
     jfrefreshgrid(d, Store.MBLsheet_select_save, allParam);
 
     selectHightlightShow();
+
+    setTimeout(() => {
+      eventBus.publish("paste", publishArr, {
+        startR: apply_str_r,
+        startC: apply_str_c,
+        endR: apply_end_r,
+        endC: apply_end_c,
+      });
+    }, 200);
   },
   getCopyData: function (d, r1, r2, c1, c2, direction) {
     let _this = this;

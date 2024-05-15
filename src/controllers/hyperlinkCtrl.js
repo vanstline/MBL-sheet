@@ -293,7 +293,7 @@ const hyperlinkCtrl = {
       let col_pre =
         cellrange.column[0] - 1 == -1
           ? 0
-          : Store.visibledatacolumn[cellrange.column[0] - 1];
+          : Store.cloumnLenSum[cellrange.column[0] - 1];
 
       $("#MBLsheet-scrollbar-x").scrollLeft(col_pre);
       $("#MBLsheet-scrollbar-y").scrollTop(row_pre);
@@ -357,9 +357,9 @@ const hyperlinkCtrl = {
 
     let row = Store.visibledatarow[row_index],
       row_pre = row_index - 1 == -1 ? 0 : Store.visibledatarow[row_index - 1];
-    let col = Store.visibledatacolumn[col_index],
+    let col = Store.cloumnLenSum[col_index],
       col_pre =
-        col_index - 1 == -1 ? 0 : Store.visibledatacolumn[col_index - 1];
+        col_index - 1 == -1 ? 0 : Store.cloumnLenSum[col_index - 1];
 
     if (!!margeset) {
       row = margeset.row[1];

@@ -3,6 +3,15 @@ import Store from "../store";
 import MBLsheetConfigsetting from "./MBLsheetConfigsetting";
 import { getObjType } from "../utils/util";
 import { createToolbarHtml } from "./toolbar";
+import {
+  SearchOutlinedBase,
+  DeleteOutlinedBase,
+  QuestionCircleOutlinedBase,
+  ArrowCircleDownOutlinedBase,
+  CloseCircleOutlinedBase,
+  DownOutlinedBase,
+  UpDownCircleOutlinedBase,
+} from "./iconBase64";
 //dom variable
 const gridHTML = function () {
   const _locale = locale();
@@ -224,7 +233,7 @@ const gridHTML = function () {
                                                         </div>
                                                     </div>
                                                     <div id="MBLsheet-dataVerification-dropdown-btn"></div>
-                                                    <div id="MBLsheet-dataVerification-dropdown-List" class="MBLsheet-mousedown-cancel"></div>
+                                                     <div id="MBLsheet-dataVerification-dropdown-List" class="MBLsheet-mousedown-cancel"></div>
                                                     <div id="MBLsheet-dataVerification-showHintBox" class="MBLsheet-mousedown-cancel"></div>
                                                     <div class="MBLsheet-cell-copy"></div>  
                                                     <div class="MBLsheet-grdblkflowpush"></div>  \${flow} 
@@ -291,6 +300,7 @@ const gridHTML = function () {
                     <div id="MBLsheet-copy-content" contenteditable="true"></div>
                     <input id="MBLsheet-copy-btn" type="button" data-clipboard-target="MBLsheet-copy-content">
                     <div id="testdpidiv" style="height: 1in; left: -100%; position: absolute; top: -100%; width: 1in;"></div>
+                   
                   </div>`;
 };
 
@@ -392,14 +402,15 @@ function rightclickHTML() {
   }
 
   const customsButtons = (config.customs || [])
-    .map(
-      (item, index) => `
-            <div data-index="${index}" class="MBLsheetColsRowsHandleAdd_custom MBLsheet-cols-menuitem MBLsheet-mousedown-cancel">
+    .map((item, index) => {
+      const keyName = item.key ? `MBLsheet-cols-menuitem-${item.key} ` : "";
+      return `
+            <div data-index="${index}" class="MBLsheetColsRowsHandleAdd_custom MBLsheet-cols-menuitem ${keyName}MBLsheet-mousedown-cancel">
                 <div class="MBLsheet-cols-menuitem-content MBLsheet-mousedown-cancel">
                 ${item.title}
                 </div>
-            </div>`
-    )
+            </div>`;
+    })
     .join("");
 
   const rightclickContainer = `<div id="MBLsheet-rightclick-menu" class="MBLsheet-cols-menu MBLsheet-rightgclick-menu MBLsheet-mousedown-cancel">
@@ -1517,26 +1528,26 @@ const iconfontObjects = {
 function customCellRightClickConfig() {
   const config = {
     copy: true, // copy
-    copyAs: true, // copy as
+    // copyAs: true, // copy as
     paste: true, // paste
-    insertRow: true, // insert row
-    insertColumn: true, // insert column
+    // insertRow: true, // insert row
+    // insertColumn: true, // insert column
     deleteRow: true, // delete the selected row
-    deleteColumn: true, // delete the selected column
-    deleteCell: true, // delete cell
-    hideRow: true, // hide the selected row and display the selected row
-    hideColumn: true, // hide the selected column and display the selected column
-    rowHeight: true, // row height
-    columnWidth: true, // column width
+    // deleteColumn: true, // delete the selected column
+    // deleteCell: true, // delete cell
+    // hideRow: true, // hide the selected row and display the selected row
+    // hideColumn: true, // hide the selected column and display the selected column
+    // rowHeight: true, // row height
+    // columnWidth: true, // column width
     clear: true, // clear content
-    matrix: true, // matrix operation selection
-    sort: true, // sort selection
-    filter: true, // filter selection
-    chart: true, // chart generation
-    image: true, // insert picture
-    link: true, // insert link
-    data: true, // data verification
-    cellFormat: true, // Set cell format
+    // matrix: true, // matrix operation selection
+    // sort: true, // sort selection
+    // filter: true, // filter selection
+    // chart: true, // chart generation
+    // image: true, // insert picture
+    // link: true, // insert link
+    // data: true, // data verification
+    // cellFormat: true, // Set cell format
   };
 
   // cellRightClickConfig determines the final result
@@ -1569,6 +1580,16 @@ function customSheetRightClickConfig() {
   return config;
 }
 
+const icons = {
+  SearchOutlined: SearchOutlinedBase,
+  DeleteOutlined: DeleteOutlinedBase,
+  QuestionCircleOutlined: QuestionCircleOutlinedBase,
+  ArrowCircleDownOutlined: ArrowCircleDownOutlinedBase,
+  CloseCircleOutlined: CloseCircleOutlinedBase,
+  DownOutlined: DownOutlinedBase,
+  UpDownCircleOutlined: UpDownCircleOutlinedBase,
+};
+
 export {
   gridHTML,
   columeHeader_word,
@@ -1600,4 +1621,5 @@ export {
   MBLsheet_CFiconsImg,
   MBLsheetdefaultFont,
   iconfontObjects,
+  icons,
 };

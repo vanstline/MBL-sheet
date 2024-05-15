@@ -20,6 +20,8 @@ import { replaceHtml, getObjType, MBLsheetfontformat } from "../utils/util";
 import Store from "../store";
 import locale from "../locale/locale";
 import imageCtrl from "./imageCtrl";
+import { eventBus } from "../global/sg/event";
+import sheetmanage from "./sheetmanage";
 
 const selection = {
   clearcopy: function (e) {
@@ -763,8 +765,10 @@ const selection = {
 
       let minh = Store.MBLsheet_select_save[0].row[0], //应用范围首尾行
         maxh = minh + copyh - 1;
+      maxh = Math.min(maxh, Store.flowdata.length - 1);
       let minc = Store.MBLsheet_select_save[0].column[0], //应用范围首尾列
         maxc = minc + copyc - 1;
+      maxc = Math.min(maxc, Store.flowdata[0]?.length - 1);
 
       //应用范围包含部分合并单元格，则return提示
       let has_PartMC = false;
@@ -785,7 +789,8 @@ const selection = {
         return;
       }
 
-      let d = editor.deepCopyFlowData(Store.flowdata); //取数据
+      // let d = editor.deepCopyFlowData(Store.flowdata); //取数据
+      let d = _.cloneDeep(Store.flowdata);
       let rowMaxLength = d.length;
       let cellMaxLength = d[0].length;
 
@@ -847,21 +852,21 @@ const selection = {
             }
           }
 
-          if (borderInfo[h - minh + "_" + (c - minc)]) {
-            let bd_obj = {
-              rangeType: "cell",
-              value: {
-                row_index: h,
-                col_index: c,
-                l: borderInfo[h - minh + "_" + (c - minc)].l,
-                r: borderInfo[h - minh + "_" + (c - minc)].r,
-                t: borderInfo[h - minh + "_" + (c - minc)].t,
-                b: borderInfo[h - minh + "_" + (c - minc)].b,
-              },
-            };
+          // if (borderInfo[h - minh + "_" + (c - minc)]) {
+          //   let bd_obj = {
+          //     rangeType: "cell",
+          //     value: {
+          //       row_index: h,
+          //       col_index: c,
+          //       l: borderInfo[h - minh + "_" + (c - minc)].l,
+          //       r: borderInfo[h - minh + "_" + (c - minc)].r,
+          //       t: borderInfo[h - minh + "_" + (c - minc)].t,
+          //       b: borderInfo[h - minh + "_" + (c - minc)].b,
+          //     },
+          //   };
 
-            cfg["borderInfo"].push(bd_obj);
-          }
+          //   cfg["borderInfo"].push(bd_obj);
+          // }
 
           let fontset = MBLsheetfontformat(x[c]);
           let oneLineTextHeight = menuButton.getTextSize("田", fontset)[1];
@@ -882,19 +887,49 @@ const selection = {
         { row: [minh, maxh], column: [minc, maxc] },
       ];
 
+      const columns = sheetmanage.getSheetByIndex().columns;
+      const maxC = Math.min(maxc, columns.length);
+      const publishArr = [];
+      for (let r = minh, i = 0; r <= maxh; r++, i++) {
+        publishArr.push([]);
+        for (let c = minc, j = 0; c <= maxC; c++, j++) {
+          if (columns[c]?.dataIndex) {
+            d[r][c] = {
+              ...Store.flowdata[r][c],
+              m: data[i][j].m,
+              v: data[i][j].v,
+            };
+          } else {
+            d[r][c] = columns[c];
+          }
+          publishArr[i].push(d[r][c]?.v);
+        }
+      }
+
       if (addr > 0 || addc > 0 || RowlChange) {
         let allParam = {
           cfg: cfg,
           RowlChange: true,
         };
+
         jfrefreshgrid(d, Store.MBLsheet_select_save, allParam);
       } else {
         let allParam = {
           cfg: cfg,
         };
+
         jfrefreshgrid(d, Store.MBLsheet_select_save, allParam);
         selectHightlightShow();
       }
+
+      setTimeout(() => {
+        eventBus.publish("paste", publishArr, {
+          startR: minh,
+          startC: minc,
+          endR: maxh,
+          endC: maxc,
+        });
+      }, 200);
     } else {
       data = data.replace(/\r/g, "");
       let dataChe = [];
@@ -992,7 +1027,6 @@ const selection = {
 
       last["row"] = [curR, curR + rlen - 1];
       last["column"] = [curC, curC + clen - 1];
-
       if (addr > 0 || addc > 0) {
         let allParam = {
           RowlChange: true,
@@ -1002,9 +1036,22 @@ const selection = {
         jfrefreshgrid(d, Store.MBLsheet_select_save);
         selectHightlightShow();
       }
+
+      const startR = last.row_focus;
+      const startC = last.column_focus;
+
+      setTimeout(() => {
+        eventBus.publish("paste", [[data]], {
+          startR,
+          startC,
+          endR: startR,
+          endC: startC,
+        });
+      }, 200);
     }
   },
   pasteHandlerOfCutPaste: function (copyRange) {
+    return;
     if (
       !checkProtectionLockedRangeList(
         Store.MBLsheet_select_save,
@@ -1538,6 +1585,33 @@ const selection = {
     }
   },
   pasteHandlerOfCopyPaste: function (copyRange) {
+    const curCopyData = [];
+    copyRange.copyRange?.forEach((item) => {
+      const { row, column } = item;
+      for (let i = row[0]; i <= row[1]; i++) {
+        for (let j = column[0]; j <= column[1]; j++) {
+          if (!curCopyData[i]) {
+            curCopyData[i] = [
+              {
+                m: Store.flowdata[i][j].m,
+                v: Store.flowdata[i][j].v,
+              },
+            ];
+          } else {
+            curCopyData[i].push({
+              m: Store.flowdata[i][j].m,
+              v: Store.flowdata[i][j].v,
+            });
+          }
+        }
+      }
+    });
+
+    this.pasteHandler(
+      curCopyData?.filter((item) => !!item?.length),
+      "{}"
+    );
+    return;
     if (
       !checkProtectionLockedRangeList(
         Store.MBLsheet_select_save,
@@ -2001,7 +2075,7 @@ const selection = {
     let cellMaxLength = d[0].length;
     let rowMaxLength = d.length;
 
-    let borderInfoCompute = getBorderInfoCompute(copySheetIndex);
+    // let borderInfoCompute = getBorderInfoCompute(copySheetIndex);
     let c_dataVerification = $.extend(
       true,
       {},
@@ -2035,47 +2109,47 @@ const selection = {
           let x = [].concat(d[h]);
 
           for (let c = mtc; c < maxcellCahe; c++) {
-            if (borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]) {
-              let bd_obj = {
-                rangeType: "cell",
-                value: {
-                  row_index: h,
-                  col_index: c,
-                  l: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
-                    .l,
-                  r: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
-                    .r,
-                  t: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
-                    .t,
-                  b: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
-                    .b,
-                },
-              };
+            // if (borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]) {
+            //   let bd_obj = {
+            //     rangeType: "cell",
+            //     value: {
+            //       row_index: h,
+            //       col_index: c,
+            //       l: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
+            //         .l,
+            //       r: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
+            //         .r,
+            //       t: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
+            //         .t,
+            //       b: borderInfoCompute[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]
+            //         .b,
+            //     },
+            //   };
 
-              if (cfg["borderInfo"] == null) {
-                cfg["borderInfo"] = [];
-              }
+            //   if (cfg["borderInfo"] == null) {
+            //     cfg["borderInfo"] = [];
+            //   }
 
-              cfg["borderInfo"].push(bd_obj);
-            } else if (borderInfoCompute[h + "_" + c]) {
-              let bd_obj = {
-                rangeType: "cell",
-                value: {
-                  row_index: h,
-                  col_index: c,
-                  l: null,
-                  r: null,
-                  t: null,
-                  b: null,
-                },
-              };
+            //   cfg["borderInfo"].push(bd_obj);
+            // } else if (borderInfoCompute[h + "_" + c]) {
+            //   let bd_obj = {
+            //     rangeType: "cell",
+            //     value: {
+            //       row_index: h,
+            //       col_index: c,
+            //       l: null,
+            //       r: null,
+            //       t: null,
+            //       b: null,
+            //     },
+            //   };
 
-              if (cfg["borderInfo"] == null) {
-                cfg["borderInfo"] = [];
-              }
+            //   if (cfg["borderInfo"] == null) {
+            //     cfg["borderInfo"] = [];
+            //   }
 
-              cfg["borderInfo"].push(bd_obj);
-            }
+            //   cfg["borderInfo"].push(bd_obj);
+            // }
 
             //数据验证 复制
             if (c_dataVerification[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]) {

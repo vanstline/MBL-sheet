@@ -17,6 +17,9 @@ import {
 } from "../controllers/protection";
 import { getSheetIndex } from "../methods/get";
 import Store from "../store";
+import sheetmanage from "../controllers/sheetmanage";
+import { eventBus } from "./sg/event";
+import { clearVerify } from "./verify";
 
 /**
  * 增加行列
@@ -48,7 +51,6 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
 
   value = Math.floor(value);
   let cfg = $.extend(true, {}, file.config);
-
   //合并单元格配置变动
   if (cfg["merge"] == null) {
     cfg["merge"] = {};
@@ -486,16 +488,16 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
     }
 
     let freezen_left =
-      Store.visibledatacolumn[freezen_col_st] -
+      Store.cloumnLenSum[freezen_col_st] -
       2 -
       freezen_scrollLeft +
       Store.rowHeaderWidth;
 
     newFreezen.freezenverticaldata = [
-      Store.visibledatacolumn[freezen_col_st],
+      Store.cloumnLenSum[freezen_col_st],
       freezen_col_st + 1,
       freezen_scrollLeft,
-      MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, freezen_col_st + 1),
+      MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, freezen_col_st + 1),
       freezen_left,
     ];
   } else {
@@ -644,8 +646,51 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
 
     // *添加空行模板这里请保持为push null;
     let row = [];
+    // for (let c = 0; c < d[0].length; c++) {
+    //   const fieldsProps = d?.[0]?.[c]?.fieldsProps ?? {};
+    //   const defaultV = fieldsProps?.defaultValue;
+    //   const { type = "", options = [] } = fieldsProps;
+    //   if (defaultV !== undefined) {
+    //     if (type === "select") {
+    //       let curM = defaultV
+    //         .split(",")
+    //         .map((min) => {
+    //           return (
+    //             options?.find((min) => min.value === defaultV)?.label ||
+    //             defaultV
+    //           );
+    //         })
+    //         .join(",");
+    //       row.push({ ...d[0][c], v: defaultV, m: curM });
+    //     } else {
+    //       row.push({ ...d[0][c], v: defaultV, m: defaultV });
+    //     }
+    //   } else {
+    //     row.push(null);
+    //   }
+    // }
+    const columns = sheetmanage.getSheetByIndex().columns;
     for (let c = 0; c < d[0].length; c++) {
-      row.push(null);
+      const curCol = d?.[0]?.[c];
+      const defaultV = curCol?.fieldsProps?.defaultValue;
+      if (defaultV !== undefined) {
+        row.push({
+          v: defaultV,
+          m: defaultV,
+          ...JSON.parse(JSON.stringify(columns[c] ?? {})),
+        });
+      } else {
+        if (
+          curCol.extra &&
+          !curCol.dataIndex &&
+          typeof curCol?.render === "function"
+        ) {
+          const curV = curCol.render();
+          row.push({ v: curV, m: curV, ...curCol });
+        } else {
+          row.push({ ...(columns[c] ?? null) });
+        }
+      }
     }
 
     var cellBorderConfig = [];
@@ -1055,6 +1100,21 @@ function MBLsheetextendData(rowlen, newData) {
 
 //删除行列
 function MBLsheetdeletetable(type, st, ed, sheetIndex) {
+  if (type === "row") {
+    const verifyKeys = Object.keys(Store.verifyMap);
+    verifyKeys.forEach((item) => {
+      const [k] = item?.split("_");
+      if (k >= st && k <= ed) {
+        clearVerify(item);
+      }
+    });
+
+    if (st === 0 && ed === 0 && Store.flowdata?.length === 1) {
+      const cb = () => eventBus.publish("deleteRow", { startR: st, endR: ed });
+      MBLsheet.clearTable(cb);
+      throw new Error("至少保留一条数据");
+    }
+  }
   sheetIndex = sheetIndex || Store.currentSheetIndex;
 
   if (
@@ -1549,7 +1609,7 @@ function MBLsheetdeletetable(type, st, ed, sheetIndex) {
   if (MBLsheetFreezen.freezenverticaldata != null && type == "column") {
     let freezen_scrollLeft = MBLsheetFreezen.freezenverticaldata[2];
     let freezen_st2 = MBLsheet_searcharray(
-      Store.visibledatacolumn,
+      Store.cloumnLenSum,
       freezen_scrollLeft
     );
     if (freezen_st2 == -1) {
@@ -1571,16 +1631,16 @@ function MBLsheetdeletetable(type, st, ed, sheetIndex) {
     }
 
     let freezen_left =
-      Store.visibledatacolumn[freezen_col_st] -
+      Store.cloumnLenSum[freezen_col_st] -
       2 -
       freezen_scrollLeft +
       Store.rowHeaderWidth;
 
     newFreezen.freezenverticaldata = [
-      Store.visibledatacolumn[freezen_col_st],
+      Store.cloumnLenSum[freezen_col_st],
       freezen_col_st + 1,
       freezen_scrollLeft,
-      MBLsheetFreezen.cutVolumn(Store.visibledatacolumn, freezen_col_st + 1),
+      MBLsheetFreezen.cutVolumn(Store.cloumnLenSum, freezen_col_st + 1),
       freezen_left,
     ];
   } else {
@@ -1753,13 +1813,13 @@ function MBLsheetdeletetable(type, st, ed, sheetIndex) {
     d.splice(st, slen);
 
     //删除多少行，增加多少行空白行
-    for (let r = 0; r < slen; r++) {
-      let row = [];
-      for (let c = 0; c < d[0].length; c++) {
-        row.push(null);
-      }
-      d.push(row);
-    }
+    // for (let r = 0; r < slen; r++) {
+    //   let row = [];
+    //   for (let c = 0; c < d[0].length; c++) {
+    //     row.push(null);
+    //   }
+    //   d.push(row);
+    // }
   } else {
     type1 = "c";
 
@@ -1895,6 +1955,10 @@ function MBLsheetdeletetable(type, st, ed, sheetIndex) {
     file.MBLsheet_alternateformat_save = newAFarr;
     file.dataVerification = newDataVerification;
     file.hyperlink = newHyperlink;
+  }
+
+  if (type === "row") {
+    eventBus.publish("deleteRow", { startR: st, endR: ed });
   }
 }
 

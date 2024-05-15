@@ -39,6 +39,7 @@ import { changeSheetContainerSize, menuToolBarWidth } from "./resize";
 import { zoomNumberDomBind } from "./zoom";
 import menuButton from "./menuButton";
 import method from "../global/method";
+import "./observer";
 
 const sheetmanage = {
   generateRandomSheetIndex: function (prefix) {
@@ -740,11 +741,9 @@ const sheetmanage = {
         if (d[r][c] == null) {
           continue;
         }
-
         ret.push({ r: r, c: c, v: d[r][c] });
       }
     }
-
     return ret;
   },
   buildGridData: function (file) {
@@ -1135,16 +1134,17 @@ const sheetmanage = {
         });
       } catch (e) {
         ini();
-        console.log("缓存操作失败");
       }
     }, 1);
   },
   storeSheetParam: function () {
     let index = this.getSheetIndex(Store.currentSheetIndex);
     let file = Store.MBLsheetfile[index];
+
     file["config"] = Store.config;
+
     file["visibledatarow"] = Store.visibledatarow;
-    file["visibledatacolumn"] = Store.visibledatacolumn;
+    file["cloumnLenSum"] = Store.cloumnLenSum;
     file["ch_width"] = Store.ch_width;
     file["rh_height"] = Store.rh_height;
     file["MBLsheet_select_save"] = $.extend(

@@ -64,6 +64,7 @@ import Store from "../store";
 import locale from "../locale/locale";
 import json from "./json";
 import method from "./method";
+import { changeValue } from "../controllers/observer";
 
 const MBLsheetformula = {
   error: {
@@ -1299,7 +1300,7 @@ const MBLsheetformula = {
         }
       );
 
-      for (let i = 0; i < functionlist.length; i++) {
+      for (let i = 0; i < functionlist?.length || 0; i++) {
         _this.functionlistPosition[functionlist[i].n] = i;
       }
     }
@@ -1406,6 +1407,9 @@ const MBLsheetformula = {
       });
   },
   updatecell: function (r, c, value, isRefresh = true) {
+    if (r == null || c == null) {
+      return;
+    }
     let _this = this;
 
     let $input = $("#MBLsheet-rich-text-editor");
@@ -1430,13 +1434,17 @@ const MBLsheetformula = {
       if (
         dvItem != null &&
         dvItem.prohibitInput &&
-        !dataVerificationCtrl.validateCellData(inputText, dvItem)
+        !dataVerificationCtrl.validateCellData(inputText, dvItem, r)
       ) {
         let failureText = dataVerificationCtrl.getFailureText(dvItem);
         tooltip.info(failureText, "");
         _this.cancelNormalSelected();
         return;
       }
+    }
+
+    if (!Store.flowdata?.[r]?.[c]) {
+      return;
     }
 
     let curv = Store.flowdata[r][c];
@@ -1764,6 +1772,8 @@ const MBLsheetformula = {
 
     // value maybe an object
     setcellvalue(r, c, d, value);
+    // 如果value是对象，那么value.v是值
+    changeValue(r, c, typeof value !== "object" ? value : value.v);
     _this.cancelNormalSelected();
 
     let RowlChange = false;
@@ -3222,9 +3232,9 @@ const MBLsheetformula = {
       row_pre = row_location[0],
       row_index = row_location[2];
 
-    let visibledatacolumn = Store.visibledatacolumn;
-    let col_index = visibledatacolumn.length - 1,
-      col = visibledatacolumn[col_index],
+    let cloumnLenSum = Store.cloumnLenSum;
+    let col_index = cloumnLenSum.length - 1,
+      col = cloumnLenSum[col_index],
       col_pre = 0;
 
     let top = 0,
@@ -3573,18 +3583,18 @@ const MBLsheetformula = {
         MBLsheet_select_save["row"][0];
       row_e = visibledatarow.length - 1;
     }
-    let visibledatacolumn = Store.visibledatacolumn;
-    if (col_e >= visibledatacolumn[visibledatacolumn.length - 1] || x > winW) {
+    let cloumnLenSum = Store.cloumnLenSum;
+    if (col_e >= cloumnLenSum[cloumnLenSum.length - 1] || x > winW) {
       col_s =
-        visibledatacolumn.length -
+        cloumnLenSum.length -
         1 -
         MBLsheet_select_save["column"][1] +
         MBLsheet_select_save["column"][0];
-      col_e = visibledatacolumn.length - 1;
+      col_e = cloumnLenSum.length - 1;
     }
 
-    let col_pre = col_s - 1 == -1 ? 0 : visibledatacolumn[col_s - 1],
-      col = visibledatacolumn[col_e];
+    let col_pre = col_s - 1 == -1 ? 0 : cloumnLenSum[col_s - 1],
+      col = cloumnLenSum[col_e];
     let row_pre = row_s - 1 == -1 ? 0 : visibledatarow[row_s - 1],
       row = visibledatarow[row_e];
     let rangeindex = _this.rangeMoveIndex;

@@ -14,6 +14,8 @@ const Store = {
 
   visibledatarow: [],
   visibledatacolumn: [],
+  cloumnLenSum: [],
+  cloumnLens: [],
   ch_width: 0,
   rh_height: 0,
 
@@ -24,6 +26,7 @@ const Store = {
   calculatebarHeight: 0,
   rowHeaderWidth: 46,
   columnHeaderHeight: 20,
+  columnHeaderBackgroundColor: "#ffffff",
   cellMainSrollBarSize: 12,
   sheetBarHeight: 31,
   statisticBarHeight: 23,
@@ -163,6 +166,11 @@ const Store = {
     m: "",
     v: "",
   },
+
+  // 验证数据集合
+  verifyMap: {},
+  // 自定义注册事件
+  customEvents: {},
 };
 
 export default Store;

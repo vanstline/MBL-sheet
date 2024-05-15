@@ -422,8 +422,8 @@ function MBLsheetMoveHighlightCell(postion, index, type, isScroll) {
       // row_index = moveX;
       // row_index_ed = moveX;
 
-      col = Store.visibledatacolumn[moveY];
-      col_pre = moveY - 1 == -1 ? 0 : Store.visibledatacolumn[moveY - 1];
+      col = Store.cloumnLenSum[moveY];
+      col_pre = moveY - 1 == -1 ? 0 : Store.cloumnLenSum[moveY - 1];
       // col_index = moveY;
       // col_index_ed = moveY;
 
@@ -529,8 +529,8 @@ function MBLsheetMoveHighlightCell(postion, index, type, isScroll) {
       row_index = moveX;
       row_index_ed = moveX;
 
-      col = Store.visibledatacolumn[moveY];
-      col_pre = moveY - 1 == -1 ? 0 : Store.visibledatacolumn[moveY - 1];
+      col = Store.cloumnLenSum[moveY];
+      col_pre = moveY - 1 == -1 ? 0 : Store.cloumnLenSum[moveY - 1];
       col_index = moveY;
       col_index_ed = moveY;
     }
@@ -686,8 +686,8 @@ function MBLsheetMoveHighlightCell2(postion, type, isScroll) {
 
     row = Store.visibledatarow[rf];
     row_pre = rf - 1 == -1 ? 0 : Store.visibledatarow[rf - 1];
-    col = Store.visibledatacolumn[cf];
-    col_pre = cf - 1 == -1 ? 0 : Store.visibledatacolumn[cf - 1];
+    col = Store.cloumnLenSum[cf];
+    col_pre = cf - 1 == -1 ? 0 : Store.cloumnLenSum[cf - 1];
 
     let changeparam = menuButton.mergeMoveMain(
       columnseleted,
@@ -783,8 +783,8 @@ function MBLsheetMoveHighlightCell2(postion, type, isScroll) {
 
     row = Store.visibledatarow[rf];
     row_pre = rf - 1 == -1 ? 0 : Store.visibledatarow[rf - 1];
-    col = Store.visibledatacolumn[cf];
-    col_pre = cf - 1 == -1 ? 0 : Store.visibledatacolumn[cf - 1];
+    col = Store.cloumnLenSum[cf];
+    col_pre = cf - 1 == -1 ? 0 : Store.cloumnLenSum[cf - 1];
 
     let top = row_pre,
       height = row - row_pre - 1;
@@ -1035,8 +1035,8 @@ function MBLsheetMoveHighlightRange(postion, index, type, isScroll) {
 
     row = Store.visibledatarow[endR];
     row_pre = curR - 1 == -1 ? 0 : Store.visibledatarow[curR - 1];
-    col = Store.visibledatacolumn[endC];
-    col_pre = curC - 1 == -1 ? 0 : Store.visibledatacolumn[curC - 1];
+    col = Store.cloumnLenSum[endC];
+    col_pre = curC - 1 == -1 ? 0 : Store.cloumnLenSum[curC - 1];
 
     let changeparam = menuButton.mergeMoveMain(
       columnseleted,
@@ -1207,8 +1207,8 @@ function MBLsheetMoveHighlightRange(postion, index, type, isScroll) {
 
     row = Store.visibledatarow[endR];
     row_pre = curR - 1 == -1 ? 0 : Store.visibledatarow[curR - 1];
-    col = Store.visibledatacolumn[endC];
-    col_pre = curC - 1 == -1 ? 0 : Store.visibledatacolumn[curC - 1];
+    col = Store.cloumnLenSum[endC];
+    col_pre = curC - 1 == -1 ? 0 : Store.cloumnLenSum[curC - 1];
 
     let top = row_pre,
       height = row - row_pre - 1;
@@ -1417,8 +1417,8 @@ function MBLsheetMoveHighlightRange2(postion, type, isScroll) {
 
     row = Store.visibledatarow[r2];
     row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-    col = Store.visibledatacolumn[c2];
-    col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+    col = Store.cloumnLenSum[c2];
+    col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
     let changeparam = menuButton.mergeMoveMain(
       columnseleted,
@@ -1551,8 +1551,8 @@ function MBLsheetMoveHighlightRange2(postion, type, isScroll) {
 
     row = Store.visibledatarow[r2];
     row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-    col = Store.visibledatacolumn[c2];
-    col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+    col = Store.cloumnLenSum[c2];
+    col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
     let top = row_pre,
       height = row - row_pre - 1;

@@ -14,7 +14,7 @@ export const error = {
 
 //是否是空值
 function isRealNull(val) {
-  if (val == null || val.toString().replace(/\s/g, "") == "") {
+  if (val == null) {
     return true;
   } else {
     return false;

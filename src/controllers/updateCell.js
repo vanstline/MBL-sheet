@@ -25,6 +25,10 @@ export function MBLsheetupdateCell(
   cover,
   isnotfocus
 ) {
+  const wrapRect = document
+    .getElementById(Store.container)
+    ?.getBoundingClientRect();
+
   if (!checkProtectionLocked(row_index1, col_index1, Store.currentSheetIndex)) {
     $("#MBLsheet-functionbox-cell").blur();
     return;
@@ -62,10 +66,12 @@ export function MBLsheetupdateCell(
     }
   }
 
+  // 自定义扩展点击区域的
+  const extraWidth = d[0][col_index1]?.extra?.style?.width || 0;
   let size = getColumnAndRowSize(row_index1, col_index1, d);
   let row = size.row,
     row_pre = size.row_pre,
-    col = size.col,
+    col = size.col - extraWidth,
     col_pre = size.col_pre,
     row_index = size.row_index,
     col_index = size.col_index;
@@ -76,7 +82,9 @@ export function MBLsheetupdateCell(
 
   let winH = $(window).height(),
     winW = $(window).width();
-  let container_offset = $("#" + Store.container).offset();
+  let container_offset = document
+    .querySelector("#" + Store.container)
+    .getBoundingClientRect();
   let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
   let scrollTop = $("#MBLsheet-cell-main").scrollTop();
 
@@ -120,9 +128,10 @@ export function MBLsheetupdateCell(
     "min-width": col - col_pre + 1 - 8,
     "min-height": row - row_pre + 1 - 4,
 
-    "max-width": winW + scrollLeft - col_pre - 20 - Store.rowHeaderWidth,
+    "max-width":
+      container_offset.width - scrollLeft - col_pre - 20 - Store.rowHeaderWidth,
     "max-height":
-      winH +
+      container_offset.height -
       scrollTop -
       row_pre -
       20 -
@@ -132,8 +141,8 @@ export function MBLsheetupdateCell(
       Store.calculatebarHeight -
       Store.sheetBarHeight -
       Store.statisticBarHeight,
-    left: left,
-    top: top,
+    left: left - wrapRect.left,
+    top: top - wrapRect.top,
   };
 
   let inputContentScale = {
@@ -397,7 +406,9 @@ export function setCenterInputPosition(row_index, col_index, d) {
 
   let winH = $(window).height(),
     winW = $(window).width();
-  let container_offset = $("#" + Store.container).offset();
+  let container_offset = document
+    .querySelector("#" + Store.container)
+    .getBoundingClientRect();
   let scrollLeft = $("#MBLsheet-cell-main").scrollLeft();
   let scrollTop = $("#MBLsheet-cell-main").scrollTop();
 
@@ -430,8 +441,8 @@ export function setCenterInputPosition(row_index, col_index, d) {
 export function getColumnAndRowSize(row_index, col_index, d) {
   let row = Store.visibledatarow[row_index],
     row_pre = row_index - 1 == -1 ? 0 : Store.visibledatarow[row_index - 1];
-  let col = Store.visibledatacolumn[col_index],
-    col_pre = col_index - 1 == -1 ? 0 : Store.visibledatacolumn[col_index - 1];
+  let col = Store.cloumnLenSum[col_index],
+    col_pre = col_index - 1 == -1 ? 0 : Store.cloumnLenSum[col_index - 1];
 
   if (d == null) {
     d = Store.flowdata;

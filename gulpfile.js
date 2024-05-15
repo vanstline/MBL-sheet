@@ -28,7 +28,7 @@ const commonjs = require("@rollup/plugin-commonjs");
 const terser = require("rollup-plugin-terser").terser;
 // rollup babel plugin, support the latest ES grammar
 const babel = require("@rollup/plugin-babel").default;
-// const gulpBabel = require('gulp-babel');
+const gulpBabel = require("gulp-babel");
 // Distinguish development and production environments
 const production = process.env.NODE_ENV === "production" ? true : false;
 
@@ -318,10 +318,12 @@ function copyStaticExpendPlugins() {
 }
 function copyStaticDemoData() {
   return src(paths.staticDemoData).pipe(dest(paths.destStaticDemoData));
-  // .pipe(gulpBabel({
-  //     presets: ['@babel/env']
-  // }))
-  // .pipe(gulp.dest('dist'));
+  // .pipe(
+  //   gulpBabel({
+  //     presets: ["@babel/env"],
+  //   })
+  // )
+  // .pipe(gulp.dest("dist"));
 }
 function copyStaticCssImages() {
   return src(paths.staticCssImages).pipe(dest(paths.destStaticCssImages));

@@ -502,8 +502,8 @@ const MBLsheetLocationCell = {
 
       let row = Store.visibledatarow[r2],
         row_pre = r1 - 1 == -1 ? 0 : Store.visibledatarow[r1 - 1];
-      let col = Store.visibledatacolumn[c2],
-        col_pre = c1 - 1 == -1 ? 0 : Store.visibledatacolumn[c1 - 1];
+      let col = Store.cloumnLenSum[c2],
+        col_pre = c1 - 1 == -1 ? 0 : Store.cloumnLenSum[c1 - 1];
 
       if (col - scrollLeft - winW + 20 > 0) {
         $("#MBLsheet-scrollbar-x").scrollLeft(col - winW + 20);

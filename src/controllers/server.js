@@ -1171,8 +1171,8 @@ const server = {
 
     let row = Store.visibledatarow[r],
       row_pre = r - 1 == -1 ? 0 : Store.visibledatarow[r - 1],
-      col = Store.visibledatacolumn[c],
-      col_pre = c - 1 == -1 ? 0 : Store.visibledatacolumn[c - 1];
+      col = Store.cloumnLenSum[c],
+      col_pre = c - 1 == -1 ? 0 : Store.cloumnLenSum[c - 1];
 
     let margeset = menuButton.mergeborer(Store.flowdata, r, c);
     if (!!margeset) {
