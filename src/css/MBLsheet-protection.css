@@ -1,0 +1,267 @@
+#MBLsheet-modal-dialog-slider-protection .MBLsheet-modal-dialog-slider-content {
+  background: #fff;
+}
+
+.MBLsheet-slider-protection-config {
+  position: absolute;
+  width: 100%;
+}
+
+.MBLsheet-slider-protection-row {
+  position: relative;
+  width: 98%;
+  height: 35px;
+  left: 1%;
+}
+
+.MBLsheet-slider-protection-column {
+  position: absolute;
+  height: 100%;
+}
+
+.MBLsheet-slider-protection-config input,
+.MBLsheet-slider-protection-config textarea,
+.MBLsheet-protection-rangeItem-dialog input,
+.MBLsheet-protection-rangeItem-dialog textarea,
+.MBLsheet-protection-sheet-validation input {
+  border: 1px solid #d4d4d4;
+  outline: none;
+}
+
+.MBLsheet-slider-protection-config input:focus,
+.MBLsheet-slider-protection-config textarea:focus,
+.MBLsheet-protection-rangeItem-dialog input:focus,
+.MBLsheet-protection-rangeItem-dialog textarea:focus,
+.MBLsheet-protection-sheet-validation input:focus {
+  border: 1px solid #0389fb;
+  outline: none;
+}
+
+.MBLsheet-protection-input {
+  width: 100%;
+  height: 19px;
+  position: relative;
+}
+
+.MBLsheet-protection-textarea {
+  width: 100%;
+  height: 47px;
+  position: relative;
+  resize: none;
+}
+
+.MBLsheet-protection-column-2x {
+  width: 20%;
+}
+
+.MBLsheet-protection-column-3x {
+  width: 30%;
+}
+
+.MBLsheet-protection-column-4x {
+  width: 40%;
+}
+
+.MBLsheet-protection-column-5x {
+  width: 50%;
+}
+
+.MBLsheet-protection-column-6x {
+  width: 60%;
+}
+
+.MBLsheet-protection-column-7x {
+  width: 70%;
+}
+
+.MBLsheet-protection-column-8x {
+  width: 80%;
+}
+
+.MBLsheet-protection-column-9x {
+  width: 90%;
+}
+
+.MBLsheet-protection-column-10x {
+  width: 100%;
+}
+
+.MBLsheet-protection-column-left {
+  text-align: left;
+}
+
+.MBLsheet-protection-column-center {
+  text-align: center;
+}
+
+.MBLsheet-protection-column-right {
+  text-align: right;
+}
+
+.MBLsheet-slider-protection-ok {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #0188fb;
+  color: #fff;
+  text-align: center;
+  line-height: 45px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.MBLsheet-slider-protection-ok:hover {
+  background: #0181ee;
+}
+
+.MBLsheet-slider-protection-ok:active {
+  background: #0074da;
+}
+
+.MBLsheet-slider-protection-cancel {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #e6e6e6;
+  color: #353535;
+  text-align: center;
+  line-height: 45px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.MBLsheet-slider-protection-cancel:hover {
+  background: #d6d6d6;
+}
+
+.MBLsheet-slider-protection-cancel:active {
+  background: #c7c7c7;
+}
+
+.MBLsheet-slider-protection-addRange {
+  line-height: 23px;
+  font-size: 12px;
+  top: 2px;
+  height: 23px;
+}
+
+.MBLsheet-protection-rangeItem {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.MBLsheet-protection-rangeItem:hover {
+  background: #d5d5d5;
+}
+
+.MBLsheet-protection-rangeItem > div {
+  position: absolute;
+  height: 100%;
+  text-align: center;
+  overflow: hidden;
+}
+
+.MBLsheet-protection-rangeItem .MBLsheet-protection-rangeItem-del {
+  left: 5px;
+  top: 5px;
+  height: 20px;
+  width: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.MBLsheet-protection-rangeItem .MBLsheet-protection-rangeItem-name {
+  left: 30px;
+  width: 80px;
+  text-align: left;
+}
+
+.MBLsheet-protection-rangeItem .MBLsheet-protection-rangeItem-range {
+  left: 110px;
+  width: 120px;
+}
+
+.MBLsheet-protection-rangeItem .MBLsheet-protection-rangeItem-update {
+  left: 230px;
+  width: 30px;
+  font-size: 14px;
+  top: 5px;
+  height: 20px;
+  width: 20px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.MBLsheet-protection-rangeItem .MBLsheet-protection-rangeItem-del:hover,
+.MBLsheet-protection-rangeItem .MBLsheet-protection-rangeItem-update:hover {
+  background: #0181ee;
+  color: #fff;
+}
+
+.MBLsheet-protection-rangeItem .MBLsheet-protection-rangeItem-del:active,
+.MBLsheet-protection-rangeItem .MBLsheet-protection-rangeItem-update:active {
+  background: #0074da;
+  color: #fff;
+}
+
+.MBLsheet-protection-rangeItem-content {
+  position: relative;
+  width: 350px;
+  height: 270px;
+}
+
+#MBLsheet-protection-rangeItem-dialog
+  .MBLsheet-slider-protection-column
+  .range {
+  width: 100%;
+  height: 30px;
+  border: 1px solid #d4d4d4;
+}
+
+#MBLsheet-protection-rangeItem-dialog
+  .MBLsheet-slider-protection-column
+  .range
+  input {
+  width: calc(100% - 30px);
+  height: 30px;
+  padding: 0 10px;
+  float: left;
+  border: none;
+  outline-style: none;
+  box-sizing: border-box;
+}
+
+#MBLsheet-protection-rangeItem-dialog
+  .MBLsheet-slider-protection-column
+  .range
+  i.fa-table {
+  float: right;
+  margin-top: 9px;
+  margin-right: 5px;
+  cursor: pointer;
+  color: #6598f3;
+}
+
+.MBLsheet-protection-rangeItemTextarea {
+  width: 100%;
+  height: 120px;
+  position: relative;
+  resize: none;
+}
+
+.MBLsheet-protection-rangeItemiInput {
+  width: 100%;
+  height: 23px;
+  position: relative;
+}
+
+.MBLsheet-protection-sheet-validation {
+  width: 390px;
+  height: 180px;
+  display: none;
+}
