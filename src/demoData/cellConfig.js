@@ -101,6 +101,7 @@ var columns = [
     width: 100,
     title: "样本名称11",
     placeholder: " 12312",
+    disabled: true,
     fieldsProps: {
       required: true,
       type: "text",

@@ -23,7 +23,7 @@ export function linseter() {
       let r = Store.MBLsheet_select_save[0]["row_focus"];
 
       var currentContent = event.target.textContent || event.target.innerText; // 获取当前内容
-      changeValue(r, c, currentContent);
+      // changeValue(r, c, currentContent);
     }
 
     function processBlur(event) {
@@ -181,6 +181,7 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
 }
 
 export function updateBlur(event) {
+  return;
   const [r, c] = Store.MBLsheetCellUpdate;
   const curColumn = Store?.flowdata?.[0]?.[c];
   if (["autocomplete", "select"].includes(curColumn?.fieldsProps?.type)) {
