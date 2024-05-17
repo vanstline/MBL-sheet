@@ -348,6 +348,19 @@ export function keyboardInitial() {
       let shiftKey = event.shiftKey;
       let kcode = event.keyCode;
 
+      const { row_focus, column_focus } = Store.MBLsheet_select_save?.[0] ?? {};
+      const curCellInfo = Store?.flowdata?.[row_focus]?.[column_focus];
+
+      if (
+        curCellInfo?.disabled ||
+        curCellInfo?.fieldsProps?.type === "select" ||
+        !curCellInfo.dataIndex ||
+        curCellInfo.width === curCellInfo?.extra?.style?.width
+      ) {
+        console.log("%c Line:361 🍡", "color:#fca650");
+        return;
+      }
+
       if (
         $("#MBLsheet-modal-dialog-mask").is(":visible") ||
         $(event.target).hasClass("MBLsheet-mousedown-cancel") ||
@@ -1088,17 +1101,6 @@ export function keyboardInitial() {
           kcode == 0 ||
           (event.ctrlKey && kcode == 86)
         ) {
-          const { row_focus, column_focus } =
-            Store.MBLsheet_select_save?.[0] ?? {};
-          const curCellInfo = Store?.flowdata?.[row_focus]?.[column_focus];
-          if (
-            curCellInfo?.disabled ||
-            curCellInfo?.fieldsProps?.type === "select" ||
-            !curCellInfo.dataIndex ||
-            curCellInfo.width === curCellInfo?.extra?.style?.width
-          ) {
-            return;
-          }
           if (
             String.fromCharCode(kcode) != null &&
             $("#MBLsheet-cell-selected").is(":visible") &&
