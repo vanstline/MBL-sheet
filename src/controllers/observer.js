@@ -22,6 +22,11 @@ export function linseter() {
       let c = Store.MBLsheet_select_save[0]["column_focus"];
       let r = Store.MBLsheet_select_save[0]["row_focus"];
 
+      const curCell = Store?.flowdata?.[r]?.[c];
+      if (curCell?.disabled) {
+        return;
+      }
+
       var currentContent = event.target.textContent || event.target.innerText; // 获取当前内容
       changeValue(r, c, currentContent);
     }
