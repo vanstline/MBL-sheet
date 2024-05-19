@@ -357,7 +357,15 @@ export function keyboardInitial() {
         !curCellInfo.dataIndex ||
         curCellInfo.width === curCellInfo?.extra?.style?.width
       ) {
-        console.log("%c Line:361 🍡", "color:#fca650");
+        MBLsheetupdateCell(
+          row_focus,
+          column_focus,
+          Store.flowdata,
+          undefined,
+          undefined,
+          false
+        );
+        event.preventDefault();
         return;
       }
 
