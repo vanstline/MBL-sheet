@@ -23,7 +23,8 @@ export function MBLsheetupdateCell(
   col_index1,
   d,
   cover,
-  isnotfocus
+  isnotfocus,
+  show = true
 ) {
   const wrapRect = document
     .getElementById(Store.container)
@@ -54,6 +55,7 @@ export function MBLsheetupdateCell(
 
   //数据验证
   if (
+    show &&
     dataVerificationCtrl.dataVerification != null &&
     dataVerificationCtrl.dataVerification[row_index1 + "_" + col_index1] != null
   ) {
@@ -143,6 +145,7 @@ export function MBLsheetupdateCell(
       Store.statisticBarHeight,
     left: left - wrapRect.left,
     top: top - wrapRect.top,
+    display: show ? "block" : "none",
   };
 
   let inputContentScale = {
@@ -150,10 +153,11 @@ export function MBLsheetupdateCell(
     "transform-origin": "left top",
     width: 100 / Store.zoomRatio + "%",
     height: 100 / Store.zoomRatio + "%",
+    display: show ? "block" : "none",
   };
 
   Store.MBLsheetCellUpdate = [row_index, col_index];
-  if (!isnotfocus) {
+  if (show && !isnotfocus) {
     $("#MBLsheet-rich-text-editor").focus().select();
   }
 
@@ -381,7 +385,9 @@ export function MBLsheetupdateCell(
   formula.rangetosheet = Store.currentSheetIndex;
   formula.createRangeHightlight();
   formula.rangeResizeTo = $("#MBLsheet-rich-text-editor");
-  cleargridelement();
+  if (show) {
+    cleargridelement();
+  }
 }
 
 export function setCenterInputPosition(row_index, col_index, d) {
