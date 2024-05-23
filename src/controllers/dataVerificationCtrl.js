@@ -294,6 +294,9 @@ const dataVerificationCtrl = {
             ).join(",");
           } else {
             $("#MBLsheet-dataVerification-dropdown-List").hide();
+            setTimeout(function () {
+              updateBlur(e);
+            });
           }
           let last =
             Store.MBLsheet_select_save[Store.MBLsheet_select_save.length - 1];
@@ -302,7 +305,6 @@ const dataVerificationCtrl = {
 
           $("#MBLsheet-rich-text-editor").text(value);
           formula.updatecell(rowIndex, colIndex);
-          updateBlur(e);
           e.stopPropagation();
         }
       );
