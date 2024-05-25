@@ -15,7 +15,7 @@ import sheetmanage from "./sheetmanage";
 import { getSheetIndex, getRangetxt } from "../methods/get";
 import locale from "../locale/locale";
 import Store from "../store";
-import { updateBlur } from "./observer";
+import { observeMulti, updateBlur } from "./observer";
 
 const dataVerificationCtrl = {
   defaultItem: {
@@ -292,6 +292,8 @@ const dataVerificationCtrl = {
                 return el.innerText;
               }
             ).join(",");
+
+            observeMulti($("#MBLsheet-dataVerification-dropdown-List")[0], e);
           } else {
             $("#MBLsheet-dataVerification-dropdown-List").hide();
             setTimeout(function () {

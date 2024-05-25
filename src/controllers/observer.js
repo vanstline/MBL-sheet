@@ -5,6 +5,7 @@ import { MBLsheetMoveHighlightCell } from "./sheetMove";
 import Store from "../store";
 import sheetmanage from "./sheetmanage";
 import { exitEditMode } from "../global/api";
+import { event } from "jquery";
 
 // $(document).ready(function () {
 
@@ -77,6 +78,37 @@ export function linseter() {
     }
   });
 }
+
+var multiEvent = null;
+
+var element = $("#MBLsheet-dataVerification-dropdown-List");
+
+// 创建MutationObserver实例
+var observer = new MutationObserver(function (mutationsList) {
+  mutationsList.forEach(function (mutation) {
+    if (mutation.type === "attributes") {
+      // 检查看是否是style属性变化，并且涉及到display或visibility
+      if (
+        mutation.attributeName === "style" &&
+        (mutation.target.style.display === "none" ||
+          mutation.target.style.visibility === "hidden")
+      ) {
+        updateBlur(event);
+        observer.disconnect();
+      }
+    }
+  });
+});
+
+// 配置观察属性变化
+var config = { attributes: true, attributeFilter: ["style"] };
+
+// 开始观察目标元素
+
+export const observeMulti = (dom, event) => {
+  multiEvent = event;
+  observer.observe(dom, config);
+};
 
 export function getRowData(r, c, newVal, keyNumMap = {}) {
   const sheet = sheetmanage.getSheetByIndex();
@@ -194,7 +226,7 @@ export function updateBlur(event) {
   const sheet = sheetmanage.getSheetByIndex();
   const curEle = Store?.flowdata?.[r]?.[c];
   const onblur = sheet?.columns?.[c]?.onblur;
-  let newVal = event.target.classList.contains("dropdown-List-item")
+  let newVal = event.target?.classList?.contains("dropdown-List-item")
     ? event.target.innerText
     : curEle?.v ?? null;
 

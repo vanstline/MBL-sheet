@@ -248,7 +248,7 @@ var columns = [
       defaultValue: "菌株",
       // type: "autocomplete",
       type: "select",
-      // // type2: "multi",
+      type2: "multi",
       // width: 300,
       options: [
         "PCR已纯化",
