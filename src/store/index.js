@@ -171,6 +171,8 @@ const Store = {
   verifyMap: {},
   // 自定义注册事件
   customEvents: {},
+  // 自定义是否编辑状态
+  isEdit: false,
 };
 
 export default Store;
