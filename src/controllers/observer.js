@@ -12,14 +12,14 @@ import { event } from "jquery";
 // });
 
 export function linseter() {
-  let isEdit = false;
+  Store.isEdit = false;
 
   setTimeout(() => {
     // 获取contenteditable元素
     var editableElement = document.querySelector("#MBLsheet-rich-text-editor");
 
     function processChange(event) {
-      isEdit = true;
+      Store.isEdit = true;
       let c = Store.MBLsheet_select_save[0]["column_focus"];
       let r = Store.MBLsheet_select_save[0]["row_focus"];
 
@@ -34,9 +34,9 @@ export function linseter() {
 
     function processBlur(event) {
       //
-      if (isEdit) {
+      if (Store.isEdit) {
         updateBlur(event);
-        isEdit = false;
+        Store.isEdit = false;
       } else {
         //
         // ;
@@ -218,6 +218,8 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
 }
 
 export function updateBlur(event) {
+  debugger;
+  Store.isEdit = false;
   const [r, c] = Store.MBLsheetCellUpdate;
   const curColumn = Store?.flowdata?.[0]?.[c];
   if (["autocomplete", "select"].includes(curColumn?.fieldsProps?.type)) {
@@ -257,8 +259,6 @@ export function updateBlur(event) {
 
     const curSetRowData = (obj, dependence = []) =>
       setRowData(obj, r, keyNumMap, true, dependence);
-
-    isEdit = false;
 
     setTimeout(() => {
       curColumn.onblur(newVal, rowData, r, {

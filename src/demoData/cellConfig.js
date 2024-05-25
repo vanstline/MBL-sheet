@@ -185,6 +185,8 @@ var columns = [
     onblur(text, record, i, config) {
       config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
       config.setDisabled({ sampleTypeNamed: text === "123" });
+
+      console.log("%c Line:189 🍢", "color:#33a5ff", text);
     },
   },
   {
