@@ -36,7 +36,6 @@ export function linseter() {
       //
       if (Store.isEdit) {
         updateBlur(event);
-        Store.isEdit = false;
       } else {
         //
         // ;
@@ -218,7 +217,6 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
 }
 
 export function updateBlur(event) {
-  debugger;
   Store.isEdit = false;
   const [r, c] = Store.MBLsheetCellUpdate;
   const curColumn = Store?.flowdata?.[0]?.[c];
