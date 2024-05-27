@@ -352,10 +352,11 @@ export function keyboardInitial() {
       const curCellInfo = Store?.flowdata?.[row_focus]?.[column_focus];
 
       if (
-        curCellInfo?.disabled ||
-        curCellInfo?.fieldsProps?.type === "select" ||
-        !curCellInfo.dataIndex ||
-        curCellInfo.width === curCellInfo?.extra?.style?.width
+        !(ctrlKey || [8, 46].includes(kcode)) &&
+        (curCellInfo?.disabled ||
+          curCellInfo?.fieldsProps?.type === "select" ||
+          !curCellInfo.dataIndex ||
+          curCellInfo.width === curCellInfo?.extra?.style?.width)
       ) {
         MBLsheetupdateCell(
           row_focus,
