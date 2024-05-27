@@ -348,6 +348,27 @@ export function keyboardInitial() {
       let shiftKey = event.shiftKey;
       let kcode = event.keyCode;
 
+      const { row_focus, column_focus } = Store.MBLsheet_select_save?.[0] ?? {};
+      const curCellInfo = Store?.flowdata?.[row_focus]?.[column_focus];
+
+      if (
+        curCellInfo?.disabled ||
+        curCellInfo?.fieldsProps?.type === "select" ||
+        !curCellInfo.dataIndex ||
+        curCellInfo.width === curCellInfo?.extra?.style?.width
+      ) {
+        MBLsheetupdateCell(
+          row_focus,
+          column_focus,
+          Store.flowdata,
+          undefined,
+          undefined,
+          false
+        );
+        event.preventDefault();
+        return;
+      }
+
       if (
         $("#MBLsheet-modal-dialog-mask").is(":visible") ||
         $(event.target).hasClass("MBLsheet-mousedown-cancel") ||

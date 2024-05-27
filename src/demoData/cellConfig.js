@@ -101,7 +101,6 @@ var columns = [
     width: 100,
     title: "样本名称11",
     placeholder: " 12312",
-    disabled: true,
     fieldsProps: {
       required: true,
       type: "text",
@@ -186,6 +185,8 @@ var columns = [
     onblur(text, record, i, config) {
       config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
       config.setDisabled({ sampleTypeNamed: text === "123" });
+
+      console.log("%c Line:189 🍢", "color:#33a5ff", text);
     },
   },
   {
@@ -249,7 +250,7 @@ var columns = [
       defaultValue: "菌株",
       // type: "autocomplete",
       type: "select",
-      // // type2: "multi",
+      type2: "multi",
       // width: 300,
       options: [
         "PCR已纯化",

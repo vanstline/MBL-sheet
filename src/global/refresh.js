@@ -221,7 +221,7 @@ function jfrefreshgrid(
   }
 
   /* 选区同步 */
-  // selectHightlightShow();
+  selectHightlightShow();
   window.MBLsheet_getcelldata_cache = null;
 }
 
@@ -1409,7 +1409,6 @@ function MBLsheetrefreshgrid(scrollWidth, scrollHeight) {
   if (scrollHeight == null) {
     scrollHeight = $("#MBLsheet-cell-main").scrollTop();
   }
-  console.log("%c Line:1410 🍡 scrollHeight", "color:#42b983", scrollHeight);
 
   if (
     MBLsheetFreezen.freezenverticaldata != null ||

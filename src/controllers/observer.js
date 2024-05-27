@@ -5,32 +5,37 @@ import { MBLsheetMoveHighlightCell } from "./sheetMove";
 import Store from "../store";
 import sheetmanage from "./sheetmanage";
 import { exitEditMode } from "../global/api";
+import { event } from "jquery";
 
 // $(document).ready(function () {
 
 // });
 
 export function linseter() {
-  let isEdit = false;
+  Store.isEdit = false;
 
   setTimeout(() => {
     // 获取contenteditable元素
     var editableElement = document.querySelector("#MBLsheet-rich-text-editor");
 
     function processChange(event) {
-      isEdit = true;
+      Store.isEdit = true;
       let c = Store.MBLsheet_select_save[0]["column_focus"];
       let r = Store.MBLsheet_select_save[0]["row_focus"];
 
+      const curCell = Store?.flowdata?.[r]?.[c];
+      if (curCell?.disabled) {
+        return;
+      }
+
       var currentContent = event.target.textContent || event.target.innerText; // 获取当前内容
-      // changeValue(r, c, currentContent);
+      changeValue(r, c, currentContent);
     }
 
     function processBlur(event) {
       //
-      if (isEdit) {
+      if (Store.isEdit) {
         updateBlur(event);
-        isEdit = false;
       } else {
         //
         // ;
@@ -72,6 +77,37 @@ export function linseter() {
     }
   });
 }
+
+var multiEvent = null;
+
+var element = $("#MBLsheet-dataVerification-dropdown-List");
+
+// 创建MutationObserver实例
+var observer = new MutationObserver(function (mutationsList) {
+  mutationsList.forEach(function (mutation) {
+    if (mutation.type === "attributes") {
+      // 检查看是否是style属性变化，并且涉及到display或visibility
+      if (
+        mutation.attributeName === "style" &&
+        (mutation.target.style.display === "none" ||
+          mutation.target.style.visibility === "hidden")
+      ) {
+        updateBlur(event);
+        observer.disconnect();
+      }
+    }
+  });
+});
+
+// 配置观察属性变化
+var config = { attributes: true, attributeFilter: ["style"] };
+
+// 开始观察目标元素
+
+export const observeMulti = (dom, event) => {
+  multiEvent = event;
+  observer.observe(dom, config);
+};
 
 export function getRowData(r, c, newVal, keyNumMap = {}) {
   const sheet = sheetmanage.getSheetByIndex();
@@ -181,7 +217,7 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
 }
 
 export function updateBlur(event) {
-  return;
+  Store.isEdit = false;
   const [r, c] = Store.MBLsheetCellUpdate;
   const curColumn = Store?.flowdata?.[0]?.[c];
   if (["autocomplete", "select"].includes(curColumn?.fieldsProps?.type)) {
@@ -190,7 +226,7 @@ export function updateBlur(event) {
   const sheet = sheetmanage.getSheetByIndex();
   const curEle = Store?.flowdata?.[r]?.[c];
   const onblur = sheet?.columns?.[c]?.onblur;
-  let newVal = event.target.classList.contains("dropdown-List-item")
+  let newVal = event.target?.classList?.contains("dropdown-List-item")
     ? event.target.innerText
     : curEle?.v ?? null;
 
@@ -221,8 +257,6 @@ export function updateBlur(event) {
 
     const curSetRowData = (obj, dependence = []) =>
       setRowData(obj, r, keyNumMap, true, dependence);
-
-    isEdit = false;
 
     setTimeout(() => {
       curColumn.onblur(newVal, rowData, r, {

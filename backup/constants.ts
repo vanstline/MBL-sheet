@@ -1,0 +1,15 @@
+enum EBorder {
+  Thin = 1,
+  Hair,
+  Dotted,
+  Dashed,
+  DashDot,
+  DashDotDot,
+  Double,
+  Medium,
+  MediumDashed,
+  MediumDashDot,
+  MediumDashDotDot,
+  SlantedDashDot,
+  Thick,
+}

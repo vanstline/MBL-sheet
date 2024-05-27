@@ -52,8 +52,8 @@ function initVerification(data, sheet, MBLsheet) {
         if (type === "select" || type === AUTOCOMPLETE) {
           // if ()
           curVerifyInfo.value1 = options
-            ?.map((item) => item.label || item)
-            ?.join(",");
+            .map((item) => item.label || item)
+            .join(",");
           curVerifyInfo.type2 = type === AUTOCOMPLETE ? AUTOCOMPLETE : type2;
         } else if (lengthVerArr.includes(type) && range != null) {
           const [v1, v2] = range || [];
@@ -85,6 +85,7 @@ function setData(data, sheet, MBLsheet) {
         const curI = Math.floor(i / sheet.column);
         p[curI].push(n.v);
       }
+      return p;
     }, []);
   }
   curData.forEach((item) => {
