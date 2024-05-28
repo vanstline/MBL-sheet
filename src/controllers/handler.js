@@ -365,13 +365,22 @@ export default function MBLsheetHandler() {
         return rowData;
       }
 
+      const curSetDisabled = (disabledMap) =>
+        setDisabled(disabledMap, row_index_ed, {}, true);
+
+      const curSetRowData = (obj, dependence = []) =>
+        setRowData(obj, row_index_ed, {}, true, dependence);
+
       var curColumn = sheetFile?.columns?.[col_index_ed] ?? {};
       if (typeof curColumn?.extra === "object") {
         const extra = curColumn.extra;
         const { width = 0 } = extra?.style ?? {};
         if (col - x <= width && typeof extra.onclick === "function") {
           const rowData = update();
-          extra.onclick(rowData[curColumn.dataIndex], rowData, row_index_ed);
+          extra.onclick(rowData[curColumn.dataIndex], rowData, row_index_ed, {
+            setRowData: curSetRowData,
+            setDisabled: curSetDisabled,
+          });
           MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
           return;
         }
@@ -386,7 +395,11 @@ export default function MBLsheetHandler() {
           Store.flowdata[0][col_index].onclick(
             rowData[curColumn.dataIndex],
             rowData,
-            row_index_ed
+            row_index_ed,
+            {
+              setRowData: curSetRowData,
+              setDisabled: curSetDisabled,
+            }
           );
         }
       }
