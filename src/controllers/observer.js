@@ -6,6 +6,7 @@ import Store from "../store";
 import sheetmanage from "./sheetmanage";
 import { exitEditMode } from "../global/api";
 import { event } from "jquery";
+import MBLsheetformula from "../global/formula";
 
 // $(document).ready(function () {
 
@@ -217,14 +218,25 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
 }
 
 export function updateBlur(event) {
-  Store.isEdit = false;
   const [r, c] = Store.MBLsheetCellUpdate;
   const curColumn = Store?.flowdata?.[0]?.[c];
+
   if (["autocomplete", "select"].includes(curColumn?.fieldsProps?.type)) {
+    $("#MBLsheet-rich-text-editor").html("");
     $("#MBLsheet-dataVerification-dropdown-List").hide();
   }
+
+  if (!Store.isEdit) {
+    // 修复异常情况下进入的 不做任务处理
+    // formula.updatecell(r, c, null);
+    MBLsheetformula.cancelNormalSelected();
+    return;
+  }
+  Store.isEdit = false;
+
   const sheet = sheetmanage.getSheetByIndex();
   const curEle = Store?.flowdata?.[r]?.[c];
+
   const onblur = sheet?.columns?.[c]?.onblur;
   let newVal = event.target?.classList?.contains("dropdown-List-item")
     ? event.target.innerText
