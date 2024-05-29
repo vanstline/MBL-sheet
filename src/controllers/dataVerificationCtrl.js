@@ -280,6 +280,7 @@ const dataVerificationCtrl = {
         "click.dropdownListItem",
         "#MBLsheet-dataVerification-dropdown-List .dropdown-List-item",
         function (e) {
+          Store.isEdit = true;
           var $item = $(this);
           let value = e.target.innerText;
           if ($item.hasClass("multi")) {

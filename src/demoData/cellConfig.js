@@ -182,12 +182,12 @@ var columns = [
     //   config.setDisabled({ sampleTypeNamed: text === "123" });
     //   // setRowData({ ...record, sampleTypeId1: "" }, ["sampleTypeId1"]);
     // },
-    onblur(text, record, i, config) {
-      config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
-      config.setDisabled({ sampleTypeNamed: text === "123" });
+    // onblur(text, record, i, config) {
+    //   config.setRowData({ ...record, sampleTypeId1: text }, ["sampleTypeId1"]);
+    //   config.setDisabled({ sampleTypeNamed: text === "123" });
 
-      console.log("%c Line:189 🍢", "color:#33a5ff", text);
-    },
+    //   console.log("%c Line:189 🍢", "color:#33a5ff", text);
+    // },
   },
   {
     dataIndex: "sampleTypeId1",
@@ -247,7 +247,7 @@ var columns = [
     // title: "样本类型",
     width: 200,
     fieldsProps: {
-      defaultValue: "菌株",
+      defaultValue: "",
       // type: "autocomplete",
       type: "select",
       type2: "multi",
@@ -289,7 +289,7 @@ var columns = [
     title: "测试使用",
     fontColor: "red",
     fieldsProps: {
-      defaultValue: "菌株",
+      // defaultValue: "菌株",
       // type: "autocomplete",
       type: "select",
       // // type2: "multi",
