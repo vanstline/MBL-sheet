@@ -336,6 +336,12 @@ export default function MBLsheetHandler() {
         //   Store.MBLsheetCellUpdate[0],
         //   Store.MBLsheetCellUpdate[1]
         // );
+
+        console.log(
+          "%c Line:341 🍢",
+          "color:#ffdd4d",
+          Store.MBLsheetCellUpdate
+        );
         updateBlur(event);
         MBLsheetMoveHighlightCell("down", 0, "rangeOfSelect");
         return;
