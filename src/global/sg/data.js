@@ -189,23 +189,17 @@ function processData(dataSource, sheet, MBLsheet) {
         if (typeof v === "number") {
           m = fieldsProps?.options?.find((min) => min.value === v)?.label || v;
         } else {
-          m = v
-            ?.split(",")
-            .map((min) => {
-              return (
-                fieldsProps?.options?.find((min) => min.value === m)?.label || v
-              );
-            })
-            .join(",");
+          m =
+            v
+              ?.split(",")
+              .map((min) => {
+                const findOpt = fieldsProps?.options?.find(
+                  (min) => min.value === m
+                );
+                return findOpt?.label || min;
+              })
+              ?.join(",") ?? v;
         }
-        // m = v
-        //   ?.split(",")
-        //   .map((min) => {
-        //     return (
-        //       fieldsProps?.options?.find((min) => min.value === m)?.label || v
-        //     );
-        //   })
-        //   .join(",");
       }
 
       if (lengthVerArr.includes(sub?.fieldsMap?.type)) {
