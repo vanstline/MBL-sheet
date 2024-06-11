@@ -13,6 +13,7 @@ import sheetmanage from "../controllers/sheetmanage";
 import { eventBus } from "./sg/event";
 import { jfrefreshgrid } from "./refresh";
 import formula from "../global/formula";
+import dataVerificationCtrl from "../controllers/dataVerificationCtrl";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -125,10 +126,23 @@ function sgInit(setting, config, MBLsheet) {
       return data;
     }
 
+    let dataVerification = dataVerificationCtrl.dataVerification;
+
     const rows = Object.keys(Store.verifyMap)?.reduce((prev, next) => {
-      const curR = next.split("_")[0];
-      if (curR && !prev.includes(+curR)) {
-        prev.push(+curR);
+      const [curR, curC] = next.split("_");
+
+      if (curR && !prev.includes(+curR) && !!data[curR]) {
+        // 手动处理下异常情况
+        var curK = config.columns[curC]?.dataIndex;
+        var curStatus = dataVerificationCtrl.validateCellDataCustom(
+          data[curR][curK],
+          dataVerification[curR + "_" + curC],
+          curR
+        ).status;
+
+        if (!curStatus) {
+          prev.push(+curR);
+        }
       }
       return prev;
     }, []);
