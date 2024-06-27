@@ -1,7 +1,7 @@
 import Store from "../store";
 import { scroll } from "./api";
 import { MBLsheetdeletetable, MBLsheetextendtable } from "./extend";
-import { getData, initDataSource, setData } from "./sg/data";
+import { forceVerifyRows, getData, initDataSource, setData } from "./sg/data";
 import { changeValue, getRowData, linseter } from "../controllers/observer";
 // import { iconPath } from "./sg/icons";
 import { colLocation, mouseposition, rowLocationByIndex } from "./location";
@@ -152,6 +152,9 @@ function sgInit(setting, config, MBLsheet) {
 
   MBLsheet.setData = (data) =>
     setData(JSON.parse(JSON.stringify(data)), sheet, MBLsheet);
+
+  MBLsheet.forceVerifyRows = (numList, flag = false) =>
+    forceVerifyRows(numList, flag, sheet, MBLsheet);
 
   MBLsheet.getFoucsInfo = () => {
     return MBLsheet.getAllSheets()[0].MBLsheet_select_save[0];

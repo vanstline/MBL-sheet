@@ -112,6 +112,71 @@ function setData(data, sheet, MBLsheet) {
   jfrefreshgrid(d, Store.MBLsheet_select_save);
 }
 
+/**
+ * 手动校验指定行，
+ *
+ * @param {number[]} rowList 行数组
+ * @param {boolean} [flag=false] flag 校验的目（是否需要通过校验）； true 通过校验，false 不通过校验，
+ *        不通过校验的话 单行只需出现一次即可跳出（性能优化）
+ * @param {*} sheet
+ * @param {*} MBLsheet
+ */
+export function forceVerifyRows(rowList, flag = false, sheet, MBLsheet) {
+  if (Array.isArray(rowList)) {
+    let dataVerification = dataVerificationCtrl.dataVerification;
+
+    var verifyDataList = [];
+    var dataSource = processData(getData(sheet), sheet, MBLsheet)?.forEach(
+      (item) => {
+        if (verifyDataList[item.r]) {
+          verifyDataList[item.r].push(item);
+        } else {
+          verifyDataList[item.r] = [item];
+        }
+      }
+    );
+
+    let d = _.cloneDeep(Store.flowdata);
+    if (!d?.length) {
+      d = sheet.celldata?.reduce((p, n, i) => {
+        if (i % sheet.column === 0) {
+          p.push([n.v]);
+        } else {
+          const curI = Math.floor(i / sheet.column);
+          p[curI].push(n.v);
+        }
+        return p;
+      }, []);
+    }
+
+    for (const curList of verifyDataList) {
+      inner: for (const curItem of curList) {
+        const { r, c, v: V } = curItem;
+        if (d?.[r]?.[c]) {
+          d[r][c] = V ?? d[r][v];
+          let value = d[r][c]?.v;
+          if (
+            dataVerification != null &&
+            dataVerification[r + "_" + c] != null &&
+            !dataVerificationCtrl.validateCellDataCustom(
+              value,
+              dataVerification[r + "_" + c],
+              r
+            ).status
+          ) {
+            setVerifyByKey(r + "_" + c, true);
+            if (!flag) {
+              break inner;
+            }
+          } else {
+            clearVerify(r + "_" + c);
+          }
+        }
+      }
+    }
+  }
+}
+
 function getData(sheet) {
   const data = MBLsheet.getSheetData()?.map((item) => {
     const obj = {};
