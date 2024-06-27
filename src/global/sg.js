@@ -150,7 +150,8 @@ function sgInit(setting, config, MBLsheet) {
     return { data, rows };
   };
 
-  MBLsheet.setData = (data) => setData(data, sheet, MBLsheet);
+  MBLsheet.setData = (data) =>
+    setData(JSON.parse(JSON.stringify(data)), sheet, MBLsheet);
 
   MBLsheet.getFoucsInfo = () => {
     return MBLsheet.getAllSheets()[0].MBLsheet_select_save[0];
