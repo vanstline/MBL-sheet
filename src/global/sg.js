@@ -14,6 +14,7 @@ import { eventBus } from "./sg/event";
 import { jfrefreshgrid } from "./refresh";
 import formula from "../global/formula";
 import dataVerificationCtrl from "../controllers/dataVerificationCtrl";
+import { defaultIcons } from "./sg/icons";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -763,23 +764,20 @@ const debugDrawArea = (ctx, { x, y, w, h }) => {
 };
 
 export async function renderIcon(icon, ctx, posi, obj, isHeader = true) {
-  if (isHeader) {
-    createIconEle(posi, obj);
-    registerEvent(posi, obj);
-  }
-
-  const curImg = new Image();
-
   const x = transSzieForDPR(posi.x);
   const y = transSzieForDPR(posi.y);
   const w = transSzieForDPR(posi.w);
   const h = transSzieForDPR(posi.h);
-  curImg.src = icons[icon];
-  curImg.onload = function (e) {
-    ctx.drawImage(curImg, x, y, w, h);
-  };
 
-  // debugDrawArea(ctx, { x, y, w, h });
+  const iconKey = `${icons[icon]}-${x}-${y}-${w}-${h}`;
+
+  if (isHeader && !Store.iconMap[iconKey]) {
+    createIconEle(posi, obj);
+    registerEvent(posi, obj);
+    Store.iconMap[iconKey] = true;
+  }
+
+  ctx.drawImage(defaultIcons[icon], x, y, w, h);
 }
 
 const getBase64Image = (src) => {
