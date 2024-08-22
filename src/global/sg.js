@@ -102,7 +102,8 @@ function sgInit(setting, config, MBLsheet) {
     }
   };
 
-  MBLsheet.setLength = (len) => setLength(len, MBLsheet);
+  MBLsheet.setLength = (len, canDownScroll = false) =>
+    setLength(len, MBLsheet, canDownScroll);
 
   MBLsheet.delRow = (cur, length = cur) => {
     const data = getData(sheet);
@@ -171,7 +172,7 @@ function sgInit(setting, config, MBLsheet) {
   linseter();
 }
 
-function setLength(len, MBLsheet) {
+function setLength(len, MBLsheet, canDownScroll = false) {
   if (len == 0) {
     throw new Error("length 不能为0");
   }
@@ -180,9 +181,16 @@ function setLength(len, MBLsheet) {
   const finlayLen = len - curLen - 1;
   if (finlayLen === 0) return;
   if (finlayLen > 0) {
-    MBLsheetextendtable("row", curLen, finlayLen);
+    MBLsheetextendtable("row", curLen, finlayLen, null, null, canDownScroll);
   } else {
-    MBLsheetdeletetable("row", curLen + finlayLen + 1, curLen);
+    MBLsheetdeletetable(
+      "row",
+      curLen + finlayLen + 1,
+      curLen,
+      null,
+      null,
+      canDownScroll
+    );
   }
 }
 

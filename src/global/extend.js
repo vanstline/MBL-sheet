@@ -28,9 +28,17 @@ import { clearVerify } from "./verify";
  * @param {number} value 插入 多少 行（列）
  * @param {string} direction 哪个方向插入 ['lefttop','rightbottom'] 之一
  * @param {string | number} sheetIndex 操作的 sheet 的 index 属性
+ * @param {boolean | undefined} scrollNewLineFlag 是否滚动到新增行
  * @returns
  */
-function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
+function MBLsheetextendtable(
+  type,
+  index,
+  value,
+  direction,
+  sheetIndex,
+  scrollNewLineFlag
+) {
   sheetIndex = sheetIndex || Store.currentSheetIndex;
 
   if (
@@ -1028,6 +1036,10 @@ function MBLsheetextendtable(type, index, value, direction, sheetIndex) {
     }
   }
 
+  if (scrollNewLineFlag) {
+    return;
+  }
+
   file.MBLsheet_select_save = range;
   if (file.index == Store.currentSheetIndex) {
     Store.MBLsheet_select_save = range;
@@ -1099,7 +1111,7 @@ function MBLsheetextendData(rowlen, newData) {
 }
 
 //删除行列
-function MBLsheetdeletetable(type, st, ed, sheetIndex) {
+function MBLsheetdeletetable(type, st, ed, sheetIndex, scrollNewLineFlag) {
   if (type === "row") {
     const verifyKeys = Object.keys(Store.verifyMap);
     verifyKeys.forEach((item) => {
