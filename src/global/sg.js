@@ -15,6 +15,7 @@ import { jfrefreshgrid } from "./refresh";
 import formula from "../global/formula";
 import dataVerificationCtrl from "../controllers/dataVerificationCtrl";
 import { defaultIcons } from "./sg/icons";
+import { execVerify } from "./verify";
 
 function sgInit(setting, config, MBLsheet) {
   if (MBLsheet.create) {
@@ -136,11 +137,14 @@ function sgInit(setting, config, MBLsheet) {
       if (curR && !prev.includes(+curR) && !!data[curR]) {
         // 手动处理下异常情况
         var curK = config.columns[curC]?.dataIndex;
-        var curStatus = dataVerificationCtrl.validateCellDataCustom(
-          data[curR][curK],
-          dataVerification[curR + "_" + curC],
-          curR
-        ).status;
+
+        // console.log("%c Line:141 🍪 getData 时手动执行 校验", "color:#fca650");
+        // var curStatus = dataVerificationCtrl.validateCellDataCustom(
+        //   data[curR][curK],
+        //   dataVerification[curR + "_" + curC],
+        //   curR
+        // ).status;
+        var curStatus = execVerify(curR, curC, data[curR][curK]);
 
         if (!curStatus) {
           prev.push(+curR);

@@ -16,6 +16,8 @@ import { getSheetIndex, getRangetxt } from "../methods/get";
 import locale from "../locale/locale";
 import Store from "../store";
 import { observeMulti, updateBlur } from "./observer";
+import { execVerify } from "../global/verify";
+import { getRowFlowData } from "../global/sg/getFlowData";
 
 const dataVerificationCtrl = {
   defaultItem: {
@@ -1505,7 +1507,8 @@ const dataVerificationCtrl = {
 
     //数据验证未通过
     let cellValue = getcellvalue(r, c, null);
-    let { status, message } = _this.validateCellDataCustom(cellValue, item, r);
+    // let { status, message } = _this.validateCellDataCustom(cellValue, item, r);
+    let { status, message } = execVerify(cellValue, item, r);
     if (status) {
       return;
     }
@@ -1779,10 +1782,10 @@ const dataVerificationCtrl = {
       };
     }
     if (typeof item.verifyFn === "function") {
-      return item.verifyFn(cellValue, r);
+      return item.verifyFn(cellValue, r, getRowFlowData(r));
     }
     return {
-      status: this.validateCellData(cellValue, item, r),
+      status: dataVerificationCtrl.validateCellData(cellValue, item, r),
       message: undefined,
     };
   },
@@ -1796,7 +1799,7 @@ const dataVerificationCtrl = {
 
     if (
       typeof item.verifyFn === "function" &&
-      !item.verifyFn(cellValue, r).status
+      !item.verifyFn(cellValue, r, getRowFlowData(r)).status
     ) {
       return false;
     }

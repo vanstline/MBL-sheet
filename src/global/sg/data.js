@@ -1,7 +1,7 @@
 import Store from "../../store";
 import { transToCellData, transToCellDataV2 } from "../api";
 import { jfrefreshgrid } from "../refresh";
-import { setVerifyByKey, clearVerify } from "../verify";
+import { setVerifyByKey, clearVerify, execVerify } from "../verify";
 import dataVerificationCtrl from "../../controllers/dataVerificationCtrl";
 import {
   fieldsMap,
@@ -93,19 +93,27 @@ function setData(data, sheet, MBLsheet) {
     if (d?.[r]?.[c]) {
       d[r][c] = V ?? d[r][v];
       let value = d[r][c]?.v;
-      if (
-        dataVerification != null &&
-        dataVerification[r + "_" + c] != null &&
-        !dataVerificationCtrl.validateCellDataCustom(
-          value,
-          dataVerification[r + "_" + c],
-          r
-        ).status
-      ) {
-        setVerifyByKey(r + "_" + c, true);
-      } else {
-        clearVerify(r + "_" + c);
+
+      if (!Store.checkMark[r]) {
+        Store.checkMark[r] = [];
       }
+      Store.checkMark[r][c] = { mark: false };
+
+      // console.log("%c Line:97 🍪, setData 时手动执行 校验 ", "color:#ffdd4d");
+      execVerify(r, c, value);
+      // if (
+      //   dataVerification != null &&
+      //   dataVerification[r + "_" + c] != null &&
+      //   !dataVerificationCtrl.validateCellDataCustom(
+      //     value,
+      //     dataVerification[r + "_" + c],
+      //     r
+      //   ).status
+      // ) {
+      //   setVerifyByKey(r + "_" + c, true);
+      // } else {
+      //   clearVerify(r + "_" + c);
+      // }
     }
   });
 
@@ -155,6 +163,8 @@ export function forceVerifyRows(rowList, flag = false, sheet, MBLsheet) {
         if (d?.[r]?.[c]) {
           d[r][c] = V ?? d[r][v];
           let value = d[r][c]?.v;
+
+          console.log("%c Line:161 🌽  强制更新时 执行校验", "color:#6ec1c2");
           if (
             dataVerification != null &&
             dataVerification[r + "_" + c] != null &&
@@ -178,7 +188,9 @@ export function forceVerifyRows(rowList, flag = false, sheet, MBLsheet) {
 }
 
 function getData(sheet) {
+  // console.log("%c Line:191 🍑 Store.flowdata", "color:#33a5ff", Store.flowdata);
   const data = MBLsheet.getSheetData()?.map((item) => {
+    // console.log("%c Line:192 🍬 item", "color:#ea7e5c", item);
     const obj = {};
     sheet.columns.forEach((col, index) => {
       const fieldsProps = item?.[index]?.fieldsProps;

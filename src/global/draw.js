@@ -23,7 +23,12 @@ import method from "./method";
 import Store from "../store";
 import locale from "../locale/locale";
 import sheetmanage from "../controllers/sheetmanage";
-import { setVerifyByKey, clearVerify, hasVerifyByKey } from "./verify";
+import {
+  setVerifyByKey,
+  clearVerify,
+  hasVerifyByKey,
+  execVerify,
+} from "./verify";
 import { getRowData } from "../controllers/observer";
 import { renderIcon } from "./sg";
 
@@ -2236,22 +2241,10 @@ let cellRender = function (
 
   let dataVerification = dataVerificationCtrl.dataVerification;
 
-  if (r == 0 && c == 7) {
-    const errRes = dataVerificationCtrl.validateCellDataCustom(
-      value,
-      dataVerification[r + "_" + c],
-      r
-    );
-  }
-  if (
-    dataVerification != null &&
-    dataVerification[r + "_" + c] != null &&
-    !dataVerificationCtrl.validateCellDataCustom(
-      value,
-      dataVerification[r + "_" + c],
-      r
-    ).status
-  ) {
+  // console.log("%c Line:2247 🍪  draw 执行校验", "color:#93c0a4", r, c);
+  const verifyRes = execVerify(r, c, value);
+
+  if (!verifyRes?.status) {
     const maxRowLen = Store.flowdata.length;
     const maxColLen = Store.flowdata[0].length;
     const curSheetTable = document.querySelector("#MBLsheet-cell-main");
@@ -2332,11 +2325,6 @@ let cellRender = function (
     MBLsheetTableContent.lineWidth = 1;
     MBLsheetTableContent.stroke();
     MBLsheetTableContent.closePath();
-
-    //
-    setVerifyByKey(r + "_" + c, value);
-  } else {
-    clearVerify(r + "_" + c);
   }
 
   //若单元格有批注（单元格右上角红色小三角标示）

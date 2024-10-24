@@ -174,6 +174,12 @@ const Store = {
   customEvents: {},
   // 自定义是否编辑状态
   isEdit: false,
+
+  // 校验标记 {mark: boolean, status: boolean, msg: string}[][] | null
+  // mark: 标记是否校验过，status: 校验状态，msg: 校验提示信息
+  // 校验标记数组，每个元素为一个数组，数组中每个元素为一个对象，对象中包含 mark, status, msg 三个属性
+  // 每个元素为一个数组，数组中每个元素为一个对象，对象中包含 mark, status, msg 三个属性
+  checkMark: [],
 };
 
 export default Store;

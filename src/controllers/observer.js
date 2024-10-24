@@ -7,6 +7,7 @@ import sheetmanage from "./sheetmanage";
 import { exitEditMode } from "../global/api";
 import { event } from "jquery";
 import MBLsheetformula from "../global/formula";
+import { getRowFlowData } from "../global/sg/getFlowData";
 
 // $(document).ready(function () {
 
@@ -157,7 +158,8 @@ export function changeValue(r, c, value, falg = true) {
   if (typeof sheet.dataVerification[`${r}_${c}`]?.verifyFn === "function") {
     const curVerifyInfo = sheet.dataVerification[`${r}_${c}`]?.verifyFn(
       value,
-      r
+      r,
+      getRowFlowData(r)
     );
 
     if (curVerifyInfo.status !== true) {
@@ -252,7 +254,8 @@ export function updateBlur(event) {
     if (typeof sheet.dataVerification[`${r}_${c}`]?.verifyFn === "function") {
       const curVerifyInfo = sheet.dataVerification[`${r}_${c}`]?.verifyFn(
         newVal,
-        r
+        r,
+        getRowFlowData(r)
       );
 
       if (curVerifyInfo.status !== true) {
