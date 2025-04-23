@@ -6,7 +6,8 @@
     <meta name="renderer" content="webkit" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1,user-scalable=0" />
+      content="width=device-width, initial-scale=1,user-scalable=0"
+    />
     <title>MBLsheet</title>
 
     <link rel="stylesheet" href="./plugins/css/pluginsCss.css" />
@@ -20,19 +21,17 @@
   </head>
 
   <body>
-    <div >asdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</div>
+    <div>
+      asdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+    </div>
     <!-- Non-full screen test -->
     <div style="margin: 80px auto; padding: 0px; width: 970px">
       <div>
         行数：<input type="text" id="row" value="10" />
-        <button
-          id="setRow"
-          onclick="MBLsheet.setLength($('#row').val(), true)">
+        <button id="setRow" onclick="MBLsheet.setLength($('#row').val(), true)">
           禁止向下滚动设置
         </button>
-        <button
-          id="setRow"
-          onclick="MBLsheet.setLength($('#row').val())">
+        <button id="setRow" onclick="MBLsheet.setLength($('#row').val())">
           设置
         </button>
       </div>
@@ -48,14 +47,8 @@
       </div> -->
       </div>
       <div>
-        <input
-          type="button"
-          value="获取数据"
-          onclick="" />
-        <input
-          type="button"
-          value="获取数据，并校验"
-          onclick="" />
+        <input type="button" value="获取数据" onclick="" />
+        <input type="button" value="获取数据，并校验" onclick="" />
       </div>
     </div>
 
@@ -87,22 +80,22 @@
     <script src="./demoData/sheetDataVerification.js"></script>
 
     <script src="./demoData/demoSg.js"></script>
-    
+
     <script src="./demoData/cellConfig.js?2323"></script>
 
     <script>
       // setTimeout(() => {
       MBLsheet.init(
-        { 
-          container: "mblsheet", 
+        {
+          container: 'mblsheet',
           columnHeaderHeight: 100,
-      // columnHeaderBackgroundColor: 'red'
-      },
+          // columnHeaderBackgroundColor: 'red'
+        },
         {
           columns: columns,
           dataSource: [],
           disabled: {
-            "1_1": true
+            '1_1': true,
           },
           row: 1,
           defaultColWidth: 200,
@@ -112,20 +105,19 @@
 
       $(function () {
         setTimeout(() => {
-          MBLsheet.setLength(excelDataSource.length)
+          MBLsheet.setLength(excelDataSource.length);
           MBLsheet.setData(excelDataSource);
         }, 100);
 
-
-        MBLsheet.addEventListener('paste', function(arr, obj) {
-          console.log("%c Line:114 🥓 粘贴事件", "color:#7f2b82", arr, obj);
-        })
-        MBLsheet.addEventListener('deleteRow', function(obj) {
-          console.log("%c Line:114 🥓 删除行事件", "color:#7f2b82",obj);
-        })
-        MBLsheet.addEventListener('deleteCell', function(arr) {
-          console.log("%c Line:114 🥓 删除单元格事件", "color:#7f2b82", arr);
-        })
+        MBLsheet.addEventListener('paste', function (arr, obj) {
+          console.log('%c Line:114 🥓 粘贴事件', 'color:#7f2b82', arr, obj);
+        });
+        MBLsheet.addEventListener('deleteRow', function (obj) {
+          console.log('%c Line:114 🥓 删除行事件', 'color:#7f2b82', obj);
+        });
+        MBLsheet.addEventListener('deleteCell', function (arr) {
+          console.log('%c Line:114 🥓 删除单元格事件', 'color:#7f2b82', arr);
+        });
         // setTimeout(() => {
         //   MBLsheet.destroy();
         //   MBLsheet.init(
@@ -139,7 +131,7 @@
         // }, 5000);
 
         // const ranges = MBLsheet.getRange();
-        // 
+        //
         // MBLsheet.create({
         //   container: "mblsheet",
         //   lang: "zh",
