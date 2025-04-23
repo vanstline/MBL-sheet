@@ -105,45 +105,46 @@ var columns = [
       required: true,
       type: "text",
       range: [-1, 999999],
-      // verifyFn: function (text, r) {
-      //   // const d = {
-      //   //   status: text === "123123",
-      //   //   message: `当前值为${text}，不符合规则`,
-      //   // };
-      //   // if (!d.status) {
-      //   //   return d;
-      //   // }
-      //   return {
-      //     status: false,
-      //     message:
-      //       "sdasdaassfddddddddddddddddddddddddddd/ndddddddddddddddddddddd/ndddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-      //   };
-      //   var status = false;
-      //   var message = "";
-      //   if (text == "1") {
-      //     status = false;
-      //     message = "请输入样品名称";
-      //   } else {
-      //     if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
-      //       status = false;
-      //       message =
-      //         "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
-      //     } else {
-      //       status = true;
-      //       message = "";
-      //     }
-      //   }
+      verifyFn: function (text, r, i) {
+        console.log("%c Line:109 🌶 text, r", "color:#f5ce50", text, r, i);
+        // const d = {
+        //   status: text === "123123",
+        //   message: `当前值为${text}，不符合规则`,
+        // };
+        // if (!d.status) {
+        //   return d;
+        // }
+        return {
+          status: false,
+          message:
+            "sdasdaassfddddddddddddddddddddddddddd/ndddddddddddddddddddddd/ndddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsdasdaassfdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        };
+        var status = false;
+        var message = "";
+        if (text == "1") {
+          status = false;
+          message = "请输入样品名称";
+        } else {
+          if (!/^(\w|#|\(|\)|\.|\-|\+)+$/.test(text)) {
+            status = false;
+            message =
+              "样品名称不合法（规则：A-Z、a-z、0-9、#、.、()、-、+,限制长度22个字符）";
+          } else {
+            status = true;
+            message = "";
+          }
+        }
 
-      //   return {
-      //     status,
-      //     message,
-      //   };
-      //   //
-      //   // return {
-      //   //   status: text === "123123",
-      //   //   message: `当前值为${text}，不符合规则`,
-      //   // };
-      // },
+        return {
+          status,
+          message,
+        };
+        //
+        // return {
+        //   status: text === "123123",
+        //   message: `当前值为${text}，不符合规则`,
+        // };
+      },
     },
     // disabled: true,
     extra: {
@@ -250,7 +251,7 @@ var columns = [
       defaultValue: "",
       // type: "autocomplete",
       type: "select",
-      type2: "multi",
+      // type2: "multi",
       // width: 300,
       options: [
         "PCR已纯化",

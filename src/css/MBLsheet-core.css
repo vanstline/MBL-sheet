@@ -69,6 +69,20 @@
   background: #fff;
 }
 
+.MBLsheet-loading-mask-2 {
+  display: none;
+  position: absolute;
+  z-index: 1000000000;
+  margin: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(1, 1, 1, 25%);
+}
+
 .MBLsheet-loading-content {
   display: none;
   position: relative;
@@ -80,6 +94,13 @@
   text-align: center;
 }
 
+.MBLsheet-loading-mask-2 .MBLsheet-loading-content {
+  display: block;
+  font-size: 18px;
+  color: #fff;
+}
+
+
 .MBLsheet-loading-image {
   width: 8em;
   height: 8em;
@@ -89,6 +110,11 @@
 .MBLsheet-loading-text {
   margin-top: 1em;
 }
+
+.MBLsheet-loading-mask-2 .MBLsheet-loading-content .MBLsheet-loading-text {
+  margin-top: 0;
+}
+
 
 .MBLsheet-loading-image .image-type {
   width: 100%;

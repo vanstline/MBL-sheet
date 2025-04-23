@@ -144,7 +144,7 @@ function sgInit(setting, config, MBLsheet) {
         //   dataVerification[curR + "_" + curC],
         //   curR
         // ).status;
-        var curStatus = execVerify(curR, curC, data[curR][curK]);
+        var curStatus = execVerify(curR, curC, data[curR][curK]).status;
 
         if (!curStatus) {
           prev.push(+curR);

@@ -1375,6 +1375,52 @@ const MBLsheetlodingHTML = function (target, coverConfig) {
   };
 };
 
+const MBLsheetlodingHTML2 = function (target, coverConfig) {
+  if (!target) {
+    return;
+  }
+  const config = customLoadingConfig();
+  if (coverConfig && JSON.stringify(coverConfig) !== "{}") {
+    Object.assign(config, coverConfig);
+  }
+  if (typeof config.enable === "boolean" && config.enable === false) {
+    return {
+      el: "",
+      show: show,
+      close: close,
+    };
+  }
+  const id = "MBLsheet-loading-2" + uuid.v4();
+  const loadingHtml = `
+        <div class="MBLsheet-loading-content"> 
+            <div class="${config.textClass} MBLsheet-loading-text">
+            <span>${config.text}</span>
+            </div>    
+        </div>`;
+  const loading = document.createElement("div");
+  loading.id = id;
+  loading.className = "MBLsheet-loading-mask-2 " + config.customClass;
+  $(loading).html(loadingHtml);
+  $(target).append(loading);
+
+  function show() {
+    if (id) {
+      $("#" + id).show();
+    }
+  }
+
+  function close() {
+    if (id) {
+      $("#" + id).hide();
+    }
+  }
+  return {
+    el: loading,
+    show: show,
+    close: close,
+  };
+};
+
 // var menusetting = {
 //     menu_selectall: '<div id="MBLsheet-selectall-btn-title"><i class="fa fa-i-cursor"></i> 全选</div>',
 //     menu_copy: '<div id="MBLsheet-copy-btn-title"><i class="fa fa-copy"></i> 复制</div>',
@@ -1615,6 +1661,7 @@ export {
   MBLsheetToolHTML,
   menuToolBar,
   MBLsheetlodingHTML,
+  MBLsheetlodingHTML2,
   luckyColor,
   keycode,
   MBLsheetdefaultstyle,

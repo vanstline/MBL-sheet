@@ -71,7 +71,7 @@ const execVerify = (r, c, val) => {
         r,
         getRowFlowData(r)
       );
-      Store.checkMark[r][c] = { ...result, mark: true };
+      Store.checkMark[r][c] = { ...result, mark: result?.status };
     }
 
     if (!Store.checkMark[r][c].status) {

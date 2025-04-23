@@ -23,7 +23,10 @@ import {
 import { setMBLsheet_select_save } from "./methods/set";
 import { MBLsheetrefreshgrid, jfrefreshgrid } from "./global/refresh";
 import functionlist from "./function/functionlist";
-import { MBLsheetlodingHTML } from "./controllers/constant";
+import {
+  MBLsheetlodingHTML,
+  MBLsheetlodingHTML2,
+} from "./controllers/constant";
 import { getcellvalue, getdatabyselection } from "./global/getdata";
 import { setcellvalue } from "./global/setdata";
 import { selectHightlightShow } from "./controllers/select";
@@ -187,6 +190,8 @@ MBLsheet.create = function (setting) {
   //loading
   const loadingObj = MBLsheetlodingHTML("#" + container);
   Store.loadingObj = loadingObj;
+  const loadingObj2 = MBLsheetlodingHTML2("#" + container);
+  Store.loadingObj2 = loadingObj2;
 
   if (loadurl == "") {
     sheetmanage.initialjfFile(menu, title);

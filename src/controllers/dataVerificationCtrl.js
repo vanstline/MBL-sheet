@@ -1508,7 +1508,11 @@ const dataVerificationCtrl = {
     //数据验证未通过
     let cellValue = getcellvalue(r, c, null);
     // let { status, message } = _this.validateCellDataCustom(cellValue, item, r);
-    let { status, message } = execVerify(cellValue, item, r);
+    execVerify(cellValue, item, r);
+    let { status, message } = Store.checkMark?.[r]?.[c] ?? {
+      status: true,
+      message: "",
+    };
     if (status) {
       return;
     }

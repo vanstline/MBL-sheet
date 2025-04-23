@@ -6220,7 +6220,7 @@ export default {
     detailSave: "已恢复本地缓存",
     row: "行",
     column: "列",
-    loading: "Songon···",
+    loading: "Loading···",
 
     copy: "副本",
     return: "返回",

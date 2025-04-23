@@ -25,6 +25,10 @@ export function linseter() {
       let c = Store.MBLsheet_select_save[0]["column_focus"];
       let r = Store.MBLsheet_select_save[0]["row_focus"];
 
+      if (Store.checkMark[r][c]) {
+        Store.checkMark[r][c].mark = false;
+      }
+
       const curCell = Store?.flowdata?.[r]?.[c];
       if (curCell?.disabled) {
         return;
@@ -221,6 +225,14 @@ export function setDisabled(obj, r, keyNumMap = {}, falg) {
 
 export function updateBlur(event) {
   const [r, c] = Store.MBLsheetCellUpdate;
+  // if (Store.checkMark[r][c]) {
+  //   Store.checkMark[r][c].mark = false;
+  //   console.log(
+  //     "%c Line:226 🍑 Store.checkMark[r][c]",
+  //     "color:#93c0a4",
+  //     Store.checkMark
+  //   );
+  // }
   const curColumn = Store?.flowdata?.[0]?.[c];
 
   if (["autocomplete", "select"].includes(curColumn?.fieldsProps?.type)) {

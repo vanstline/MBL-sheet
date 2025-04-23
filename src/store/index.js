@@ -1,6 +1,7 @@
 const Store = {
   container: null,
   loadingObj: {},
+  loadingObj2: {},
   MBLsheetfile: null,
   defaultcolumnNum: 60,
   defaultrowNum: 84,

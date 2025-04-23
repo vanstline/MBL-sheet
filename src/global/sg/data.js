@@ -121,15 +121,14 @@ function setData(data, sheet, MBLsheet) {
 }
 
 /**
- * 手动校验指定行，
+ * 执行数据校验
  *
- * @param {number[]} rowList 行数组
- * @param {boolean} [flag=false] flag 校验的目（是否需要通过校验）； true 通过校验，false 不通过校验，
- *        不通过校验的话 单行只需出现一次即可跳出（性能优化）
+ * @param {*} rowList
+ * @param {boolean} [flag=false]
  * @param {*} sheet
  * @param {*} MBLsheet
  */
-export function forceVerifyRows(rowList, flag = false, sheet, MBLsheet) {
+function execVerifyRow(rowList, flag = false, sheet, MBLsheet) {
   if (Array.isArray(rowList)) {
     let dataVerification = dataVerificationCtrl.dataVerification;
 
@@ -163,8 +162,6 @@ export function forceVerifyRows(rowList, flag = false, sheet, MBLsheet) {
         if (d?.[r]?.[c]) {
           d[r][c] = V ?? d[r][v];
           let value = d[r][c]?.v;
-
-          console.log("%c Line:161 🌽  强制更新时 执行校验", "color:#6ec1c2");
           if (
             dataVerification != null &&
             dataVerification[r + "_" + c] != null &&
@@ -185,6 +182,33 @@ export function forceVerifyRows(rowList, flag = false, sheet, MBLsheet) {
       }
     }
   }
+}
+
+/**
+ * 手动校验指定行，
+ *
+ * @param {number[]} rowList 行数组
+ * @param {boolean} [flag=false] flag 校验的目（是否需要通过校验）； true 通过校验，false 不通过校验，
+ *        不通过校验的话 单行只需出现一次即可跳出（性能优化）
+ * @param {*} sheet
+ * @param {*} MBLsheet
+ */
+export async function forceVerifyRows(rowList, flag = false, sheet, MBLsheet) {
+  Store.loadingObj2.show();
+
+  console.time("forceVerifyRows");
+  return new Promise((resolve) => {
+    new Promise(function (res) {
+      setTimeout(function () {
+        execVerifyRow(rowList, flag, sheet, MBLsheet);
+        res();
+      }, 0);
+    }).then(() => {
+      console.timeEnd("forceVerifyRows");
+      Store.loadingObj2.close();
+      resolve();
+    });
+  });
 }
 
 function getData(sheet) {
@@ -244,7 +268,10 @@ function processData(dataSource, sheet, MBLsheet) {
   initVerification(fillArr, sheet, MBLsheet);
 
   const curData = fillArr.map((item, r) => {
+    Store.checkMark.push([]);
     return columns.map((sub) => {
+      Store.checkMark[r].push({ mark: false });
+
       var v = item[sub.dataIndex];
 
       const fieldsProps = sub.fieldsProps || {};
